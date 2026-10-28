@@ -7,6 +7,11 @@ Versiones con [SemVer](https://semver.org/lang/es/). Mientras la app está en pr
 - Si hace falta, antes de la final puede haber candidatas `1.0.0-rc.N` solo con arreglos.
 - Cada versión lleva su etiqueta de Git `vX.Y.Z[-beta.N]`. La versión vive en `DeskBox/OpenWinBox.csproj` (`<Version>`).
 
+## [Sin publicar]
+
+- Licencia MIT, avisos de terceros (THIRD-PARTY-NOTICES.md) y atribuciones en Configuración → Acerca.
+- README en inglés, español, francés, portugués, alemán, italiano, ruso, chino, japonés y coreano.
+
 ## [1.0.0-beta.1] - 2026-10-28
 
 Primera beta. Base: réplica mejorada del DeskBox original.

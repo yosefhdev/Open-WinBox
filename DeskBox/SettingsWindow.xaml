@@ -381,7 +381,7 @@
                                 <Image x:Name="AboutIcon" Width="40" Height="40" />
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
                                     <TextBlock x:Name="VersionText" Style="{StaticResource BodyStrongTextBlockStyle}" />
-                                    <TextBlock Text="Widgets de carpetas para el escritorio de Windows." Style="{StaticResource CaptionTextBlockStyle}"
+                                    <TextBlock Text="Widgets de código abierto para el escritorio de Windows." Style="{StaticResource CaptionTextBlockStyle}"
                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                                 </StackPanel>
                                 <Button Grid.Column="2" Click="OpenDataFolder_Click">
@@ -392,6 +392,14 @@
                                 </Button>
                             </Grid>
                         </Border>
+                        <!-- CC BY 4.0 de Open-Meteo exige atribución -->
+                        <TextBlock Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap" Margin="4,8,4,0"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                            <Run Text="Software libre bajo licencia MIT. Datos del clima:" />
+                            <Hyperlink NavigateUri="https://open-meteo.com/">Open-Meteo.com</Hyperlink>
+                            <Run Text="(CC BY 4.0). Fotos del día: Microsoft Bing. Nombre de la ciudad:" />
+                            <Hyperlink NavigateUri="https://www.bigdatacloud.com/">BigDataCloud</Hyperlink><Run Text="." />
+                        </TextBlock>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
