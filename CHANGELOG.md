@@ -1,0 +1,21 @@
+# Changelog
+
+Versiones con [SemVer](https://semver.org/lang/es/). Mientras la app está en pruebas se publican betas
+(`1.0.0-beta.1`, `1.0.0-beta.2`, …). Cuando todo esté probado sale la versión final `1.0.0`.
+
+- **beta.N** sube con cada entrega de pruebas (funciones nuevas o arreglos).
+- Si hace falta, antes de la final puede haber candidatas `1.0.0-rc.N` solo con arreglos.
+- Cada versión lleva su etiqueta de Git `vX.Y.Z[-beta.N]`. La versión vive en `DeskBox/OpenWinBox.csproj` (`<Version>`).
+
+## [1.0.0-beta.1] - 2026-10-28
+
+Primera beta. Base: réplica mejorada del DeskBox original.
+
+- Widgets de carpetas con pestañas tipo navegador: crear, renombrar, cambiar icono, bloquear, agrupar
+  (menú o arrastrando un widget sobre otro), reordenar y separar pestañas.
+- Arrastrar archivos y accesos directos al widget; abrir cualquier tipo de archivo.
+- Imán al mover y redimensionar; widgets siempre detrás de las apps y fuera de la barra de tareas y Alt+Tab.
+- Widgets funcionales: Música, Spotify, Glance (reloj dual 12/24 h), Tiempo y Audio (dispositivos y volumen por app).
+- Configuración con subpáginas por widget, asistente de primeros pasos, bandeja y F7.
+- Importa widgets, orden e íconos del DeskBox original.
+- Optimización de CPU en reposo (de 5.4 s a 0.05 s de CPU por minuto).

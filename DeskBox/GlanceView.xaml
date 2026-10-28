@@ -1,0 +1,50 @@
+<UserControl
+    x:Class="OpenWinBox.GlanceView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Como el Glance del original: foto de fondo que rota con fundido, hora grande y fecha centradas -->
+    <Grid>
+        <!-- Centradas: con la alineación por defecto (Stretch) WinUI recorta UniformToFill desde la esquina superior izquierda -->
+        <Image x:Name="ImageA" Stretch="UniformToFill" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <Image x:Name="ImageB" Stretch="UniformToFill" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <!-- Velo suave para que el texto se lea sobre cualquier foto -->
+        <Rectangle>
+            <Rectangle.Fill>
+                <RadialGradientBrush>
+                    <GradientStop Color="#66000000" Offset="0" />
+                    <GradientStop Color="#1A000000" Offset="1" />
+                </RadialGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <StackPanel VerticalAlignment="Center" Spacing="2">
+            <!-- Con reloj dual: dos mitades iguales separadas por una línea; con uno solo, la segunda columna mide 0 -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition x:Name="SecondColumn" Width="0" />
+                </Grid.ColumnDefinitions>
+                <StackPanel HorizontalAlignment="Center" Spacing="2">
+                    <TextBlock x:Name="LocalLabelText" FontSize="13" Foreground="#E6FFFFFF" HorizontalAlignment="Center" Visibility="Collapsed" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="6">
+                        <TextBlock x:Name="TimeText" FontSize="44" FontWeight="SemiBold" Foreground="White" />
+                        <TextBlock x:Name="AmPmText" FontSize="16" FontWeight="SemiBold" Foreground="#E6FFFFFF" Margin="0,0,0,9" VerticalAlignment="Bottom" />
+                    </StackPanel>
+                    <TextBlock x:Name="LocalZoneText" FontSize="12" Foreground="#CCFFFFFF" HorizontalAlignment="Center" Visibility="Collapsed" />
+                </StackPanel>
+                <Rectangle x:Name="ClockDivider" Grid.Column="1" Width="1" Margin="0,6" Fill="#66FFFFFF" Visibility="Collapsed" />
+                <!-- Segundo reloj (otra zona horaria), opcional -->
+                <StackPanel x:Name="SecondClock" Grid.Column="2" HorizontalAlignment="Center" Spacing="2" Visibility="Collapsed">
+                    <TextBlock x:Name="SecondLabelText" FontSize="13" Foreground="#E6FFFFFF" HorizontalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="6">
+                        <TextBlock x:Name="SecondTimeText" FontSize="44" FontWeight="SemiBold" Foreground="White" />
+                        <TextBlock x:Name="SecondAmPmText" FontSize="16" FontWeight="SemiBold" Foreground="#E6FFFFFF" Margin="0,0,0,9" VerticalAlignment="Bottom" />
+                    </StackPanel>
+                    <TextBlock x:Name="SecondZoneText" FontSize="12" Foreground="#CCFFFFFF" HorizontalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+            <TextBlock x:Name="DateText" FontSize="13" Foreground="#E6FFFFFF" HorizontalAlignment="Center" />
+        </StackPanel>
+    </Grid>
+</UserControl>
