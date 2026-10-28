@@ -1,292 +1,321 @@
-# PLAN — Widgets de archivos: botón "+", menú "⋯", bloquear, agrupar/separar pestañas
+# PLAN — Seguridad y documentación para agentes de IA
 
-## Contexto
+Fecha: 2026-10-29. Versión de partida: `1.0.0-beta.1` (commit `cf0599a`). Plan anterior archivado en
+`docs/plans/2026-10-27-pestanas-tipo-navegador.md`.
 
-OpenWinBox (WinUI 3 / WinAppSDK 1.6, .NET 8, sin empaquetar). Código en `DeskBox\`.
-Un widget de archivos (`WidgetConfig.Kind == "File"`) es una ventana `WidgetWindow`; cada carpeta de
-`WidgetConfig.Folders` es una pestaña (`BuildTabs` en `WidgetWindow.xaml.cs`). Datos por carpeta en
-`Order/Icons/Titles` (diccionarios con la ruta de la carpeta como clave). `App` mantiene
-`_widgets: Dictionary<WidgetConfig, WidgetWindow>`; cambiar las pestañas = cerrar y reabrir la ventana
-(patrón ya usado por `App.AddFolder`/`App.RemoveFolder`).
+## Objetivo
 
-Hoy: botón X (columna 2 del Grid de la barra en `WidgetWindow.xaml`) llama `Hide_Click` → `AppWindow.Hide()`.
-"Desactivar widget" (= `App.RemoveWidget`, no borra la carpeta) y "Agrupar otra carpeta…" viven en el menú
-de clic derecho de la pestaña (`ShowTitleMenu`). La ventana se mueve con arrastre nativo desde `DragBar`
-(`SetTitleBar(DragBar)`), con imán en el subclass proc `OnWindowMessage` (`WidgetWindow.Snap.cs`).
+1. **Seguridad:** que OpenWinBox sea confiable en cualquier PC con Windows.
+   - No puede abrir la puerta a nada malicioso ni saltarse protecciones de Windows.
+   - El usuario debe poder comprobar que el `.exe` que descarga es exactamente el que salió de este código, sin troyanos.
+2. **Agentes de IA:** que cualquier agente (Claude Code, Codex, Copilot, Cursor, Gemini, Windsurf, Cline, Aider, Junie…) entienda:
+   - la estructura, el funcionamiento, la seguridad y el rendimiento de la app;
+   - cómo hacer cambios nuevos con el mismo orden y estilo.
 
-### Decisiones
+## Reglas para ejecutar el plan
 
-- **Widget/pestaña nueva vacía**: sin diálogo. Se crea la carpeta
-  `%LOCALAPPDATA%\OpenWinBox\widgets\Nuevo widget` (si existe: `FileActions.UniquePath` → "Nuevo widget (2)"…).
-  El título visible es el nombre de esa carpeta (el usuario lo cambia con "Cambiar nombre").
-- **Eliminar un widget o pestaña nunca borra la carpeta del disco** (puede tener archivos del usuario).
-- Unir: las pestañas del widget origen se agregan **al final** del destino, el destino conserva posición y
-  tamaño, la pestaña activa pasa a ser la primera de las agregadas. Carpetas repetidas se omiten.
-- Separar: la pestaña sale con sus `Order/Icons/Titles`; el widget nuevo usa el tamaño del original y
-  queda con la esquina superior izquierda bajo el cursor. Si el original queda con 1 pestaña, se ve normal
-  (ya ocurre solo: `BuildTabs` usa `Folders.Count > 1`).
-- Si en el origen `Name` está puesto y tiene una sola carpeta sin `Titles[folder]`, al unir se copia
-  `Name` a `Titles[folder]` para que no cambie el nombre visible.
-- Bloquear se guarda en config (`WidgetConfig.IsLocked`) y solo impide mover (redimensionar sigue igual).
-- Fuera de alcance (no pedido): soltar una **pestaña** sobre otro widget para pasarla ahí; animación de
-  reordenamiento; deshacer.
-
-### Build (criterio común a todos los pasos)
-
-Desde `C:\Users\yosefh\dev-projects\PERSONAL\DeskBox-2.0\DeskBox`:
-`"/c/Program Files/dotnet/dotnet.exe" build OpenWinBox.csproj -nologo -v q` → 0 errores.
-Antes de compilar cerrar DeskBox si está abierto (el .exe bloqueado rompe el build). Para probar: ejecutar
-`bin\...\OpenWinBox.exe` (la ruta que deje el build) y revisar `%LOCALAPPDATA%\OpenWinBox\config.json`.
-Sin tests unitarios: la verificación es build + prueba manual descrita en cada paso.
-
----
+- **Orden:** un paso a la vez, en el orden de la checklist. Se puede usar `/ciclo` con este archivo.
+- **Compilar:** cada paso compila sin errores:
+  ```bash
+  "/c/Program Files/dotnet/dotnet.exe" build OpenWinBox.csproj -nologo -v q
+  ```
+  Se corre desde la carpeta del proyecto y antes hay que cerrar la app.
+- **Commits:** un commit por paso con la identidad del repo (Yosefh <yosefhknt@gmail.com>). No se hace push hasta que haya remoto.
+- **Versión:** al terminar todo, `1.0.0-beta.2`, con su entrada en CHANGELOG y su etiqueta.
 
 ## Checklist
 
-- [x] Paso 0 — Preparación (build base y app corriendo)
-- [x] Paso 1 — Helpers en `App`: nuevo widget vacío, nueva pestaña vacía, unir, separar, reabrir
-- [x] Paso 2 — Botón "+" con menú (Nuevo widget / Nueva pestaña en este widget) (código aprobado; prueba en pantalla pendiente del usuario)
-- [x] Paso 3 — X → "⋯" con menú (Cambiar nombre, Cambiar icono, Ocultar, Desactivar) (código aprobado; prueba en pantalla pendiente del usuario)
-- [x] Paso 4 — Bloquear / Desbloquear (código aprobado; prueba en pantalla pendiente)
-- [x] Paso 5 — "Agrupar con otro widget" (submenú) (código aprobado; prueba en pantalla pendiente)
-- [x] Paso 6 — Reordenar pestañas arrastrándolas (código aprobado; prueba en pantalla pendiente)
-- [x] Paso 7 — Arrastrar una pestaña fuera del widget para separarla (código aprobado; prueba en pantalla pendiente)
-- [x] Paso 8 — Arrastrar un widget 1.5 s sobre la barra de otro para unirlos (código aprobado tras fix del overlay; prueba en pantalla pendiente)
-- [ ] Paso 9 — Prueba de regresión final
+**Parte A — Seguridad del código**
+- [ ] A0. Renombrar la carpeta `DeskBox/` → `OpenWinBox/` (antes de documentar rutas)
+- [ ] A1. Auditoría de seguridad del código con hallazgos priorizados (`docs/security/audit-2026-10.md`)
+- [ ] A2. Corregir hallazgos de red: URLs y nombres de archivo de Bing, límites de tamaño, un solo HttpClient
+- [ ] A3. Corregir la apertura de archivos: no saltarse el bloqueo de Windows para ejecutables descargados
+- [ ] A4. Manifiesto de la app: sin permisos de administrador, Windows 10/11, DPI
+- [ ] A5. Privacidad: documentar y limitar lo que sale del equipo (ubicación, IP)
+
+**Parte B — Cadena de suministro (que el .exe sea confiable)**
+- [ ] B1. Dependencias bloqueadas: `packages.lock.json` + restauración en modo bloqueado
+- [ ] B2. Compilación reproducible y determinista + script de publicación (zip + SHA-256)
+- [ ] B3. CI en GitHub Actions: build, CodeQL, escaneo de dependencias, atestación de origen (para cuando haya remoto)
+- [ ] B4. Firma de código: elegir opción (SignPath para OSS, Azure Trusted Signing o sin firma) — **decisión del usuario**
+- [ ] B5. `SECURITY.md`: cómo reportar vulnerabilidades y cómo verificar una descarga
+
+**Parte C — Documentación para agentes de IA**
+- [ ] C1. Investigar (web) qué archivo lee hoy cada agente
+- [ ] C2. `AGENTS.md`: fuente única de verdad
+- [ ] C3. Guías en `docs/dev/`: arquitectura, convenciones, seguridad, rendimiento, recetas
+- [ ] C4. Archivos puente por agente (CLAUDE.md, GEMINI.md, Copilot, Cursor…) que solo apunten a AGENTS.md
+- [ ] C5. `CONTRIBUTING.md` + plantilla de PR con checklist de seguridad y rendimiento
+- [ ] C6. Prueba: un agente "en frío" agrega un widget de ejemplo siguiendo solo la documentación
+
+**Cierre**
+- [ ] D1. Versión `1.0.0-beta.2`, CHANGELOG, commit y etiqueta
 
 ---
 
-## Paso 0 — Preparación
+## Parte A — Seguridad del código
 
-- No paralelizable (los demás dependen de él).
-- Acción: cerrar DeskBox (bandeja → Salir), respaldar `%LOCALAPPDATA%\OpenWinBox\config.json` a
-  `config.backup.json`, compilar con el comando de Build, abrir la app.
-- Aceptación: build 0 errores; los widgets de archivos actuales aparecen igual que antes.
+### A0. Renombrar la carpeta del proyecto (≈10 min)
 
-## Paso 1 — Helpers en `App` (modelo)
+Hoy la carpeta se llama `DeskBox/` porque Windows la tenía bloqueada al renombrar.
 
-- No paralelizable (escribe código; base de los pasos 2, 5, 7, 8).
-- Archivos: `DeskBox\App.xaml.cs` (junto a `AddWidget`/`AddFolder`/`RemoveFolder`), `DeskBox\WidgetConfig.cs`
-  (solo si hace falta una propiedad; `IsLocked` se agrega en el paso 4).
-- Enfoque (mínimo, reutilizando el patrón cerrar+`OpenWidget` existente):
-  - `private void Reopen(WidgetConfig w)`: `if (_widgets.Remove(w, out var win)) win.Close(); OpenWidget(w);`
-    y usarlo en `AddFolder`/`RemoveFolder` (quita duplicación).
-  - `public static string NewEmptyFolder()`: `Directory.CreateDirectory(FileActions.UniquePath(<LOCALAPPDATA>\OpenWinBox\widgets, "Nuevo widget"))`
-    (crear antes la carpeta base `widgets`), devuelve la ruta.
-  - `AddWidget(string folder, PointInt32? at = null)`: si `at` viene, `X/Y = at`; si no, centrado (actual).
-    Si hay un parámetro opcional de tamaño (para separar), aceptar `int width = 400, int height = 500`.
-  - `public void AddEmptyWidget()` → `AddWidget(NewEmptyFolder())`. Para que no salga encima del actual,
-    se puede pasar la posición del widget origen + 30 px (opcional, decidir lo más simple).
-  - `public void AddEmptyTab(WidgetConfig w)` → `AddFolder(w, NewEmptyFolder())`.
-  - `public void MergeWidgets(WidgetConfig target, WidgetConfig source)`: por cada carpeta de `source` que
-    no esté en `target.Folders` (comparación `OrdinalIgnoreCase`): agregar a `Folders` y copiar
-    `Order/Icons/Titles` de esa carpeta; aplicar la regla de `Name` (ver Decisiones);
-    `target.ActiveIndex` = índice de la primera agregada; cerrar ventana de `source` y quitarlo de
-    `Config.Widgets` (sin tocar disco); `Save()`; `Reopen(target)`. Ignorar si `target == source` o algún
-    `Kind != "File"`.
-  - `public void SplitFolder(WidgetConfig source, string folder, PointInt32 at)`: solo si
-    `source.Folders.Count > 1`. Crear `WidgetConfig` nuevo con `Folders={folder}`, `X/Y=at`, ancho/alto del
-    origen y los `Order/Icons/Titles` de esa carpeta movidos; luego `RemoveFolder(source, folder)`
-    (ya limpia diccionarios, ajusta ActiveIndex y reabre); agregar el nuevo a `Config.Widgets`, `Save()`,
-    `OpenWidget`.
-  - Al cerrar una ventana desde su propio handler (merge/split disparado desde esa ventana) encolar con
-    `DispatcherQueue.TryEnqueue` en el llamador si se cierra la ventana dentro de su subclass proc o de un
-    evento de puntero (se usa en pasos 7 y 8).
-- Aceptación: build 0 errores. Sin cambio visible aún; widgets existentes abren igual y "Agrupar otra
-  carpeta como pestaña…" / "Quitar esta pestaña" del clic derecho siguen funcionando (ahora vía `Reopen`).
+- **Pasos:**
+  1. Cerrar la app.
+  2. `git mv DeskBox OpenWinBox`.
+  3. Actualizar las rutas en README (10 idiomas), CHANGELOG, el acceso directo del menú Inicio y el de "hubs", la entrada de autoinicio y los scripts de rendimiento.
+- **Criterio:**
+  - `git grep -n "DeskBox/"` no da resultados.
+  - La app compila y arranca desde la ruta nueva.
+  - El autoinicio apunta al `.exe` nuevo.
 
-## Paso 2 — Botón "+" con menú
+### A1. Auditoría de seguridad (≈1 h)
 
-- No paralelizable (modifica `WidgetWindow.xaml` igual que el paso 3).
-- Archivos: `DeskBox\WidgetWindow.xaml` (Grid de la barra: `ColumnDefinitions="Auto,*,Auto"` →
-  `"Auto,*,Auto,Auto"`, nuevo `Button` en columna 2, el actual X pasa a columna 3);
-  `DeskBox\WidgetWindow.xaml.cs` (handler `Add_Click`, junto a `Hide_Click`).
-- Enfoque: botón con glifo `&#xE710;` (Add, Segoe Fluent Icons), mismo estilo que el X (FontSize 10,
-  Padding 8,6, fondo transparente), `ToolTipService.ToolTip="Nuevo widget o pestaña"`,
-  `AutomationProperties.Name="Agregar"`. En `Add_Click`: `MenuFlyout` con
-  `Entry("Nuevo widget", "&#xE8A0;"…, App.Current.AddEmptyWidget)` y
-  `Entry("Nueva pestaña en este widget", …, () => App.Current.AddEmptyTab(_config))`, mostrado con
-  `ShowPopup(menu, (FrameworkElement)sender)` (para que no lo tapen otros widgets).
-  En widgets funcionales la barra tiene alto 0, así que no se ve: no requiere condición extra.
-- Aceptación (build 0 errores, luego en pantalla):
-  1. Cada widget de archivos muestra "+" a la izquierda de la X; el tooltip dice "Nuevo widget o pestaña".
-  2. "+" → "Nuevo widget": aparece una ventana nueva titulada "Nuevo widget" vacía; existe la carpeta
-     `%LOCALAPPDATA%\OpenWinBox\widgets\Nuevo widget`; arrastrar un acceso directo desde el escritorio a esa
-     ventana lo agrega; `config.json` tiene un widget nuevo con esa carpeta en `Folders`.
-  3. Repetir "Nuevo widget": se crea "Nuevo widget (2)" (no se reutiliza la carpeta).
-  4. "+" → "Nueva pestaña en este widget" en un widget de 1 pestaña: ahora muestra 2 pestañas, la nueva
-     seleccionada y vacía; `config.json` tiene 2 rutas en `Folders` de ese widget.
+Revisar todo el código buscando cada tipo de riesgo y escribir `docs/security/audit-2026-10.md`. Cada hallazgo lleva: archivo:línea, riesgo, severidad (alta/media/baja), corrección y estado.
 
-## Paso 3 — X → "⋯" con menú
+| Superficie | Qué revisar |
+|---|---|
+| Red | Cada `HttpClient`; URLs armadas con datos de la respuesta; tamaño de descargas; solo HTTPS |
+| Archivos | Rutas armadas con datos externos (path traversal); mover, copiar o borrar archivos del usuario; escrituras atómicas |
+| Procesos | Cada `Process.Start` y `ShellExecute`: qué se ejecuta, con qué argumentos y si puede ejecutar algo no pedido |
+| Registro | Solo `HKCU\...\Run\OpenWinBox`, sin nada más |
+| COM e interop | `IPolicyConfig` (no documentada), `IShellItemImageFactory`, WScript.Shell |
+| Entrada no confiable | `config.json` (lo puede editar otro programa), el layout del DeskBox original, JSON de las APIs |
+| Comunicación entre procesos | Mutex y EventWaitHandle con nombre: qué puede provocar otro proceso |
 
-- No paralelizable (modifica `WidgetWindow.xaml`/`.xaml.cs`; depende del paso 2 por la columna).
-- Archivos: `DeskBox\WidgetWindow.xaml` (botón de columna 3: glifo `&#xE712;` More, tooltip
-  "Opciones del widget", `AutomationProperties.Name="Opciones"`, `Click="More_Click"`);
-  `DeskBox\WidgetWindow.xaml.cs` (`Hide_Click` → `More_Click`; reutilizar `Entry`, `ShowPopup`,
-  `RenameTitleAsync`, `PickIcon`).
-- Enfoque: `MenuFlyout` con
-  - "Cambiar nombre" → `RenameTitleAsync(<botón de la pestaña activa>, ActiveFolder)` (renombra lo que se ve
-    junto al icono de la pestaña activa; ancla = `TabsPanel.Children[_config.ActiveIndex]`).
-  - "Cambiar icono…" → `PickIcon(ActiveFolder)` (IconPicker ya ofrece emoji/imagen/restablecer).
-  - (paso 4 agrega Bloquear, paso 5 agrega "Agrupar con…")
-  - separador; "Ocultar (F7 para mostrar)" → `AppWindow.Hide()` (lo que hacía la X).
-  - "Desactivar widget" en rojo (`SystemFillColorCriticalBrush`) → `App.Current.RemoveWidget(_config)`.
-  Mantener el menú de clic derecho de la pestaña tal cual.
-- Aceptación (build 0 errores):
-  1. La X ya no existe; en su lugar "⋯". Clic → menú con Cambiar nombre, Cambiar icono…, Ocultar, Desactivar.
-  2. Cambiar nombre → escribir "Juegos" + Enter → la pestaña activa muestra "Juegos";
-     `config.json` → `Titles["<carpeta>"] = "Juegos"`. Con nombre vacío vuelve al nombre de la carpeta.
-  3. Cambiar icono… → elegir 🎮 → la pestaña muestra 🎮; `Icons["<carpeta>"] = "emoji:🎮"`.
-  4. Ocultar → el widget desaparece; F7 lo vuelve a mostrar.
-  5. Desactivar → la ventana se cierra, sale de `config.json` y la carpeta sigue en disco.
-  6. El menú se ve completo aunque el widget esté detrás de otro (lo sube `ShowPopup`).
+**Hallazgos que ya detecté hoy** (para confirmar en la auditoría):
 
-## Paso 4 — Bloquear / Desbloquear
+1. **Alta — redirección de la descarga de Bing** (`GlanceView.xaml.cs:163`).
+   - Problema: la descarga arma `"https://www.bing.com" + url` con lo que dice la respuesta. Si `url` empezara con `@otro-sitio.com/...`, la descarga iría a otro servidor.
+   - Corrección: armar la URL con `new Uri(baseUri, relative)` y comprobar que el host sigue siendo `www.bing.com`.
+2. **Media — path traversal en la caché de imágenes** (`GlanceView.xaml.cs:161`).
+   - Problema: el nombre del archivo sale de `hsh` de la respuesta. Un valor con `..\` podría escribir fuera de la caché.
+   - Corrección: aceptar solo hexadecimal.
+3. **Media — descargas sin límite de tamaño** (`GetByteArrayAsync` y `GetStringAsync`).
+   - Corrección: `MaxResponseContentBufferSize` de unos 15 MB para imágenes y 1 MB para JSON.
+4. **Alta — saltarse el bloqueo de Windows** (`FileActions.Open`).
+   - Problema: si Windows bloquea un `.lnk` que apunta a un archivo descargado, la app abre el destino directamente. Eso está bien para una imagen, pero no debe hacerse con ejecutables ni scripts (.exe, .bat, .cmd, .ps1, .vbs, .js, .msi, .scr, .hta, .lnk…).
+   - Corrección: en esos tipos, respetar el bloqueo y mostrar el aviso.
+5. **Baja — un `HttpClient` nuevo en cada descarga** de Glance: unificarlo en un cliente compartido.
+6. **Baja — argumento sin comillas** en `OpenAs_RunDLL` y en `explorer.exe /select`: revisar comillas y caracteres especiales en las rutas.
 
-- No paralelizable.
-- Archivos: `DeskBox\WidgetConfig.cs` (`public bool IsLocked { get; set; }` en `WidgetConfig`);
-  `DeskBox\WidgetWindow.Snap.cs` (`OnWindowMessage`, casos `WM_ENTERSIZEMOVE`/`WM_MOVING`);
-  `DeskBox\WidgetWindow.xaml(.cs)` (entrada en `More_Click`, indicador visual).
-- Enfoque:
-  - Menú "⋯": `ToggleMenuFlyoutItem { Text = "Bloquear posición", IsChecked = _config.IsLocked }`
-    (icono `&#xE72E;` Lock); al hacer clic: invertir `IsLocked`, `_save()`, actualizar indicador.
-  - En `WM_MOVING` con `_config.IsLocked`: escribir en `lParam` el rect de `GetWindowRect` tomado en
-    `WM_ENTERSIZEMOVE` (guardarlo en un campo nuevo o en `_startRect` antes del ancla) y `return 1`, sin imán.
-    Así el arrastre nativo de `DragBar` no mueve la ventana. `WM_SIZING` sigue funcionando.
-    (Alternativa si se ve parpadeo: no hay; WM_MOVING ajusta antes de mover.)
-  - Indicador: un `FontIcon` `&#xE72E;` pequeño (FontSize 10, color secundario) en la barra (p. ej. dentro
-    de `DragBar` antes de `StatusText`, o columna propia) visible solo si `IsLocked`, con tooltip
-    "Bloqueado: desbloquéalo desde ⋯ para moverlo". Así el usuario entiende por qué no se mueve.
-- Aceptación (build 0 errores):
-  1. "⋯" → "Bloquear posición" → aparece el candado; arrastrar desde la barra no mueve el widget;
-     `config.json` → `"IsLocked": true`. Redimensionar desde el borde sí funciona.
-  2. Cerrar y abrir la app → sigue bloqueado (candado visible, no se mueve).
-  3. "⋯" → desmarcar → candado desaparece, se mueve con imán como antes; `"IsLocked": false`.
+- **Criterio:** el documento existe y cada hallazgo tiene severidad y corrección propuesta.
 
-## Paso 5 — "Agrupar con otro widget" (submenú)
+### A2. Endurecer la red (≈45 min)
 
-- No paralelizable (depende de los pasos 1 y 3).
-- Archivos: `DeskBox\WidgetWindow.xaml.cs` (`More_Click`); `DeskBox\App.xaml.cs` (exponer la lista:
-  p. ej. `public IEnumerable<WidgetConfig> FileWidgets => _widgets.Keys.Where(w => w.Kind == "File")`);
-  `DeskBox\IconPicker.cs` (helper pequeño para icono de menú).
-- Enfoque:
-  - `MenuFlyoutSubItem { Text = "Agrupar con…" }` con un `MenuFlyoutItem` por cada widget de archivos
-    abierto distinto de `_config`. Texto = `Name` o el título de su pestaña activa (mover el cálculo de
-    `TitleFor` a un helper estático o en `WidgetConfig` si hace falta, sin duplicar lógica); si tiene
-    varias pestañas, sufijo " (3 pestañas)". Icono: `IconPicker.MenuIcon(spec)` nuevo →
-    `emoji:` = `FontIcon { Glyph = emoji, FontFamily = "Segoe UI Emoji" }`,
-    `image:` = `BitmapIcon { UriSource = new Uri(path), ShowAsMonochrome = false }`,
-    sin spec = `FontIcon` carpeta (mismo glifo que `Render`).
-  - Clic → `App.Current.MergeWidgets(_config, other)` (las pestañas del otro se suman a este; el otro se
-    cierra). Encolar con `DispatcherQueue.TryEnqueue` porque la ventana actual se recrea.
-  - Si no hay otros widgets: submenú deshabilitado (`IsEnabled = false`) con un hijo "No hay otros widgets".
-- Aceptación (build 0 errores):
-  1. Con widgets A (pestaña "Juegos" 🎮) y B ("Docs"): en A "⋯" → "Agrupar con…" lista "🎮"/"Docs" con su
-     icono, sin listar A ni widgets funcionales.
-  2. Elegir "Docs" → B se cierra; A muestra pestañas "Juegos" y "Docs" con "Docs" seleccionada; los íconos
-     y orden de archivos de Docs se conservan.
-  3. `config.json`: B ya no está; A tiene ambas carpetas en `Folders` y las entradas de B en
-     `Order/Icons/Titles`.
-  4. Con un solo widget de archivos: "Agrupar con…" aparece deshabilitado.
+- **Archivos:** `GlanceView.xaml.cs`, `WeatherView.xaml.cs`, `SettingsWindow.xaml.cs`.
+  - Un helper nuevo `Net.cs` con un `HttpClient` compartido: timeout, User-Agent `OpenWinBox/<versión>` y límite de tamaño.
+- **Cambios:** corregir los hallazgos 1, 2, 3 y 5. Solo `https://` a hosts conocidos (lista en `Net.cs`).
+- **Criterio:**
+  - `git grep "new HttpClient"` da un solo resultado (en `Net.cs`).
+  - Una prueba con JSON falso (`url = "@ejemplo.com/x"`, `hsh = "..\\x"`) no descarga ni escribe nada. Se hace con un harness de consola en el scratchpad, como el de `FileActions`.
+  - Glance y Tiempo siguen funcionando.
 
-## Paso 6 — Reordenar pestañas arrastrándolas
+### A3. Apertura segura de archivos (≈30 min)
 
-- No paralelizable (base del paso 7: misma lógica de arrastre).
-- Archivos: `DeskBox\WidgetWindow.xaml.cs` (`BuildTabs`; nueva región "Arrastre de pestañas" o
-  `WidgetWindow.Tabs.cs` parcial si queda grande).
-- Enfoque (drag manual, no DragDrop de WinUI):
-  - En cada botón de pestaña: `tab.AddHandler(PointerPressedEvent, handler, handledEventsToo: true)`
-    (Button marca el evento como manejado), lo mismo para `PointerMovedEvent` y `PointerReleasedEvent`;
-    guardar índice y `GetCursorPos` inicial; `tab.CapturePointer(e.Pointer)`.
-  - Umbral de 6 px antes de considerarlo arrastre (un clic normal sigue seleccionando la pestaña). Si hubo
-    arrastre, suprimir el `Click` siguiente (flag `_tabDragged`).
-  - Durante el arrastre: `tab.Opacity = 0.6`; calcular el índice destino con la X del puntero relativa a
-    `TabsPanel` comparándola con el centro de cada hijo (`TransformToVisual(TabsPanel)` + `ActualWidth`).
-  - Al soltar dentro de la ventana con índice distinto: mover en `_config.Folders`
-    (`RemoveAt`/`Insert`), ajustar `ActiveIndex` para que siga apuntando a la misma carpeta, `_save()`,
-    `BuildTabs()`. No hace falta recrear la ventana (las caches son por carpeta).
-  - `PointerCaptureLost` → cancelar y restaurar opacidad.
-  - Solo con `Folders.Count > 1`.
-- Aceptación (build 0 errores):
-  1. Widget con pestañas A, B, C: arrastrar A hasta la derecha de C y soltar → orden B, C, A; la pestaña
-     seleccionada sigue siendo la misma carpeta y su contenido no cambia.
-  2. Cerrar/abrir la app → orden B, C, A persiste (`Folders` en ese orden en `config.json`).
-  3. Clic simple en una pestaña sigue cambiando de pestaña; clic derecho sigue abriendo su menú.
-  4. Arrastrar desde `DragBar` sigue moviendo la ventana (no se rompe el arrastre nativo).
+- **Archivo:** `FileActions.cs`.
+- **Cambio:** abrir el destino del acceso directo sin pasar por el bloqueo de Windows solo si NO es ejecutable ni script. Para esos tipos, mostrar "Windows bloqueó este archivo porque viene de internet" con la opción de abrir su carpeta.
+- **Criterio:**
+  - Una imagen descargada se sigue abriendo.
+  - Un `.exe` descargado (con Zone.Identifier=3) detrás de un `.lnk` NO se ejecuta y se ve el aviso.
 
-## Paso 7 — Arrastrar una pestaña fuera para separarla
+### A4. Manifiesto de la aplicación (≈20 min)
 
-- No paralelizable (depende de los pasos 1 y 6).
-- Archivos: `DeskBox\WidgetWindow.xaml.cs` (handlers del paso 6), `DeskBox\WidgetWindow.Snap.cs`
-  (reutilizar `VisualBounds`, `GetCursorPos`, `RECT/POINT`), `DeskBox\WidgetWindow.xaml` (texto de ayuda).
-- Enfoque:
-  - En `PointerMoved` del arrastre de pestaña, con `GetCursorPos` comparar contra `VisualBounds(Hwnd)`
-    inflado ~20 px (escalado por DPI). Fuera → modo "separar": `StatusText.Text = "Suelta para separar"`
-    y opacidad 0.4 en la pestaña; dentro → vuelve a modo reordenar.
-  - Al soltar en modo separar y `Folders.Count > 1`:
-    `DispatcherQueue.TryEnqueue(() => App.Current.SplitFolder(_config, folder, new PointInt32(cursor.X - 20, cursor.Y - 10)))`.
-    El widget nuevo pasa por `FitToScreen` en su constructor (ya existe).
-  - Con 1 sola pestaña no se hace nada (no hay drag de pestaña: el widget se mueve con la barra).
-  - Mientras se arrastra la ventana tiene `CapturePointer`, así que `PointerMoved` llega aunque el cursor
-    salga de la ventana.
-- Aceptación (build 0 errores):
-  1. Widget con pestañas Juegos, Docs: arrastrar "Docs" al escritorio vacío → durante el arrastre fuera se lee
-     "Suelta para separar"; al soltar aparece un widget nuevo "Docs" con su esquina superior izquierda junto
-     al cursor, mismo tamaño, mismo icono y orden de archivos.
-  2. El original queda con "Juegos" como widget normal (sin estilo de pestañas: título en negrita).
-  3. `config.json`: dos widgets, cada uno con una carpeta; `Icons/Titles/Order` de Docs movidos al nuevo.
-  4. Arrastrar fuera y volver a entrar antes de soltar → no separa; se comporta como reordenar.
-  5. Soltar fuera de toda pantalla (borde de monitor) → el widget queda dentro del área visible.
+- **Archivos:** `app.manifest` nuevo y su `<ApplicationManifest>` en el csproj.
+- **Contenido:**
+  - `requestedExecutionLevel level="asInvoker"`: nunca pide administrador.
+  - `supportedOS` Windows 10/11.
+  - `dpiAwareness PerMonitorV2`.
+  - `longPathAware`.
+- **Criterio:**
+  - `mt.exe -inputresource:OpenWinBox.exe -out:x.manifest` (o un harness) muestra `asInvoker`.
+  - La app arranca sin aviso de UAC.
 
-## Paso 8 — Arrastrar un widget 1.5 s sobre la barra de otro para unirlos
+### A5. Privacidad (≈30 min)
 
-- No paralelizable (depende del paso 1).
-- Archivos: `DeskBox\WidgetWindow.Snap.cs` (`OnWindowMessage`: `WM_MOVING`, `WM_EXITSIZEMOVE`; lista `All`),
-  `DeskBox\WidgetWindow.xaml` (overlay nuevo), `DeskBox\WidgetWindow.xaml.cs` (método público para
-  mostrar/ocultar overlay).
-- Enfoque:
-  - Overlay en el destino: `Border x:Name="MergeOverlay"` en `Root` (`Grid.RowSpan="2"`, `Canvas.ZIndex="11"`,
-    `IsHitTestVisible="False"`, `Opacity="0"`, `OpacityTransition` 0.2 s como `Handle`), borde de acento
-    2 px, fondo acento semitransparente y `TextBlock` centrado "Suelta para unir" (FontSize 14 SemiBold).
-    Al empezar a esperar (cursor entra a la barra): mostrar el borde con un `ProgressBar`/barra que se llena
-    o un pulso (p. ej. `Scale` 0.98→1) como "cargando"; a los 1.5 s el texto cambia a "Suelta para unir".
-    Lo más simple: opacidad 0.5 con texto "Mantén para unir…" y a 1.5 s opacidad 1 + "Suelta para unir".
-  - Origen, en `WM_MOVING` (solo si `IsFileWidget` y no bloqueado): con `GetCursorPos` buscar en `All` una
-    ventana `w != this`, visible, `w.IsFileWidget`, cuyo rect de barra (`VisualBounds(w.Hwnd)` con
-    `B = T + 36 * escala`) contenga el cursor. Guardar `_mergeTarget` y `_mergeSince = Environment.TickCount64`
-    al cambiar de destino; si cambia/desaparece, ocultar overlay del anterior.
-  - Un `DispatcherQueueTimer` (100 ms) mientras hay `_mergeTarget` decide la fase visual (≥1500 ms →
-    "Suelta para unir"), porque si el mouse está quieto no llegan `WM_MOVING`. Además, en
-    `WM_EXITSIZEMOVE` se decide por tiempo (`TickCount64 - _mergeSince >= 1500`), así funciona aunque el
-    timer no avance dentro del bucle modal de movimiento.
-  - En `WM_EXITSIZEMOVE`: ocultar overlay; si la condición se cumple:
-    `DispatcherQueue.TryEnqueue(() => App.Current.MergeWidgets(target._config, _config))` (no cerrar la
-    ventana dentro de su propio subclass proc). Limpiar `_mergeTarget`.
-  - Para el destino `HWND_BOTTOM` puede quedar tapado por el origen: el overlay va en el destino pero el
-    cursor está sobre su barra, que el origen tapa solo si se superponen; aceptar (el texto también puede
-    mostrarse en `StatusText` del origen: "Suelta para unir con «Docs»"). Recomendado: ambos.
-  - El imán sigue activo durante este arrastre (no interferir con `SnapRect`).
-- Aceptación (build 0 errores):
-  1. Widgets A y B separados: arrastrar A por su barra hasta que el cursor quede sobre la barra de B y
-     esperar quieto → B muestra el borde/overlay "Mantén para unir…" y a ~1.5 s cambia a "Suelta para unir".
-  2. Soltar → A se cierra, B muestra sus pestañas + las de A al final, con la primera de A seleccionada;
-     `config.json` con un widget menos.
-  3. Pasar por encima de la barra de B sin detenerse (<1.5 s) y soltar en otro lado → no se unen; overlay
-     desaparece.
-  4. Llegar a 1.5 s y luego sacar el cursor de la barra antes de soltar → overlay se va, no se unen.
-  5. Soltar encima del área de archivos de B (no de la barra) → no se unen, solo se mueve.
-  6. Widgets funcionales (Música, Glance…) nunca muestran overlay ni se unen.
+- **Documentar en `docs/dev/security.md` y en el README** qué datos salen del equipo:
+  - Coordenadas a Open-Meteo y BigDataCloud.
+  - La IP a ipapi.co solo si la ubicación de Windows está apagada.
+  - El idioma a Bing.
+- Ninguna telemetría.
+- **Opcional (decidir mañana):** una opción "Ubicación aproximada por IP" que se pueda apagar.
+- **Criterio:** la lista coincide con un `git grep "https://"` del código.
 
-## Paso 9 — Regresión final
+## Parte B — Cadena de suministro
 
-- Paralelizable entre escenarios (solo verificación, sin escribir código) una vez hechos los pasos 1–8.
-- Escenarios:
-  1. Build 0 errores y 0 warnings nuevos.
-  2. Soltar archivos externos en un widget sigue funcionando (acceso directo creado / .lnk movido).
-  3. Reordenar íconos dentro de un widget sigue guardando `Order`.
-  4. Imán al mover/redimensionar y brillo en bordes siguen funcionando.
-  5. F7 oculta/muestra todos; "Fijar al escritorio" sigue mandando los widgets al fondo tras usar los menús.
-  6. Configuración › Widgets lista los widgets nuevos/unidos/separados correctamente y "Agregar carpeta" /
-     "Quitar" desde ahí siguen funcionando.
-  7. Música/Glance/Tiempo: sin barra, sin "+"/"⋯", agarradera y menú de clic derecho intactos.
-  8. Restaurar `config.backup.json` si se quiere volver al estado inicial.
+### B1. Dependencias bloqueadas (≈15 min)
+
+- `RestorePackagesWithLockFile=true` en el csproj; commitear `packages.lock.json`.
+- En CI: `dotnet restore --locked-mode`.
+- **Criterio:** cambiar a mano una versión en el lock hace fallar la restauración.
+
+### B2. Compilación reproducible y paquete con hash (≈45 min)
+
+- **En el csproj:** `Deterministic`, `ContinuousIntegrationBuild` (en CI), `PathMap` para no incrustar rutas del equipo (`C:\Users\yosefh\...`) en el `.exe`/`.pdb`.
+- **Script `tools/publish.ps1`:**
+  1. `dotnet publish -c Release`.
+  2. Zip `OpenWinBox-<versión>-win-x64.zip`.
+  3. `SHA256SUMS.txt`.
+- Antes, revisar por qué Release mostró 520 MB de memoria residente y si la memoria privada es igual.
+- **Criterio:**
+  - Dos publicaciones seguidas dan el mismo SHA-256 del `.dll` principal.
+  - `strings OpenWinBox.dll | grep yosefh` no encuentra nada.
+
+### B3. CI en GitHub Actions (≈1 h, se activa al tener remoto)
+
+- **`.github/workflows/build.yml`:** build y publicación en `windows-latest`, en push y PR.
+- **`.github/workflows/codeql.yml`:** análisis de seguridad de C#.
+- **`.github/dependabot.yml`:** NuGet y Actions.
+- **`release.yml`:** al crear la etiqueta `v*`:
+  1. Compila.
+  2. Genera la atestación de origen (`actions/attest-build-provenance`).
+  3. Sube el zip y `SHA256SUMS.txt` a Releases.
+- Las Actions se fijan por SHA, no por etiqueta.
+- **Criterio:** `actionlint` sin errores. Al tener remoto: un push corre build y CodeQL en verde.
+
+### B4. Firma de código — DECISIÓN DEL USUARIO
+
+Sin firma, SmartScreen muestra "Windows protegió su PC" y algunos antivirus desconfían más.
+
+| Opción | Costo | Nota |
+|---|---|---|
+| **SignPath Foundation** | Gratis para OSS | Hay que solicitarlo; firma desde CI; requiere repo público y licencia OSI (MIT sirve) |
+| **Azure Trusted Signing** | ≈ USD 10/mes | Requiere validación de identidad; integración con GitHub Actions |
+| Certificado OV/EV tradicional | USD 200–600/año | Más trámite |
+| Sin firma (por ahora) | 0 | Compensar con hash SHA-256 + atestación + VirusTotal en cada release |
+
+- **Recomendación:** empezar sin firma (betas) + atestación + hashes, y pedir SignPath al hacer público el repo.
+- **Criterio:** decisión anotada en `docs/dev/security.md`.
+
+### B5. SECURITY.md (≈20 min)
+
+- **Cómo reportar una vulnerabilidad:** por privado (GitHub Security Advisories), con un tiempo de respuesta.
+- **Versiones soportadas:** la beta más reciente.
+- **Cómo verificar una descarga:** `Get-FileHash` contra `SHA256SUMS.txt` y `gh attestation verify`.
+- **Criterio:** el archivo existe y el README enlaza a él.
+
+## Parte C — Documentación para agentes de IA
+
+**Idea central:** un solo lugar con la verdad (`AGENTS.md` + `docs/dev/`). Los archivos de cada herramienta solo apuntan ahí, para que nunca se contradigan.
+
+### C1. Investigar convenciones actuales (≈20 min)
+
+Confirmar en la web qué archivo lee hoy cada agente (cambian seguido):
+
+| Agente | Archivo esperado |
+|---|---|
+| Estándar abierto (Codex, Copilot agent, Cursor, Jules, Zed…) | `AGENTS.md` |
+| Claude Code | `CLAUDE.md` (puede importar con `@AGENTS.md`) |
+| Gemini CLI | `GEMINI.md` (o configurar que lea `AGENTS.md`) |
+| GitHub Copilot | `.github/copilot-instructions.md` |
+| Cursor | `.cursor/rules/*.mdc` |
+| Windsurf | `.windsurf/rules/` |
+| Cline | `.clinerules` |
+| Aider | `CONVENTIONS.md` (`--read`) |
+| JetBrains Junie | `.junie/guidelines.md` |
+
+- **Criterio:** la tabla queda confirmada o corregida, con enlaces, en `docs/dev/ai-agents.md`.
+
+### C2. AGENTS.md (≈45 min)
+
+**Contenido**, corto y escaneable (menos de 200 líneas):
+
+1. **Qué es la app** y su stack: WinUI 3, .NET 8, sin empaquetar, Windows App SDK self-contained.
+2. **Comandos exactos:** compilar, ejecutar, cerrar la app antes de compilar, medir rendimiento (`tools/perf.ps1`).
+3. **Mapa del código:** un renglón por archivo y qué hace.
+4. **Reglas que no se rompen:**
+   - Seguridad: lista de A1–A5.
+   - Rendimiento: CPU en reposo menor a 0.1 s/min, sin `ProgressBar` animada, temporizadores mínimos, caché de llamadas COM caras.
+   - Nada de `Windows.Storage` en modo sin empaquetar.
+   - Ventanas `WS_EX_NOACTIVATE` + `WS_EX_TOOLWINDOW`.
+   - Escritura atómica de la config.
+   - Textos de UI en español.
+   - Comentarios cortos en español que explican el porqué.
+5. **Flujo de trabajo:**
+   1. Plan.
+   2. Cambio mínimo.
+   3. Compilar.
+   4. Probar en pantalla.
+   5. Medir CPU si se agregó un timer o un evento.
+   6. CHANGELOG y versión beta.
+6. **Enlaces** a las guías de `docs/dev/`.
+
+**Criterio:** cada comando del archivo se probó y funciona tal cual.
+
+### C3. Guías en docs/dev/ (≈2 h)
+
+| Archivo | Contenido |
+|---|---|
+| `architecture.md` | Ciclo de vida (App → ShellHost → WidgetWindow), config y migraciones, ventanas, imán, pestañas, widgets funcionales, diagrama |
+| `conventions.md` | Nombres, comentarios, estilo XAML (tokens de tema, `SettingRow`), menús con `ShowPopup`, idioma de UI, CRLF |
+| `security.md` | Modelo de amenazas, reglas (red, archivos, procesos, registro), datos que salen del equipo, firma y releases |
+| `performance.md` | Presupuestos (CPU en reposo, arranque, memoria), cómo medir con `tools/perf.ps1`, anti-patrones encontrados (ProgressBar, FriendlyName, timers de 1 s) |
+| `winui-gotchas.md` | Lo aprendido: Windows.Storage, íconos en STA, acrílico sin activar, coordenadas DIP vs. físicas, `ShouldConstrainToRootBounds`… |
+| `recipes/add-functional-widget.md` | Paso a paso real: `FeatureKinds`, `DefaultSize`, `FeatureTitle`, `SetupFeature`, fila y subpágina en Configuración, clase de opciones, `FeatureOptionsChanged` |
+| `recipes/add-setting.md` | Propiedad en `AppConfig`, fila `SettingRow`, carga y guardado |
+| `recipes/release.md` | Subir beta, CHANGELOG, etiqueta, publicar |
+
+- Mover `tools/perf.ps1` y `perf-split.ps1` desde el scratchpad al repo.
+- **Criterio:** cada receta se sigue tal cual sobre el código actual, sin pasos faltantes. Lo comprueba el paso C6.
+
+### C4. Archivos puente (≈20 min)
+
+- **`CLAUDE.md`:** `@AGENTS.md` y nada más (salvo particularidades de Claude Code).
+- **`GEMINI.md`, `.github/copilot-instructions.md`, `.cursor/rules/openwinbox.mdc`, `.windsurf/rules/openwinbox.md`, `.clinerules`, `CONVENTIONS.md`, `.junie/guidelines.md`:**
+  - 3–5 líneas cada uno.
+  - Contenido: "Lee AGENTS.md y docs/dev/ antes de cambiar código" + las 5 reglas más importantes.
+- **Criterio:**
+  - Ningún archivo puente pasa de 15 líneas.
+  - Todos enlazan a `AGENTS.md`.
+
+### C5. CONTRIBUTING.md y plantilla de PR (≈30 min)
+
+- **`CONTRIBUTING.md`:** cómo compilar, el estilo, cómo proponer cambios y la política de versiones.
+- **`.github/pull_request_template.md`** con checklist:
+  - [ ] compila
+  - [ ] probado en pantalla
+  - [ ] sin red nueva sin revisar
+  - [ ] sin `Process.Start` nuevo sin revisar
+  - [ ] CPU en reposo medida si hay timers
+  - [ ] CHANGELOG
+- **Criterio:** los archivos existen y el README enlaza a CONTRIBUTING.
+
+### C6. Prueba "en frío" con un agente (≈45 min)
+
+- Lanzar un subagente sin contexto de esta conversación. Solo recibe: "Lee AGENTS.md y agrega un widget funcional de ejemplo 'Notas' siguiendo la receta".
+- Revisar si siguió la estructura, las reglas de seguridad y rendimiento, y si compiló.
+- Corregir la documentación donde dudó o se equivocó.
+- Descartar el widget de ejemplo, salvo que el usuario lo quiera.
+- **Criterio:**
+  - El agente termina sin preguntar cosas que ya están en la documentación.
+  - El widget compila y respeta las reglas.
+
+## Cierre
+
+### D1. Beta 2 (≈10 min)
+
+- `<Version>1.0.0-beta.2</Version>` y CHANGELOG con lo hecho.
+- Commit y `git tag -a v1.0.0-beta.2`.
+- **Criterio:** Configuración → Acerca muestra `1.0.0-beta.2`.
+
+## Estimado total
+
+Unas 9–10 h de trabajo, repartidas así:
+
+| Parte | Tiempo |
+|---|---|
+| A (seguridad del código) | ≈3 h |
+| B (cadena de suministro) | ≈3 h, pero B3 solo se puede validar del todo con remoto |
+| C (agentes) | ≈4 h |
+
+Si mañana hay poco tiempo, la prioridad es:
+
+1. A1–A3 (riesgos reales).
+2. C2 + C4 (AGENTS.md y puentes).
+3. B1–B2.
+4. El resto.
+
+## Decisiones pendientes del usuario
+
+1. **Firma de código (B4):** SignPath (gratis, requiere repo público), Azure Trusted Signing (≈USD 10/mes) o sin firma durante las betas.
+2. **Ubicación por IP (A5):** ¿se deja como respaldo automático o como opción que el usuario activa?
+3. **Remoto:** dónde vivirá el repo (GitHub recomendado para Actions, CodeQL, atestaciones y Security Advisories).
