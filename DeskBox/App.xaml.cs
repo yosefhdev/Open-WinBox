@@ -23,6 +23,7 @@ public partial class App : Application
     private Mutex? _singleInstance;
     private SettingsWindow? _settings;
     private OnboardingWindow? _onboarding;
+    private TrayMenu? _trayMenu;
 
     public App()
     {
@@ -52,18 +53,19 @@ public partial class App : Application
         foreach (var widget in Config.Widgets.Where(w => !w.IsDisabled && (w.Kind != "File" || w.Folders.Count > 0)))
             OpenWidget(widget);
 
-        _shell = new ShellHost { PinnedToDesktop = Config.PinToDesktop };
+        _shell = new ShellHost();
         _shell.ToggleRequested += ToggleWidgets;
-        _shell.PinToggleRequested += () => SetPinned(!Config.PinToDesktop);
-        _shell.SettingsRequested += () => OpenSettings();
-        _shell.ExitRequested += () =>
-        {
-            _shell.Dispose();
-            foreach (var w in _widgets.Values) w.Close();
-            Exit();
-        };
+        _shell.MenuRequested += (x, y) => (_trayMenu ??= new TrayMenu()).ShowAt(x, y);
 
         if (!Config.HasCompletedOnboarding) OpenOnboarding();
+    }
+
+    public void Quit()
+    {
+        _shell?.Dispose();
+        foreach (var w in _widgets.Values) w.Close();
+        _trayMenu?.Close();
+        Exit();
     }
 
     // Widgets de archivos abiertos (para "Agrupar con…")
@@ -215,7 +217,6 @@ public partial class App : Application
     {
         Config.PinToDesktop = pinned;
         Config.Save();
-        if (_shell != null) _shell.PinnedToDesktop = pinned;
         foreach (var w in _widgets.Values) w.SetPinnedToDesktop(pinned);
     }
 

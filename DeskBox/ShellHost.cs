@@ -9,17 +9,13 @@ namespace OpenWinBox;
 internal sealed class ShellHost : IDisposable
 {
     public event Action? ToggleRequested;
-    public event Action? ExitRequested;
-    public event Action? PinToggleRequested;
-    public event Action? SettingsRequested;
+    public event Action<int, int>? MenuRequested; // posición del cursor en píxeles físicos
 
     public bool HotkeyRegistered { get; }
-    public bool PinnedToDesktop { get; set; } // solo para mostrar la marca en el menú
 
     private const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run", RunValue = "OpenWinBox";
     private const int WM_HOTKEY = 0x312, WM_TRAY = 0x8001, WM_LBUTTONUP = 0x202, WM_RBUTTONUP = 0x205;
     private const int HOTKEY_ID = 1, VK_F7 = 0x76, MOD_NOREPEAT = 0x4000;
-    private const int CMD_TOGGLE = 1, CMD_AUTOSTART = 2, CMD_EXIT = 3, CMD_PIN = 4, CMD_SETTINGS = 5;
 
     private readonly WndProc _wndProc; // referencia viva: el GC no debe recolectar el delegado que usa Windows
     private readonly IntPtr _hwnd;
@@ -97,27 +93,8 @@ internal sealed class ShellHost : IDisposable
 
     private void ShowMenu()
     {
-        var menu = CreatePopupMenu();
-        AppendMenu(menu, 0, CMD_TOGGLE, "Mostrar / ocultar (F7)");
-        AppendMenu(menu, PinnedToDesktop ? 0x8u /* MF_CHECKED */ : 0, CMD_PIN, "Mantener en el escritorio (detrás de las apps)");
-        AppendMenu(menu, AutoStart ? 0x8u : 0, CMD_AUTOSTART, "Iniciar con Windows");
-        AppendMenu(menu, 0x800 /* MF_SEPARATOR */, 0, null);
-        AppendMenu(menu, 0, CMD_SETTINGS, "Configuración…");
-        AppendMenu(menu, 0x800, 0, null);
-        AppendMenu(menu, 0, CMD_EXIT, "Salir");
         GetCursorPos(out var pt);
-        SetForegroundWindow(_hwnd); // sin esto el menú no se cierra al hacer clic fuera
-        var cmd = TrackPopupMenu(menu, 0x100 | 0x2 /* TPM_RETURNCMD | TPM_RIGHTBUTTON */, pt.X, pt.Y, 0, _hwnd, IntPtr.Zero);
-        DestroyMenu(menu);
-
-        switch (cmd)
-        {
-            case CMD_TOGGLE: ToggleRequested?.Invoke(); break;
-            case CMD_AUTOSTART: AutoStart = !AutoStart; break;
-            case CMD_PIN: PinToggleRequested?.Invoke(); break;
-            case CMD_SETTINGS: SettingsRequested?.Invoke(); break;
-            case CMD_EXIT: ExitRequested?.Invoke(); break;
-        }
+        MenuRequested?.Invoke(pt.X, pt.Y);
     }
 
     public void Dispose()
@@ -173,12 +150,7 @@ internal sealed class ShellHost : IDisposable
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern IntPtr LoadImage(IntPtr hInstance, string name, uint type, int cx, int cy, uint flags);
     [DllImport("user32.dll")] private static extern int GetSystemMetrics(int index);
-    [DllImport("user32.dll")] private static extern IntPtr CreatePopupMenu();
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern bool AppendMenu(IntPtr menu, uint flags, int id, string? text);
-    [DllImport("user32.dll")] private static extern int TrackPopupMenu(IntPtr menu, uint flags, int x, int y, int reserved, IntPtr hwnd, IntPtr rect);
-    [DllImport("user32.dll")] private static extern bool DestroyMenu(IntPtr menu);
     [DllImport("user32.dll")] private static extern bool GetCursorPos(out POINT pt);
-    [DllImport("user32.dll")] private static extern bool SetForegroundWindow(IntPtr hwnd);
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)] private static extern bool Shell_NotifyIcon(int message, ref NOTIFYICONDATA data);
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode)] private static extern IntPtr GetModuleHandle(string? name);
 }
