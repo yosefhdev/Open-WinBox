@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.UI.Windowing;
@@ -24,6 +26,11 @@ public partial class App : Application
     private SettingsWindow? _settings;
     private OnboardingWindow? _onboarding;
     private TrayMenu? _trayMenu;
+    private WinEventProc? _foregroundProc; // referencia viva: Windows llama a este delegado
+    private IntPtr _foregroundHook;
+
+    // Win+D trae el escritorio (Progman/WorkerW) al frente y tapa a los widgets; mientras tanto van encima de él
+    public static bool DesktopInFront { get; private set; }
 
     public App()
     {
@@ -53,6 +60,12 @@ public partial class App : Application
         foreach (var widget in Config.Widgets.Where(w => !w.IsDisabled && (w.Kind != "File" || w.Folders.Count > 0)))
             OpenWidget(widget);
 
+        // Out-of-context desde el hilo de UI: el callback llega por su loop de mensajes, sin TryEnqueue.
+        // Sin los eventos propios: abrir un menú del widget no debe contar como "el escritorio dejó de estar al frente"
+        _foregroundProc = OnForegroundChanged;
+        _foregroundHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, _foregroundProc, 0, 0,
+            WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
+
         _shell = new ShellHost();
         _shell.ToggleRequested += ToggleWidgets;
         _shell.MenuRequested += (x, y) => (_trayMenu ??= new TrayMenu()).ShowAt(x, y);
@@ -63,6 +76,7 @@ public partial class App : Application
     public void Quit()
     {
         _shell?.Dispose();
+        if (_foregroundHook != IntPtr.Zero) UnhookWinEvent(_foregroundHook);
         foreach (var w in _widgets.Values) w.Close();
         _trayMenu?.Close();
         Exit();
@@ -243,6 +257,8 @@ public partial class App : Application
             _settings.Closed += (_, _) => _settings = null;
         }
         else _settings.ShowPage(page);
+        // El hook omite ventanas propias: sin esto los widgets topmost taparían Configuración
+        if (DesktopInFront) SetDesktopInFront(false, WinRT.Interop.WindowNative.GetWindowHandle(_settings));
         _settings.Activate();
     }
 
@@ -276,4 +292,62 @@ public partial class App : Application
             else w.ShowOnDesktop();
         }
     }
+
+    private void OnForegroundChanged(IntPtr hook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint thread, uint time)
+    {
+        if (hwnd == IntPtr.Zero) return;
+        var name = new StringBuilder(64);
+        GetClassName(hwnd, name, name.Capacity);
+        // Barra de tareas, Inicio, bandeja y popups del shell no cambian si el escritorio está al frente (Win+D → Win+T)
+        if (name.ToString() is "Shell_TrayWnd" or "Shell_SecondaryTrayWnd" or "Windows.UI.Core.CoreWindow" or "XamlExplorerHostIslandWindow"
+            or "NotifyIconOverflowWindow" or "TopLevelWindowForOverflowXamlIsland" or "Xaml_WindowedPopupClass") return;
+        var desktop = name.ToString() is "Progman" or "WorkerW";
+        if (desktop == DesktopInFront) return;
+        // Un clic en el fondo también lo pone en primer plano sin subirlo en Z: solo cuenta si de verdad tapa a algún widget.
+        // No subirlos antes de que los tape: si cambian de orden mientras Win+D minimiza, el shell lo cancela y restaura las apps.
+        if (desktop && !CoversWidget(hwnd)) { RecheckDesktop(hwnd); return; }
+        SetDesktopInFront(desktop, hwnd);
+    }
+
+    // Con Win+D el evento llega ~200 ms antes de que el shell suba el escritorio: mirar cada ~16 ms durante 1 s
+    // y subir los widgets en cuanto los tape
+    private async void RecheckDesktop(IntPtr hwnd)
+    {
+        for (var i = 0; i < 60; i++)
+        {
+            await Task.Delay(16);
+            if (DesktopInFront || GetForegroundWindow() != hwnd) return;
+            if (CoversWidget(hwnd)) { SetDesktopInFront(true, hwnd); return; }
+        }
+    }
+
+    private bool CoversWidget(IntPtr hwnd)
+    {
+        var widgets = _widgets.Values.Select(w => w.Hwnd).ToHashSet();
+        for (var h = GetWindow(hwnd, GW_HWNDNEXT); h != IntPtr.Zero; h = GetWindow(h, GW_HWNDNEXT))
+            if (widgets.Contains(h)) return true;
+        return false;
+    }
+
+    private async void SetDesktopInFront(bool front, IntPtr foreground)
+    {
+        DesktopInFront = front;
+        foreach (var w in _widgets.Values) w.SetAboveDesktop(front, foreground);
+        if (front || !Config.PinToDesktop) return;
+        // Al salir de Win+D el shell termina de restaurar el orden después del evento y puede subir algún widget: repetir
+        await Task.Delay(300);
+        if (!DesktopInFront) foreach (var w in _widgets.Values) w.SetAboveDesktop(false, foreground);
+    }
+
+    private delegate void WinEventProc(IntPtr hook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint thread, uint time);
+    private const uint EVENT_SYSTEM_FOREGROUND = 0x3, WINEVENT_OUTOFCONTEXT = 0, WINEVENT_SKIPOWNPROCESS = 0x2;
+    private const uint GW_HWNDNEXT = 2;
+    [DllImport("user32.dll")] private static extern IntPtr GetWindow(IntPtr hwnd, uint cmd);
+    [DllImport("user32.dll")] private static extern IntPtr GetForegroundWindow();
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr module, WinEventProc proc, uint process, uint thread, uint flags);
+    [DllImport("user32.dll")] private static extern bool UnhookWinEvent(IntPtr hook);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern int GetClassName(IntPtr hwnd, StringBuilder name, int max);
 }

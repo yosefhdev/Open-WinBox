@@ -34,7 +34,7 @@ public sealed partial class WidgetWindow : Window
     private bool _closed; // un menú puede cerrarse después de la ventana (p. ej. al reabrirla desde un ítem)
     private readonly Microsoft.UI.Dispatching.DispatcherQueueTimer _lowerTimer;
 
-    private IntPtr Hwnd => Win32Interop.GetWindowFromWindowId(AppWindow.Id);
+    public IntPtr Hwnd => Win32Interop.GetWindowFromWindowId(AppWindow.Id);
 
     private bool IsFileWidget => _config.Kind == "File";
 
@@ -156,6 +156,18 @@ public sealed partial class WidgetWindow : Window
         var style = GetWindowLongPtr(Hwnd, GWL_EXSTYLE);
         SetWindowLongPtr(Hwnd, GWL_EXSTYLE, pinned ? style | WS_EX_NOACTIVATE : style & ~WS_EX_NOACTIVATE);
         if (pinned) SendToBottom();
+    }
+
+    // Con el escritorio al frente (Win+D) Windows lo deja sobre todo lo que no es topmost: HWND_TOP no basta.
+    // Al salir, colocarse detrás de la app que tomó el foco (o al fondo si está fijado); eso también quita el topmost.
+    public void SetAboveDesktop(bool above, IntPtr foreground)
+    {
+        if (_closed) return; // una pasada diferida (300 ms) puede llegar tras cerrar la app
+        if (above || _pinned) SendToBottom();
+        // Detrás de una app topmost el widget heredaría el topmost para siempre: solo quitárselo
+        else if ((GetWindowLongPtr(foreground, GWL_EXSTYLE) & WS_EX_TOPMOST) != 0)
+            SetWindowPos(Hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        else SetWindowPos(Hwnd, foreground, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
     }
 
     // Si el monitor guardado ya no existe (o cambió la resolución), mover la ventana al área visible más cercana
@@ -625,10 +637,15 @@ public sealed partial class WidgetWindow : Window
     private void OnAppWindowChanged(AppWindow sender, AppWindowChangedEventArgs args)
     {
         // WinUI sube la ventana al hacer clic aunque tenga WS_EX_NOACTIVATE: devolverla al fondo al soltar el mouse
-        if (_pinned && !PopupOpen && args.DidZOrderChange && !args.IsZOrderAtBottom) _lowerTimer.Start();
+        if (_pinned && !PopupOpen && !App.DesktopInFront && args.DidZOrderChange && !args.IsZOrderAtBottom) _lowerTimer.Start();
         if (!args.DidPositionChange && !args.DidSizeChange) return;
         // Minimizada, Windows la manda a (-32000,-32000) con tamaño mínimo: no guardar eso
-        if (sender.Presenter is OverlappedPresenter { State: OverlappedPresenterState.Minimized }) return;
+        if (sender.Presenter is OverlappedPresenter { State: OverlappedPresenterState.Minimized } p)
+        {
+            // Win+D (u otra app) lo minimizó; un widget de escritorio no se minimiza nunca
+            if (sender.IsVisible) DispatcherQueue.TryEnqueue(() => { if (_closed) return; p.Restore(false); if (_pinned) SendToBottom(); });
+            return;
+        }
         _config.X = sender.Position.X;
         _config.Y = sender.Position.Y;
         _config.Width = sender.Size.Width;
@@ -703,14 +720,15 @@ public sealed partial class WidgetWindow : Window
         return sub;
     }
 
+    // Con el escritorio al frente, el fondo queda bajo Progman y el widget desaparecería: topmost en su lugar
     private void SendToBottom() =>
-        SetWindowPos(Hwnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        SetWindowPos(Hwnd, App.DesktopInFront ? HWND_TOPMOST : HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
     private const int IconSize = 30; // igual que iconSize en la configuración del DeskBox original
-    private static readonly IntPtr HWND_BOTTOM = new(1), HWND_TOP = IntPtr.Zero;
+    private static readonly IntPtr HWND_BOTTOM = new(1), HWND_TOP = IntPtr.Zero, HWND_TOPMOST = new(-1), HWND_NOTOPMOST = new(-2);
     private const uint SWP_NOSIZE = 0x1, SWP_NOMOVE = 0x2, SWP_NOACTIVATE = 0x10;
     private const int GWL_EXSTYLE = -20, VK_LBUTTON = 0x01, VK_RBUTTON = 0x02;
-    private const nint WS_EX_NOACTIVATE = 0x08000000, WS_EX_TOOLWINDOW = 0x80, WS_EX_APPWINDOW = 0x40000;
+    private const nint WS_EX_NOACTIVATE = 0x08000000, WS_EX_TOOLWINDOW = 0x80, WS_EX_APPWINDOW = 0x40000, WS_EX_TOPMOST = 0x8;
 
     [DllImport("user32.dll", SetLastError = true)]
     private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint flags);

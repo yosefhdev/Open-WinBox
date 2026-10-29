@@ -25,6 +25,10 @@ Fecha: 2026-10-29. Versión de partida: `1.0.0-beta.1` (commit `cf0599a`). Plan 
 
 ## Checklist
 
+**Parte W — Widgets visibles tras Win + D** (prioridad: va antes de la Parte A)
+- [x] W1. Restaurar sin activar el widget cuando Windows lo minimiza (Win + D)
+- [x] W2. (Solo si W1 no basta) Subir los widgets sobre el escritorio mientras el escritorio está en primer plano
+
 **Parte A — Seguridad del código**
 - [ ] A0. Renombrar la carpeta `DeskBox/` → `OpenWinBox/` (antes de documentar rutas)
 - [ ] A1. Auditoría de seguridad del código con hallazgos priorizados (`docs/security/audit-2026-10.md`)
@@ -50,6 +54,82 @@ Fecha: 2026-10-29. Versión de partida: `1.0.0-beta.1` (commit `cf0599a`). Plan 
 
 **Cierre**
 - [ ] D1. Versión `1.0.0-beta.2`, CHANGELOG, commit y etiqueta
+
+---
+
+## Parte W — Widgets visibles tras Win + D
+
+**Problema:** Win + D (Mostrar escritorio) minimiza todo, incluidos los `WidgetWindow`. Deben quedar visibles siempre,
+con "Mantener en el escritorio" (`_pinned`: `WS_EX_NOACTIVATE` + `SendToBottom`) y sin él. F7 / clic en la bandeja
+(`App.ToggleWidgets`, `App.xaml.cs:268`) sigue ocultando/mostrando con `AppWindow.Hide()` / `ShowOnDesktop()`; eso
+no es minimizar, así que no choca. El usuario no puede minimizar a propósito (`IsMinimizable = false`,
+`WidgetWindow.xaml.cs:104`): **cualquier minimizado viene de fuera** y se puede deshacer sin bandera extra.
+
+**Enfoque elegido:** (a) detectar el minimizado en el `AppWindow.Changed` que ya existe y restaurar sin activar.
+Descartado (b) emparentar con Progman/WorkerW: frágil entre builds de Windows y rompe arrastre/imán/DPI.
+
+**Comando de build** (en todos los pasos, desde la raíz del repo; cerrar antes la app):
+```bash
+taskkill //IM OpenWinBox.exe //F 2>/dev/null; "/c/Program Files/dotnet/dotnet.exe" build DeskBox/OpenWinBox.csproj -c Debug -nologo -v q
+```
+Debe terminar con 0 errores (y sin warnings nuevos).
+
+### W1. Restaurar al ser minimizado (≈15 min) — no paralelizable
+
+- **Archivo:** `DeskBox/WidgetWindow.xaml.cs`, método `OnAppWindowChanged` (≈línea 625).
+  - Hoy, si el presenter está `Minimized`, hace `return` para no guardar la posición (-32000,-32000). Conservar ese
+    "no guardar" y, en vez de solo salir, encolar la restauración:
+    ```csharp
+    if (sender.Presenter is OverlappedPresenter { State: OverlappedPresenterState.Minimized } p)
+    {
+        // Win+D (u otra app) lo minimizó; un widget de escritorio no se minimiza nunca
+        if (sender.IsVisible) DispatcherQueue.TryEnqueue(() => { if (_closed) return; p.Restore(false); if (_pinned) SendToBottom(); });
+        return;
+    }
+    ```
+  - `Restore(false)` = restaurar sin activar (no roba el foco). `TryEnqueue` evita restaurar dentro del propio evento.
+  - Guardia `IsVisible`: un widget oculto con F7 no debe reaparecer por esto.
+  - No tocar `ShowOnDesktop` (`:144`) ni `ToggleWidgets`: su manejo de "minimizado" queda como red de seguridad.
+  - Ojo: el minimizado llega con `DidPositionChange/DidSizeChange`, pero el `return` está DESPUÉS del
+    `if (!args.DidPositionChange && !args.DidSizeChange) return;`; está bien así (minimizar siempre mueve la ventana).
+- **Criterio:**
+  1. Build con 0 errores.
+  2. Prueba manual, modo normal (Configuración → "Mantener en el escritorio" apagado), con 2+ widgets y alguna app
+     abierta (Bloc de notas): Win + D → las apps se minimizan y **los widgets siguen visibles** en su sitio y tamaño;
+     `config.json` (`%APPDATA%`/carpeta de config de la app) no queda con X/Y = -32000.
+  3. Igual con "Mantener en el escritorio" encendido: widgets visibles tras Win + D y siguen al fondo (abrir una app
+     encima los tapa; clic en el widget no le roba el foco a esa app).
+  4. Win + D otra vez → Bloc de notas vuelve; los widgets siguen donde estaban.
+  5. F7 oculta todos los widgets; Win + D con ellos ocultos NO los hace reaparecer; F7 de nuevo los muestra.
+     Clic en el ícono de bandeja hace lo mismo.
+  6. Si tras Win + D el widget no está minimizado (sigue `Restored`) pero no se ve, o queda tapado por el fondo del
+     escritorio → pasar a W2. Para distinguirlo: `Debug.WriteLine(sender.Presenter is OverlappedPresenter o ? o.State : default)`
+     temporal en `OnAppWindowChanged` y mirar la salida de depuración; quitarlo antes del commit.
+
+### W2. Por encima del escritorio mientras está al frente (≈40 min) — solo si W1 no basta — no paralelizable, depende de W1
+
+En Windows 11, Win + D puede, además de minimizar, traer la ventana del escritorio (`WorkerW`/`Progman`) al frente y
+tapar las ventanas que no son topmost, sobre todo las que están en `HWND_BOTTOM` (modo "Mantener en el escritorio").
+Es lo que hace Rainmeter: topmost mientras el escritorio es la ventana en primer plano; normal en cuanto deja de serlo.
+
+- **Archivos:**
+  - `DeskBox/App.xaml.cs`: un solo `SetWinEventHook(EVENT_SYSTEM_FOREGROUND (0x3), ..., WINEVENT_OUTOFCONTEXT (0)|WINEVENT_SKIPOWNPROCESS (2))`
+    al arrancar (junto a donde se abren los widgets) y `UnhookWinEvent` en `Quit()`. Guardar el delegado en un campo
+    (igual que `_subclassProc` en `WidgetWindow.Snap.cs:23`). En el callback: `GetClassName(hwnd)` es `"WorkerW"` o
+    `"Progman"` → `w.SetAboveDesktop(true)` en cada widget de `_widgets.Values`; si no → `SetAboveDesktop(false)`.
+    El callback llega en el hilo de UI (hook out-of-context en el hilo que lo instaló), no hace falta `TryEnqueue`.
+  - `DeskBox/WidgetWindow.xaml.cs`: método nuevo `public void SetAboveDesktop(bool above)` junto a `SetPinnedToDesktop`:
+    - si cambia el estado: `SetWindowPos(Hwnd, above ? HWND_TOPMOST : HWND_NOTOPMOST, 0,0,0,0, SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE)`;
+      al salir, si `_pinned`, `SendToBottom()`.
+    - campo `bool _aboveDesktop`, y en `OnAppWindowChanged` la condición que arranca `_lowerTimer` debe exigir
+      `!_aboveDesktop`; si no, el temporizador lo vuelve a mandar al fondo y deshace el topmost.
+    - Constantes `HWND_TOPMOST = new(-1)`, `HWND_NOTOPMOST = new(-2)` junto a `HWND_BOTTOM` (`:710`).
+- **Criterio:**
+  1. Build con 0 errores.
+  2. Repetir las pruebas 2–5 de W1: ahora los widgets se ven tras Win + D en ambos modos.
+  3. Con el escritorio mostrado, clic en una app de la barra de tareas → la app queda ENCIMA de los widgets
+     (el topmost se quitó); en modo "Mantener en el escritorio" los widgets vuelven al fondo.
+  4. El menú contextual / renombrar de un widget sigue funcionando con el escritorio al frente.
 
 ---
 
