@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="480" viewBox="0 0 1280 480" role="img" aria-label="Illustration of OpenWinBox widgets on a desktop: a folder widget with tabs, a clock, weather, music and audio controls">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F4A08A"/>
+      <stop offset="1" stop-color="#C24E36"/>
+    </linearGradient>
+    <linearGradient id="photo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#26415E"/>
+      <stop offset="1" stop-color="#6B4A7E"/>
+    </linearGradient>
+    <linearGradient id="cover" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A06EE8"/>
+      <stop offset="1" stop-color="#24B5C8"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#5A1E10" flood-opacity="0.35"/>
+    </filter>
+    <style>
+      text { font-family: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif; fill: #F4F4F6; }
+      .muted { fill: #A9ABB5; }
+      .card { fill: #1D1E24; fill-opacity: 0.94; stroke: #FFFFFF; stroke-opacity: 0.08; }
+      .track { fill: #FFFFFF; fill-opacity: 0.16; }
+      .fill { fill: #F08A6E; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="480" fill="url(#wall)"/>
+  <circle cx="1180" cy="-30" r="260" fill="#FFFFFF" opacity="0.07"/>
+  <circle cx="60" cy="520" r="300" fill="#FFFFFF" opacity="0.06"/>
+
+  <!-- Widget de carpetas con pestañas -->
+  <g filter="url(#shadow)">
+    <rect class="card" x="70" y="50" width="400" height="380" rx="14"/>
+  </g>
+  <rect x="82" y="62" width="104" height="34" rx="8" fill="#FFFFFF" fill-opacity="0.12"/>
+  <text x="134" y="84" font-size="14" font-weight="600" text-anchor="middle">Projects</text>
+  <text x="222" y="84" font-size="14" class="muted" text-anchor="middle">Docs</text>
+  <text x="292" y="84" font-size="14" class="muted" text-anchor="middle">Games</text>
+  <text x="444" y="85" font-size="18" class="muted" text-anchor="middle">+</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="96" y="120" width="64" height="64" rx="14" fill="#E9705A"/>
+    <rect x="188" y="120" width="64" height="64" rx="14" fill="#4BA3EA"/>
+    <rect x="280" y="120" width="64" height="64" rx="14" fill="#F5C518"/>
+    <rect x="372" y="120" width="64" height="64" rx="14" fill="#4FC08D"/>
+    <text x="128" y="204">Website</text>
+    <text x="220" y="204">Reports</text>
+    <text x="312" y="204">Notes</text>
+    <text x="404" y="204">Budget</text>
+    <rect x="96" y="226" width="64" height="64" rx="14" fill="#A06EE8"/>
+    <rect x="188" y="226" width="64" height="64" rx="14" fill="#24B5C8"/>
+    <rect x="280" y="226" width="64" height="64" rx="14" fill="#E9705A"/>
+    <rect x="372" y="226" width="64" height="64" rx="14" fill="#4BA3EA"/>
+    <text x="128" y="310">Design</text>
+    <text x="220" y="310">Photos</text>
+    <text x="312" y="310">Invoices</text>
+    <text x="404" y="310">Backups</text>
+    <rect x="96" y="332" width="64" height="64" rx="14" fill="#4FC08D"/>
+    <rect x="188" y="332" width="64" height="64" rx="14" fill="#F5C518"/>
+    <text x="128" y="416">Scripts</text>
+    <text x="220" y="416">Ideas</text>
+  </g>
+
+  <!-- Glance -->
+  <g filter="url(#shadow)">
+    <rect x="500" y="50" width="350" height="180" rx="14" fill="url(#photo)"/>
+  </g>
+  <text x="526" y="142" font-size="72" font-weight="600">10:24</text>
+  <text x="528" y="184" font-size="17">Monday, November 2</text>
+
+  <!-- Tiempo -->
+  <g filter="url(#shadow)">
+    <rect class="card" x="500" y="250" width="350" height="180" rx="14"/>
+  </g>
+  <circle cx="568" cy="326" r="30" fill="#F5C518"/>
+  <rect x="556" y="334" width="66" height="26" rx="13" fill="#E4E6EC"/>
+  <text x="646" y="350" font-size="56" font-weight="600">24°</text>
+  <text x="526" y="402" font-size="16" class="muted">Partly cloudy</text>
+
+  <!-- Música -->
+  <g filter="url(#shadow)">
+    <rect class="card" x="880" y="50" width="330" height="180" rx="14"/>
+  </g>
+  <rect x="900" y="70" width="84" height="84" rx="10" fill="url(#cover)"/>
+  <text x="1000" y="102" font-size="18" font-weight="600">Song title</text>
+  <text x="1000" y="128" font-size="14" class="muted">Artist name</text>
+  <rect class="track" x="900" y="172" width="290" height="4" rx="2"/>
+  <rect class="fill" x="900" y="172" width="118" height="4" rx="2"/>
+  <g fill="#F4F4F6">
+    <path d="M1012 196 l-14 8 l14 8 z"/>
+    <rect x="994" y="196" width="3" height="16"/>
+    <rect x="1040" y="194" width="5" height="20" rx="1"/>
+    <rect x="1051" y="194" width="5" height="20" rx="1"/>
+    <path d="M1086 196 l14 8 l-14 8 z"/>
+    <rect x="1101" y="196" width="3" height="16"/>
+  </g>
+
+  <!-- Audio -->
+  <g filter="url(#shadow)">
+    <rect class="card" x="880" y="250" width="330" height="180" rx="14"/>
+  </g>
+  <text x="902" y="286" font-size="15" font-weight="600">Speakers</text>
+  <text x="1188" y="286" font-size="13" class="muted" text-anchor="end">Output</text>
+  <g font-size="13">
+    <text x="902" y="326">Browser</text>
+    <rect class="track" x="990" y="320" width="198" height="4" rx="2"/>
+    <rect class="fill" x="990" y="320" width="150" height="4" rx="2"/>
+    <circle cx="1140" cy="322" r="7" fill="#F4F4F6"/>
+    <text x="902" y="364">Music</text>
+    <rect class="track" x="990" y="358" width="198" height="4" rx="2"/>
+    <rect class="fill" x="990" y="358" width="96" height="4" rx="2"/>
+    <circle cx="1086" cy="360" r="7" fill="#F4F4F6"/>
+    <text x="902" y="402">Game</text>
+    <rect class="track" x="990" y="396" width="198" height="4" rx="2"/>
+    <rect class="fill" x="990" y="396" width="172" height="4" rx="2"/>
+    <circle cx="1162" cy="398" r="7" fill="#F4F4F6"/>
+  </g>
+</svg>
