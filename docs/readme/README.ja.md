@@ -6,7 +6,7 @@
 
 **Windows デスクトップ用のオープンソースウィジェット。フォルダー、音楽、時計、天気、オーディオをいつでも目の前に。**
 
-![バージョン](https://img.shields.io/badge/バージョン-1.0.0--beta.1-orange)
+![バージョン](https://img.shields.io/badge/バージョン-1.0.0--beta.2-orange)
 ![プラットフォーム](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![ライセンス](https://img.shields.io/badge/ライセンス-MIT-green)
 
@@ -35,17 +35,17 @@
 ## 動作環境
 
 - Windows 10 バージョン 1809 以降、または Windows 11（64 ビット）。
-- [.NET 8 Runtime](https://dotnet.microsoft.com/download/dotnet/8.0)（x64）。ソースからビルドする場合は .NET 8 SDK が必要です。
+- その他に必要なものはインストーラーに含まれています。ソースからビルドする場合は [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) が必要です。
 
 ## インストール
 
 ### 方法 1：リリース版をダウンロード
 
-1. このリポジトリの **Releases** ページを開き、最新の `OpenWinBox-<バージョン>-win-x64.zip` をダウンロードします。
-2. 残しておくフォルダーに展開します（例：`C:\Apps\OpenWinBox`）。
-3. `OpenWinBox.exe` を実行します。初回はクイックガイドが開きます。
+1. このリポジトリの **Releases** ページを開き、最新の `OpenWinBox-<バージョン>-Setup.exe` をダウンロードします。
+2. 実行します。現在のユーザーにのみインストールされ、管理者権限は必要ありません。
+3. OpenWinBox を開きます。初回はクイックガイドが開きます。
 
-> パッケージは最初の公開ベータ版と同時に公開予定です。
+> インストーラーはまだコード署名されていないため、「Windows によって PC が保護されました」と表示されることがあります。**詳細情報**、**実行** の順に選択してください。ハッシュはリリースの `SHA256SUMS.txt` と照合できます。
 
 ### 方法 2：ソースからビルド
 

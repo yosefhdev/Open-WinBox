@@ -6,7 +6,7 @@
 
 **Windows 바탕 화면을 위한 오픈 소스 위젯: 폴더, 음악, 시계, 날씨, 오디오를 한눈에.**
 
-![버전](https://img.shields.io/badge/버전-1.0.0--beta.1-orange)
+![버전](https://img.shields.io/badge/버전-1.0.0--beta.2-orange)
 ![플랫폼](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![라이선스](https://img.shields.io/badge/라이선스-MIT-green)
 
@@ -35,17 +35,17 @@
 ## 요구 사항
 
 - Windows 10 버전 1809 이상 또는 Windows 11(64비트).
-- [.NET 8 Runtime](https://dotnet.microsoft.com/download/dotnet/8.0)(x64). 소스에서 빌드하려면 .NET 8 SDK가 필요합니다.
+- 나머지는 모두 설치 프로그램에 포함되어 있습니다. 소스에서 빌드하려면 [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)가 필요합니다.
 
 ## 설치
 
 ### 방법 1: 릴리스 다운로드
 
-1. 이 저장소의 **Releases** 페이지에서 최신 `OpenWinBox-<버전>-win-x64.zip`을 다운로드합니다.
-2. 계속 보관할 폴더에 압축을 풉니다(예: `C:\Apps\OpenWinBox`).
-3. `OpenWinBox.exe`를 실행합니다. 처음 실행하면 빠른 안내가 열립니다.
+1. 이 저장소의 **Releases** 페이지에서 최신 `OpenWinBox-<버전>-Setup.exe`를 다운로드합니다.
+2. 실행합니다. 현재 사용자에게만 설치되며 관리자 권한이 필요하지 않습니다.
+3. OpenWinBox를 엽니다. 처음 실행하면 빠른 안내가 열립니다.
 
-> 패키지는 첫 공개 베타와 함께 게시될 예정입니다.
+> 설치 프로그램은 아직 코드 서명이 되어 있지 않아 *Windows의 PC 보호* 창이 나타날 수 있습니다. **추가 정보**를 누른 다음 **실행**을 선택하세요. 해시는 릴리스의 `SHA256SUMS.txt`와 비교할 수 있습니다.
 
 ### 방법 2: 소스에서 빌드
 

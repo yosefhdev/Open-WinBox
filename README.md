@@ -6,7 +6,7 @@
 
 **Open-source desktop widgets for Windows: your folders, music, clock, weather and audio, right on the desktop.**
 
-![Version](https://img.shields.io/badge/version-1.0.0--beta.1-orange)
+![Version](https://img.shields.io/badge/version-1.0.0--beta.2-orange)
 ![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -35,17 +35,17 @@
 ## Requirements
 
 - Windows 10 version 1809 or later, or Windows 11 (64-bit).
-- [.NET 8 Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) (x64). To build from source you need the .NET 8 SDK instead.
+- The installer includes everything else. To build from source you need the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
 
 ## Installation
 
 ### Option 1: download a release
 
-1. Open the **Releases** page of this repository and download the latest `OpenWinBox-<version>-win-x64.zip`.
-2. Extract it to a folder you will keep, for example `C:\Apps\OpenWinBox`.
-3. Run `OpenWinBox.exe`. A quick setup guide opens the first time.
+1. Open the **Releases** page of this repository and download the latest `OpenWinBox-<version>-Setup.exe`.
+2. Run it. It installs for your user only and does not ask for administrator rights.
+3. Open OpenWinBox. A quick setup guide opens the first time.
 
-> Release packages will be published with the first public beta.
+> The installer is not code-signed yet, so Windows may show *Windows protected your PC*. Choose **More info** and then **Run anyway**. You can compare its hash with `SHA256SUMS.txt` in the release.
 
 ### Option 2: build from source
 

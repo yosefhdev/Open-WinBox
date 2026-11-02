@@ -6,7 +6,7 @@
 
 **Widgets de código aberto para a área de trabalho do Windows: suas pastas, música, relógio, clima e áudio sempre à vista.**
 
-![Versão](https://img.shields.io/badge/versão-1.0.0--beta.1-orange)
+![Versão](https://img.shields.io/badge/versão-1.0.0--beta.2-orange)
 ![Plataforma](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Licença](https://img.shields.io/badge/licença-MIT-green)
 
@@ -35,17 +35,17 @@
 ## Requisitos
 
 - Windows 10 versão 1809 ou posterior, ou Windows 11 (64 bits).
-- [.NET 8 Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) (x64). Para compilar a partir do código, use o SDK do .NET 8.
+- O instalador inclui todo o resto. Para compilar a partir do código, use o [SDK do .NET 8](https://dotnet.microsoft.com/download/dotnet/8.0).
 
 ## Instalação
 
 ### Opção 1: baixar uma versão
 
-1. Abra a página **Releases** deste repositório e baixe o `OpenWinBox-<versão>-win-x64.zip` mais recente.
-2. Extraia em uma pasta que você vai manter, por exemplo `C:\Apps\OpenWinBox`.
-3. Execute `OpenWinBox.exe`. Na primeira vez, um guia rápido é aberto.
+1. Abra a página **Releases** deste repositório e baixe o `OpenWinBox-<versão>-Setup.exe` mais recente.
+2. Execute-o. Ele instala apenas para o seu usuário e não pede permissões de administrador.
+3. Abra o OpenWinBox. Na primeira vez, um guia rápido é aberto.
 
-> Os pacotes serão publicados com a primeira beta pública.
+> O instalador ainda não é assinado, então o Windows pode mostrar *O Windows protegeu o computador*. Escolha **Mais informações** e depois **Executar assim mesmo**. Você pode comparar o hash com o `SHA256SUMS.txt` da versão publicada.
 
 ### Opção 2: compilar a partir do código
 

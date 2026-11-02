@@ -9,6 +9,11 @@ Versiones con [SemVer](https://semver.org/lang/es/). Mientras la app está en pr
 
 ## [Sin publicar]
 
+## [1.0.0-beta.2] - 2026-11-01
+
+- Instalador para Windows (`OpenWinBox-<versión>-Setup.exe`): no requiere administrador ni instalar .NET.
+- Menú de bandeja propio con acrílico, íconos e interruptores.
+- Los widgets siguen visibles con Win+D.
 - Licencia MIT, avisos de terceros (THIRD-PARTY-NOTICES.md) y atribuciones en Configuración → Acerca.
 - README en inglés, español, francés, portugués, alemán, italiano, ruso, chino, japonés y coreano.
 

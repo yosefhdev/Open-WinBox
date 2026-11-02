@@ -1,6 +1,7 @@
 # Salidas de compilación
 bin/
 obj/
+dist/
 # Visual Studio / Rider
 .vs/
 .idea/

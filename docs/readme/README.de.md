@@ -6,7 +6,7 @@
 
 **Open-Source-Widgets für den Windows-Desktop: Ordner, Musik, Uhr, Wetter und Audio immer im Blick.**
 
-![Version](https://img.shields.io/badge/Version-1.0.0--beta.1-orange)
+![Version](https://img.shields.io/badge/Version-1.0.0--beta.2-orange)
 ![Plattform](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Lizenz](https://img.shields.io/badge/Lizenz-MIT-green)
 
@@ -35,17 +35,17 @@
 ## Voraussetzungen
 
 - Windows 10 ab Version 1809 oder Windows 11 (64 Bit).
-- [.NET 8 Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) (x64). Zum Kompilieren aus dem Quellcode wird das .NET 8 SDK benötigt.
+- Alles Weitere bringt das Installationsprogramm mit. Zum Kompilieren aus dem Quellcode wird das [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) benötigt.
 
 ## Installation
 
 ### Option 1: Version herunterladen
 
-1. Öffne die Seite **Releases** dieses Repositorys und lade die neueste `OpenWinBox-<Version>-win-x64.zip` herunter.
-2. Entpacke sie in einen dauerhaften Ordner, zum Beispiel `C:\Apps\OpenWinBox`.
-3. Starte `OpenWinBox.exe`. Beim ersten Start öffnet sich eine kurze Einführung.
+1. Öffne die Seite **Releases** dieses Repositorys und lade die neueste `OpenWinBox-<Version>-Setup.exe` herunter.
+2. Führe sie aus. Die Installation gilt nur für deinen Benutzer und braucht keine Administratorrechte.
+3. Öffne OpenWinBox. Beim ersten Start öffnet sich eine kurze Einführung.
 
-> Pakete werden mit der ersten öffentlichen Beta veröffentlicht.
+> Das Installationsprogramm ist noch nicht signiert, daher zeigt Windows eventuell *Der Computer wurde durch Windows geschützt* an. Wähle **Weitere Informationen** und dann **Trotzdem ausführen**. Den Hash kannst du mit `SHA256SUMS.txt` im Release vergleichen.
 
 ### Option 2: aus dem Quellcode kompilieren
 

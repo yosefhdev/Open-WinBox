@@ -39,7 +39,7 @@ Fecha: 2026-10-29. Versión de partida: `1.0.0-beta.1` (commit `cf0599a`). Plan 
 
 **Parte B — Cadena de suministro (que el .exe sea confiable)**
 - [ ] B1. Dependencias bloqueadas: `packages.lock.json` + restauración en modo bloqueado
-- [ ] B2. Compilación reproducible y determinista + script de publicación (zip + SHA-256)
+- [ ] B2. Compilación reproducible y determinista + script de publicación (instalador + SHA-256)
 - [ ] B3. CI en GitHub Actions: build, CodeQL, escaneo de dependencias, atestación de origen (para cuando haya remoto)
 - [ ] B4. Firma de código: elegir opción (SignPath para OSS, Azure Trusted Signing o sin firma) — **decisión del usuario**
 - [ ] B5. `SECURITY.md`: cómo reportar vulnerabilidades y cómo verificar una descarga
@@ -233,7 +233,7 @@ Revisar todo el código buscando cada tipo de riesgo y escribir `docs/security/a
 - **En el csproj:** `Deterministic`, `ContinuousIntegrationBuild` (en CI), `PathMap` para no incrustar rutas del equipo (`C:\Users\yosefh\...`) en el `.exe`/`.pdb`.
 - **Script `tools/publish.ps1`:**
   1. `dotnet publish -c Release`.
-  2. Zip `OpenWinBox-<versión>-win-x64.zip`.
+  2. Instalador `OpenWinBox-<versión>-Setup.exe` (hecho: `tools/publish.ps1`, `tools/installer.iss`).
   3. `SHA256SUMS.txt`.
 - Antes, revisar por qué Release mostró 520 MB de memoria residente y si la memoria privada es igual.
 - **Criterio:**
@@ -248,7 +248,7 @@ Revisar todo el código buscando cada tipo de riesgo y escribir `docs/security/a
 - **`release.yml`:** al crear la etiqueta `v*`:
   1. Compila.
   2. Genera la atestación de origen (`actions/attest-build-provenance`).
-  3. Sube el zip y `SHA256SUMS.txt` a Releases.
+  3. Sube el instalador y `SHA256SUMS.txt` a Releases.
 - Las Actions se fijan por SHA, no por etiqueta.
 - **Criterio:** `actionlint` sin errores. Al tener remoto: un push corre build y CodeQL en verde.
 

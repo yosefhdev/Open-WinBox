@@ -6,7 +6,7 @@
 
 **开源的 Windows 桌面小组件：文件夹、音乐、时钟、天气和音频，一眼可见。**
 
-![版本](https://img.shields.io/badge/版本-1.0.0--beta.1-orange)
+![版本](https://img.shields.io/badge/版本-1.0.0--beta.2-orange)
 ![平台](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![许可证](https://img.shields.io/badge/许可证-MIT-green)
 
@@ -35,17 +35,17 @@
 ## 系统要求
 
 - Windows 10 1809 或更高版本，或 Windows 11（64 位）。
-- [.NET 8 Runtime](https://dotnet.microsoft.com/download/dotnet/8.0)（x64）。从源码编译需要 .NET 8 SDK。
+- 其余所需内容均已包含在安装程序中。从源码编译需要 [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)。
 
 ## 安装
 
 ### 方式一：下载发行版
 
-1. 打开本仓库的 **Releases** 页面，下载最新的 `OpenWinBox-<版本>-win-x64.zip`。
-2. 解压到一个长期保留的文件夹，例如 `C:\Apps\OpenWinBox`。
-3. 运行 `OpenWinBox.exe`。首次运行会打开快速入门向导。
+1. 打开本仓库的 **Releases** 页面，下载最新的 `OpenWinBox-<版本>-Setup.exe`。
+2. 运行它。它只为当前用户安装，不需要管理员权限。
+3. 打开 OpenWinBox。首次运行会打开快速入门向导。
 
-> 发行包将随第一个公开 Beta 版发布。
+> 安装程序尚未进行代码签名，因此 Windows 可能会显示“Windows 已保护你的电脑”。请选择 **更多信息**，然后选择 **仍要运行**。可以用发行版中的 `SHA256SUMS.txt` 核对哈希值。
 
 ### 方式二：从源码编译
 

@@ -6,7 +6,7 @@
 
 **Des widgets open source pour le bureau Windows : vos dossiers, votre musique, l'heure, la météo et le son, toujours à portée de vue.**
 
-![Version](https://img.shields.io/badge/version-1.0.0--beta.1-orange)
+![Version](https://img.shields.io/badge/version-1.0.0--beta.2-orange)
 ![Plateforme](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Licence](https://img.shields.io/badge/licence-MIT-green)
 
@@ -35,17 +35,17 @@
 ## Configuration requise
 
 - Windows 10 version 1809 ou ultérieure, ou Windows 11 (64 bits).
-- [.NET 8 Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) (x64). Pour compiler depuis les sources, il faut le SDK .NET 8.
+- Le programme d'installation inclut tout le reste. Pour compiler depuis les sources, il faut le [SDK .NET 8](https://dotnet.microsoft.com/download/dotnet/8.0).
 
 ## Installation
 
 ### Option 1 : télécharger une version
 
-1. Ouvrez la page **Releases** de ce dépôt et téléchargez le dernier `OpenWinBox-<version>-win-x64.zip`.
-2. Décompressez-le dans un dossier que vous garderez, par exemple `C:\Apps\OpenWinBox`.
-3. Lancez `OpenWinBox.exe`. Un guide rapide s'ouvre la première fois.
+1. Ouvrez la page **Releases** de ce dépôt et téléchargez le dernier `OpenWinBox-<version>-Setup.exe`.
+2. Exécutez-le. Il s'installe uniquement pour votre utilisateur et ne demande pas de droits d'administrateur.
+3. Ouvrez OpenWinBox. Un guide rapide s'ouvre la première fois.
 
-> Les paquets seront publiés avec la première bêta publique.
+> Le programme d'installation n'est pas encore signé : Windows peut afficher *Windows a protégé votre ordinateur*. Choisissez **Informations complémentaires** puis **Exécuter quand même**. Vous pouvez comparer son empreinte avec `SHA256SUMS.txt` dans la version publiée.
 
 ### Option 2 : compiler depuis les sources
 
