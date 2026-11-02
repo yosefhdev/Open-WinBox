@@ -6,82 +6,154 @@
 
 **Widgets de código aberto para a área de trabalho do Windows: suas pastas, música, relógio, clima e áudio sempre à vista.**
 
+[![Baixar](https://img.shields.io/badge/Baixar-Instalador%20para%20Windows-E9705A?style=for-the-badge)](https://github.com/yosefhdev/OpenWinBox/releases)
+
 ![Versão](https://img.shields.io/badge/versão-1.0.0--beta.2-orange)
 ![Plataforma](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Licença](https://img.shields.io/badge/licença-MIT-green)
 
 [English](../../README.md) · [Español](README.es.md) · [Français](README.fr.md) · **Português** · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Русский](README.ru.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
 
+<br>
+
+<img src="../banner.svg" width="100%" alt="Ilustração dos widgets do OpenWinBox em uma área de trabalho: um widget de pastas com abas, um relógio, o clima, música e controles de áudio" />
+
+<sub>Ilustração dos tipos de widget. A aparência real depende do seu tema e das suas configurações.</sub>
+
 </div>
 
 > [!NOTE]
-> O OpenWinBox está em **beta**. Algumas coisas podem mudar ou falhar entre versões. Relate problemas na aba Issues.
+> O OpenWinBox está em **beta**. Algumas coisas podem mudar ou falhar entre versões. Relate problemas na aba [Issues](https://github.com/yosefhdev/OpenWinBox/issues).
 
-## Recursos
+## O que é o OpenWinBox?
 
-- **Widgets de pastas.** Qualquer pasta vira um widget com seus arquivos e atalhos. Arraste arquivos ou atalhos para adicioná-los; clique duas vezes para abrir.
-- **Abas como no navegador.** Junte vários widgets em um: arraste um widget sobre outro, reordene as abas arrastando ou puxe uma aba para fora para separá-la.
-- **Do seu jeito.** Renomeie widgets, escolha um emoji ou uma imagem como ícone, trave a posição e organize os ícones na ordem que quiser.
-- **Sempre na área de trabalho.** Os widgets ficam atrás dos seus apps, não aparecem na barra de tarefas nem no Alt+Tab e se alinham suavemente entre si e às bordas da tela.
-- **Widgets funcionais:**
-  - **Música**: o que está tocando em qualquer app, com controles e três estilos.
-  - **Spotify**: só o Spotify, com aleatório e repetir.
-  - **Glance**: relógio grande sobre a foto do dia do Bing, segundo fuso horário opcional, 12 h ou 24 h.
-  - **Clima**: o tempo da sua localização ou de qualquer cidade.
-  - **Áudio**: troque a saída e o microfone e ajuste o volume de cada app (como o Win+G).
-- **Leve.** Cerca de 0,005 % de CPU em repouso.
-- **Importa do DeskBox.** Se o DeskBox 1.5 estiver instalado, seus widgets, ordem e ícones são importados na primeira execução.
+A área de trabalho do Windows costuma ficar cheia de arquivos soltos, e ver a hora de outro país ou trocar de música exige abrir outro aplicativo. O OpenWinBox coloca pequenos widgets na área de trabalho para deixar tudo isso sempre à vista.
 
-## Requisitos
+Ele funciona na bandeja do sistema, não precisa de conta, e remover um widget nunca apaga seus arquivos.
 
-- Windows 10 versão 1809 ou posterior, ou Windows 11 (64 bits).
-- O instalador inclui todo o resto. Para compilar a partir do código, use o [SDK do .NET 8](https://dotnet.microsoft.com/download/dotnet/8.0).
+## Widgets
+
+### Widgets de pastas
+
+Transforme qualquer pasta em um widget que mostra seus arquivos e atalhos.
+
+- **Arrastar e soltar:** arraste arquivos ou atalhos para um widget para adicioná-los e clique duas vezes para abri-los.
+- **Abas como no navegador:** agrupe vários widgets em um só, reordene as abas arrastando ou puxe uma para fora para separá-la.
+- **Do seu jeito:** renomeie widgets, use um emoji ou uma imagem como ícone, trave a posição e organize os ícones na ordem que quiser.
+
+### Widgets funcionais
+
+Ative ou desative cada um separadamente e clique na linha dele nas configurações para ver as opções.
+
+| Widget | O que faz |
+|---|---|
+| 🎵 **Música** | Mostra o que está tocando em qualquer aplicativo, com controles de reprodução e três estilos |
+| 🟢 **Spotify** | A mesma ideia só para o Spotify, com aleatório e repetição |
+| 🕒 **Glance** | Relógio grande sobre a foto do dia do Bing, com segundo fuso horário opcional e formato de 12 ou 24 horas |
+| ☀️ **Clima** | O clima atual da sua localização ou de qualquer cidade |
+| 🔊 **Áudio** | Troque a saída e o microfone e ajuste o volume de cada aplicativo, como no Win+G |
+
+## Por que você pode gostar
+
+- **Fica na área de trabalho.** Os widgets ficam atrás dos seus aplicativos, continuam visíveis com Win+D e nunca aparecem na barra de tarefas nem no Alt+Tab.
+- **Encaixa no lugar.** Os widgets se alinham suavemente entre si e com as bordas da tela.
+- **Temas claro e escuro.** Siga o tema do sistema ou escolha um.
+- **Discreto em repouso.** Usa cerca de 0,05 segundo de CPU por minuto.
+- **Importa do DeskBox.** Se o DeskBox 1.5 estiver instalado, seus widgets, a ordem e os ícones são importados na primeira execução.
 
 ## Instalação
 
-### Opção 1: baixar uma versão
+**Você precisa de** Windows 10 versão 1809 ou posterior, ou Windows 11 (64 bits). O instalador inclui todo o resto, então não é preciso instalar o .NET.
 
-1. Abra a página **Releases** deste repositório e baixe o `OpenWinBox-<versão>-Setup.exe` mais recente.
+1. Baixe o `OpenWinBox-<versão>-Setup.exe` mais recente na página [Releases](https://github.com/yosefhdev/OpenWinBox/releases).
 2. Execute-o. Ele instala apenas para o seu usuário e não pede permissões de administrador.
 3. Abra o OpenWinBox. Na primeira vez, um guia rápido é aberto.
 
-> O instalador ainda não é assinado, então o Windows pode mostrar *O Windows protegeu o computador*. Escolha **Mais informações** e depois **Executar assim mesmo**. Você pode comparar o hash com o `SHA256SUMS.txt` da versão publicada.
-
-### Opção 2: compilar a partir do código
-
-```bash
-git clone <url-do-repositorio>
-cd <pasta-do-repositorio>
-dotnet build DeskBox/OpenWinBox.csproj -c Release
-```
-
-O app fica em `DeskBox/bin/Release/net8.0-windows10.0.19041.0/win-x64/OpenWinBox.exe`.
+> [!IMPORTANT]
+> O instalador ainda não é assinado, então o Windows pode mostrar *O Windows protegeu o computador*. Escolha **Mais informações** e depois **Executar assim mesmo**. Para conferir o download, compare o hash com o `SHA256SUMS.txt` da versão publicada.
 
 ## Como usar
 
-> Por enquanto a interface está em **espanhol**; os textos exatos aparecem em *itálico*.
+> [!TIP]
+> A interface está em **espanhol** por enquanto. Os textos que você verá na tela aparecem em *itálico*.
+
+Os dois controles para lembrar são **F7**, que mostra ou oculta todos os widgets, e o **ícone da bandeja**, que abre o menu com o botão direito.
+
+<details open>
+<summary><b>Ações do dia a dia</b></summary>
+<br>
 
 | Ação | Como |
 |---|---|
-| Mostrar ou ocultar todos os widgets | Pressione **F7** ou clique no ícone da bandeja |
-| Abrir as configurações | Clique com o botão direito no ícone da bandeja → *Configuración…*, ou abra o app de novo |
+| Mostrar ou ocultar todos os widgets | Pressione **F7** ou clique com o botão esquerdo no ícone da bandeja |
+| Abrir as configurações | Botão direito no ícone da bandeja → *Configuración…*, ou abra o aplicativo de novo |
 | Novo widget | **+** em qualquer widget → *Nuevo widget*, ou *Configuración → Widgets de archivos → Nuevo widget* |
 | Nova aba em um widget | **+** → *Nueva pestaña en este widget* |
-| Renomear, trocar ícone, travar, agrupar | **⋯** no widget → *Cambiar nombre*, *Cambiar icono…*, *Bloquear posición*, *Agrupar con…* |
 | Adicionar arquivos | Arraste arquivos ou atalhos para o widget (segure **Ctrl** para copiar um atalho em vez de movê-lo) |
+
+</details>
+
+<details>
+<summary><b>Organizar widgets</b></summary>
+<br>
+
+| Ação | Como |
+|---|---|
+| Renomear, trocar o ícone, travar, agrupar | **⋯** no widget → *Cambiar nombre*, *Cambiar icono…*, *Bloquear posición*, *Agrupar con…* |
 | Agrupar dois widgets | Arraste um widget pela barra e segure sobre a barra de outro até aparecer *Suelta para unir*; depois solte |
-| Reordenar ou separar abas | Arraste uma aba para os lados para reordenar, ou para fora do widget para torná-la independente |
-| Mover um widget funcional | Passe o mouse sobre ele e arraste a alça no topo |
-| Ativar ou desativar widgets funcionais | *Configuración → Widgets funcionales* (clique em uma linha para ver as opções) |
+| Reordenar ou separar abas | Arraste uma aba para os lados para reordená-la, ou para fora do widget para torná-la independente |
+| Mover um widget funcional | Passe o cursor sobre ele e arraste a alça na parte superior |
+
+</details>
+
+<details>
+<summary><b>Configurações</b></summary>
+<br>
+
+| Ação | Como |
+|---|---|
+| Ativar ou desativar widgets funcionais | *Configuración → Widgets funcionales* |
+| Mudar o tema | *Configuración → Apariencia → Tema* |
 | Iniciar com o Windows | *Configuración → General → Lanzar al inicio*, ou *Iniciar con Windows* no menu da bandeja |
 
-As configurações ficam em `%LOCALAPPDATA%\OpenWinBox`. Remover um widget ou uma aba nunca apaga seus arquivos.
+</details>
+
+## Privacidade
+
+O OpenWinBox não tem conta nem análises próprias. Suas configurações ficam no seu PC, em `%LOCALAPPDATA%\OpenWinBox`.
+
+Dois widgets se conectam diretamente do seu PC a serviços on-line, sem chave de API:
+
+| Widget | Serviço | Para quê |
+|---|---|---|
+| Clima | [Open-Meteo](https://open-meteo.com/) | Previsão e busca de cidades |
+| Clima | [BigDataCloud](https://www.bigdatacloud.com/) | Nome da cidade da sua localização |
+| Clima | [ipapi.co](https://ipapi.co/) | Localização aproximada quando a localização do Windows está desativada |
+| Glance | Microsoft Bing | Foto do dia |
+
+Os widgets Música e Spotify leem o que o Windows informa estar tocando, então não pedem login. Os termos de cada serviço estão em [THIRD-PARTY-NOTICES.md](../../THIRD-PARTY-NOTICES.md).
 
 ## Desinstalar
 
-1. Desative *Lanzar al inicio* nas configurações e escolha *Salir* no menu da bandeja.
-2. Apague a pasta do app.
-3. Opcional: apague `%LOCALAPPDATA%\OpenWinBox` para remover suas configurações.
+1. Escolha *Salir* no menu da bandeja.
+2. Desinstale o OpenWinBox em **Configurações do Windows → Aplicativos → Aplicativos instalados**. Isso também remove a inicialização com o Windows.
+3. Opcional: apague `%LOCALAPPDATA%\OpenWinBox` para remover também as suas configurações.
+
+## Compilar a partir do código
+
+Você precisa do [SDK do .NET 8](https://dotnet.microsoft.com/download/dotnet/8.0).
+
+```bash
+git clone https://github.com/yosefhdev/OpenWinBox.git
+cd OpenWinBox
+dotnet build DeskBox/OpenWinBox.csproj -c Release
+```
+
+O aplicativo é criado em `DeskBox/bin/Release/net8.0-windows10.0.19041.0/win-x64/OpenWinBox.exe`.
+
+Para gerar o instalador, instale o [Inno Setup 6](https://jrsoftware.org/isinfo.php) e execute `tools/publish.ps1`. O resultado fica em `dist/`.
+
+Feito com C#, [WinUI 3](https://github.com/microsoft/microsoft-ui-xaml) e o [Windows App SDK](https://github.com/microsoft/WindowsAppSDK).
 
 ## Versões
 

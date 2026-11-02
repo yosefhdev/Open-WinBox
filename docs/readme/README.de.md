@@ -6,82 +6,154 @@
 
 **Open-Source-Widgets für den Windows-Desktop: Ordner, Musik, Uhr, Wetter und Audio immer im Blick.**
 
+[![Herunterladen](https://img.shields.io/badge/Herunterladen-Windows--Installationsprogramm-E9705A?style=for-the-badge)](https://github.com/yosefhdev/OpenWinBox/releases)
+
 ![Version](https://img.shields.io/badge/Version-1.0.0--beta.2-orange)
 ![Plattform](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Lizenz](https://img.shields.io/badge/Lizenz-MIT-green)
 
 [English](../../README.md) · [Español](README.es.md) · [Français](README.fr.md) · [Português](README.pt-BR.md) · **Deutsch** · [Italiano](README.it.md) · [Русский](README.ru.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
 
+<br>
+
+<img src="../banner.svg" width="100%" alt="Illustration der OpenWinBox-Widgets auf einem Desktop: ein Ordner-Widget mit Tabs, eine Uhr, Wetter, Musik und Audiosteuerung" />
+
+<sub>Illustration der Widget-Typen. Das tatsächliche Aussehen hängt von Design und Einstellungen ab.</sub>
+
 </div>
 
 > [!NOTE]
-> OpenWinBox ist in der **Beta**-Phase. Zwischen Versionen kann sich manches ändern oder nicht funktionieren. Bitte melde Probleme im Tab „Issues“.
+> OpenWinBox ist in der **Beta**-Phase. Zwischen Versionen kann sich manches ändern oder nicht funktionieren. Bitte melde Probleme im Tab „[Issues](https://github.com/yosefhdev/OpenWinBox/issues)“.
 
-## Funktionen
+## Was ist OpenWinBox?
 
-- **Ordner-Widgets.** Jeder Ordner wird zu einem Widget mit seinen Dateien und Verknüpfungen. Ziehe Dateien oder Verknüpfungen darauf, um sie hinzuzufügen; Doppelklick zum Öffnen.
-- **Tabs wie im Browser.** Fasse mehrere Widgets zu einem zusammen: Ziehe ein Widget auf ein anderes, ordne Tabs per Ziehen neu oder ziehe einen Tab heraus, um ihn wieder abzutrennen.
-- **Nach deinem Geschmack.** Widgets umbenennen, ein Emoji oder Bild als Symbol wählen, die Position sperren und Symbole beliebig anordnen.
-- **Bleibt auf dem Desktop.** Widgets liegen hinter deinen Apps, erscheinen weder in der Taskleiste noch in Alt+Tab und richten sich sanft aneinander und an den Bildschirmrändern aus.
-- **Funktions-Widgets:**
-  - **Musik**: was in einer beliebigen App läuft, mit Steuerung und drei Stilen.
-  - **Spotify**: nur Spotify, mit Zufallswiedergabe und Wiederholen.
-  - **Glance**: große Uhr über dem Bing-Bild des Tages, optional zweite Zeitzone, 12 oder 24 Stunden.
-  - **Wetter**: das Wetter an deinem Standort oder in jeder Stadt.
-  - **Audio**: Ausgabe und Mikrofon wechseln und die Lautstärke jeder App einstellen (wie Win+G).
-- **Ressourcenschonend.** Etwa 0,005 % CPU im Leerlauf.
-- **Import aus DeskBox.** Ist DeskBox 1.5 installiert, werden beim ersten Start deine Widgets, ihre Reihenfolge und Symbole übernommen.
+Der Windows-Desktop füllt sich schnell mit losen Dateien, und um die Uhrzeit im Ausland zu sehen oder den Titel zu wechseln, muss man eine weitere App öffnen. OpenWinBox legt kleine Widgets auf den Desktop, damit all das immer im Blick ist.
 
-## Voraussetzungen
+Es läuft im Infobereich der Taskleiste, braucht kein Konto, und das Entfernen eines Widgets löscht nie deine Dateien.
 
-- Windows 10 ab Version 1809 oder Windows 11 (64 Bit).
-- Alles Weitere bringt das Installationsprogramm mit. Zum Kompilieren aus dem Quellcode wird das [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) benötigt.
+## Widgets
+
+### Ordner-Widgets
+
+Mach aus jedem Ordner ein Widget, das seine Dateien und Verknüpfungen anzeigt.
+
+- **Ziehen und Ablegen:** Ziehe Dateien oder Verknüpfungen auf ein Widget, um sie hinzuzufügen, und öffne sie per Doppelklick.
+- **Tabs wie im Browser:** Fasse mehrere Widgets zu einem zusammen, sortiere die Tabs per Ziehen um oder ziehe einen Tab heraus, um ihn wieder zu trennen.
+- **Dein Stil:** Benenne Widgets um, verwende ein Emoji oder Bild als Symbol, sperre ihre Position und ordne die Symbole beliebig an.
+
+### Funktions-Widgets
+
+Schalte jedes einzeln ein oder aus und klicke in den Einstellungen auf seine Zeile, um die Optionen zu sehen.
+
+| Widget | Was es macht |
+|---|---|
+| 🎵 **Musik** | Zeigt, was in einer beliebigen App läuft, mit Wiedergabesteuerung und drei Stilen |
+| 🟢 **Spotify** | Dieselbe Idee nur für Spotify, mit Zufallswiedergabe und Wiederholung |
+| 🕒 **Glance** | Große Uhr über dem Bing-Foto des Tages, mit optionaler zweiter Zeitzone und 12- oder 24-Stunden-Format |
+| ☀️ **Wetter** | Das aktuelle Wetter für deinen Standort oder eine beliebige Stadt |
+| 🔊 **Audio** | Wechsle Ausgabe und Mikrofon und stelle die Lautstärke jeder App ein, wie mit Win+G |
+
+## Was dir gefallen könnte
+
+- **Bleibt auf dem Desktop.** Widgets liegen hinter deinen Apps, bleiben mit Win+D sichtbar und erscheinen nie in der Taskleiste oder bei Alt+Tab.
+- **Rastet sauber ein.** Widgets richten sich sanft aneinander und an den Bildschirmrändern aus.
+- **Helles und dunkles Design.** Folge dem Systemdesign oder wähle eines aus.
+- **Ruhig im Leerlauf.** Es braucht etwa 0,05 Sekunden CPU-Zeit pro Minute.
+- **Import aus DeskBox.** Ist DeskBox 1.5 installiert, werden deine Widgets, ihre Reihenfolge und Symbole beim ersten Start übernommen.
 
 ## Installation
 
-### Option 1: Version herunterladen
+**Du brauchst** Windows 10 ab Version 1809 oder Windows 11 (64 Bit). Alles Weitere bringt das Installationsprogramm mit, .NET musst du also nicht installieren.
 
-1. Öffne die Seite **Releases** dieses Repositorys und lade die neueste `OpenWinBox-<Version>-Setup.exe` herunter.
+1. Lade die neueste `OpenWinBox-<Version>-Setup.exe` von der Seite [Releases](https://github.com/yosefhdev/OpenWinBox/releases) herunter.
 2. Führe sie aus. Die Installation gilt nur für deinen Benutzer und braucht keine Administratorrechte.
 3. Öffne OpenWinBox. Beim ersten Start öffnet sich eine kurze Einführung.
 
-> Das Installationsprogramm ist noch nicht signiert, daher zeigt Windows eventuell *Der Computer wurde durch Windows geschützt* an. Wähle **Weitere Informationen** und dann **Trotzdem ausführen**. Den Hash kannst du mit `SHA256SUMS.txt` im Release vergleichen.
-
-### Option 2: aus dem Quellcode kompilieren
-
-```bash
-git clone <repository-url>
-cd <repository-ordner>
-dotnet build DeskBox/OpenWinBox.csproj -c Release
-```
-
-Die App liegt dann unter `DeskBox/bin/Release/net8.0-windows10.0.19041.0/win-x64/OpenWinBox.exe`.
+> [!IMPORTANT]
+> Das Installationsprogramm ist noch nicht signiert, daher zeigt Windows eventuell *Der Computer wurde durch Windows geschützt* an. Wähle **Weitere Informationen** und dann **Trotzdem ausführen**. Zum Prüfen des Downloads kannst du den Hash mit `SHA256SUMS.txt` im Release vergleichen.
 
 ## Bedienung
 
-> Die Oberfläche ist derzeit auf **Spanisch**; die genauen Beschriftungen stehen *kursiv*.
+> [!TIP]
+> Die Oberfläche ist derzeit auf **Spanisch**. Die Beschriftungen, die du auf dem Bildschirm siehst, stehen hier *kursiv*.
+
+Merke dir zwei Dinge: **F7** blendet alle Widgets ein oder aus, und das **Symbol im Infobereich** öffnet per Rechtsklick das Menü.
+
+<details open>
+<summary><b>Alltägliche Aktionen</b></summary>
+<br>
 
 | Aktion | So geht's |
 |---|---|
-| Alle Widgets ein- oder ausblenden | **F7** drücken oder auf das Infobereich-Symbol klicken |
-| Einstellungen öffnen | Rechtsklick auf das Infobereich-Symbol → *Configuración…*, oder die App erneut starten |
+| Alle Widgets ein- oder ausblenden | Drücke **F7** oder klicke mit links auf das Symbol im Infobereich |
+| Einstellungen öffnen | Rechtsklick auf das Symbol im Infobereich → *Configuración…*, oder starte die App erneut |
 | Neues Widget | **+** auf einem Widget → *Nuevo widget*, oder *Configuración → Widgets de archivos → Nuevo widget* |
 | Neuer Tab in einem Widget | **+** → *Nueva pestaña en este widget* |
-| Umbenennen, Symbol ändern, sperren, gruppieren | **⋯** am Widget → *Cambiar nombre*, *Cambiar icono…*, *Bloquear posición*, *Agrupar con…* |
-| Dateien hinzufügen | Dateien oder Verknüpfungen auf das Widget ziehen (**Strg** gedrückt halten, um eine Verknüpfung zu kopieren statt zu verschieben) |
-| Zwei Widgets gruppieren | Ein Widget an seiner Leiste ziehen und über der Leiste eines anderen halten, bis *Suelta para unir* erscheint, dann loslassen |
-| Tabs neu ordnen oder abtrennen | Tab seitlich ziehen zum Umsortieren oder aus dem Widget heraus, um ihn eigenständig zu machen |
-| Funktions-Widget verschieben | Mit der Maus darüberfahren und den Griff oben ziehen |
-| Funktions-Widgets ein- oder ausschalten | *Configuración → Widgets funcionales* (Zeile anklicken für Optionen) |
-| Mit Windows starten | *Configuración → General → Lanzar al inicio*, oder *Iniciar con Windows* im Infobereich-Menü |
+| Dateien hinzufügen | Ziehe Dateien oder Verknüpfungen auf das Widget (halte **Strg** gedrückt, um eine Verknüpfung zu kopieren statt zu verschieben) |
 
-Die Einstellungen liegen in `%LOCALAPPDATA%\OpenWinBox`. Das Entfernen eines Widgets oder Tabs löscht nie deine Dateien.
+</details>
 
-## Deinstallation
+<details>
+<summary><b>Widgets organisieren</b></summary>
+<br>
 
-1. *Lanzar al inicio* in den Einstellungen ausschalten und im Infobereich-Menü *Salir* wählen.
-2. Den App-Ordner löschen.
-3. Optional: `%LOCALAPPDATA%\OpenWinBox` löschen, um die Einstellungen zu entfernen.
+| Aktion | So geht's |
+|---|---|
+| Umbenennen, Symbol ändern, sperren, gruppieren | **⋯** auf dem Widget → *Cambiar nombre*, *Cambiar icono…*, *Bloquear posición*, *Agrupar con…* |
+| Zwei Widgets gruppieren | Ziehe ein Widget an seiner Leiste und halte es über die Leiste eines anderen, bis *Suelta para unir* erscheint, dann lass los |
+| Tabs umsortieren oder trennen | Ziehe einen Tab seitwärts zum Umsortieren oder aus dem Widget heraus, um ihn eigenständig zu machen |
+| Funktions-Widget verschieben | Fahre mit der Maus darüber und ziehe am Griff oben |
+
+</details>
+
+<details>
+<summary><b>Einstellungen</b></summary>
+<br>
+
+| Aktion | So geht's |
+|---|---|
+| Funktions-Widgets ein- oder ausschalten | *Configuración → Widgets funcionales* |
+| Design ändern | *Configuración → Apariencia → Tema* |
+| Mit Windows starten | *Configuración → General → Lanzar al inicio*, oder *Iniciar con Windows* im Menü des Infobereichs |
+
+</details>
+
+## Datenschutz
+
+OpenWinBox hat kein Konto und keine eigene Nutzungsanalyse. Deine Einstellungen bleiben auf deinem PC, in `%LOCALAPPDATA%\OpenWinBox`.
+
+Zwei Widgets verbinden sich direkt von deinem PC aus mit Onlinediensten, ohne API-Schlüssel:
+
+| Widget | Dienst | Wofür |
+|---|---|---|
+| Wetter | [Open-Meteo](https://open-meteo.com/) | Vorhersage und Städtesuche |
+| Wetter | [BigDataCloud](https://www.bigdatacloud.com/) | Stadtname für deinen Standort |
+| Wetter | [ipapi.co](https://ipapi.co/) | Ungefährer Standort, wenn die Windows-Ortung aus ist |
+| Glance | Microsoft Bing | Foto des Tages |
+
+Die Widgets Musik und Spotify lesen, was Windows als aktuelle Wiedergabe meldet, daher ist keine Anmeldung nötig. Die Bedingungen der einzelnen Dienste stehen in [THIRD-PARTY-NOTICES.md](../../THIRD-PARTY-NOTICES.md).
+
+## Deinstallieren
+
+1. Wähle *Salir* im Menü des Infobereichs.
+2. Deinstalliere OpenWinBox unter **Windows-Einstellungen → Apps → Installierte Apps**. Dabei wird auch der Autostart entfernt.
+3. Optional: Lösche `%LOCALAPPDATA%\OpenWinBox`, um auch deine Einstellungen zu entfernen.
+
+## Aus dem Quellcode kompilieren
+
+Du brauchst das [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
+
+```bash
+git clone https://github.com/yosefhdev/OpenWinBox.git
+cd OpenWinBox
+dotnet build DeskBox/OpenWinBox.csproj -c Release
+```
+
+Die App wird unter `DeskBox/bin/Release/net8.0-windows10.0.19041.0/win-x64/OpenWinBox.exe` erstellt.
+
+Um das Installationsprogramm zu erzeugen, installiere [Inno Setup 6](https://jrsoftware.org/isinfo.php) und führe `tools/publish.ps1` aus. Das Ergebnis liegt in `dist/`.
+
+Erstellt mit C#, [WinUI 3](https://github.com/microsoft/microsoft-ui-xaml) und dem [Windows App SDK](https://github.com/microsoft/WindowsAppSDK).
 
 ## Versionen
 
