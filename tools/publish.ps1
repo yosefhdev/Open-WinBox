@@ -22,6 +22,7 @@ if ($LASTEXITCODE) { throw "ISCC falló ($LASTEXITCODE)" }
 
 $setup = Get-Item (Join-Path $dist "OpenWinBox-$version-Setup.exe")
 $hash = (Get-FileHash $setup.FullName -Algorithm SHA256).Hash.ToLower()
-"$hash  $($setup.Name)" | Set-Content (Join-Path $dist 'SHA256SUMS.txt') -Encoding ascii
+# Con LF: `sha256sum -c` no acepta CRLF
+[IO.File]::WriteAllText((Join-Path $dist 'SHA256SUMS.txt'), "$hash  $($setup.Name)`n")
 
 Write-Host "$($setup.FullName) ($([math]::Round($setup.Length / 1MB)) MB)"
