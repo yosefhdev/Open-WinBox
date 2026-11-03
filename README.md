@@ -71,7 +71,7 @@ Turn each one on or off separately, and click its row in Settings to see its opt
 3. Open OpenWinBox. A quick setup guide opens the first time.
 
 > [!IMPORTANT]
-> The installer isn't code-signed yet, so Windows may show *Windows protected your PC*. Choose **More info** and then **Run anyway**. To check your download, compare its hash with `SHA256SUMS.txt` in the release. If Smart App Control is on, Windows may block the app with no option to continue.
+> The installer isn't code-signed yet. OpenWinBox is applying for free code signing from the [SignPath Foundation](https://signpath.org/) ([policy](docs/code-signing-policy.md)). Until then, Windows may show *Windows protected your PC*. Choose **More info** and then **Run anyway**. To check your download, compare its hash with `SHA256SUMS.txt` in the release. If Smart App Control is on, Windows may block the app with no option to continue.
 
 ## How to use
 

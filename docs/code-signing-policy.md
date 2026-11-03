@@ -1,6 +1,6 @@
 # Code signing policy
 
-**Status:** OpenWinBox has applied for free code signing from the [SignPath Foundation](https://signpath.org/). Current releases are not signed yet.
+**Status:** OpenWinBox is applying for free code signing from the [SignPath Foundation](https://signpath.org/). Current releases are not signed yet.
 
 Once the project is approved, this page will state: Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).
 
