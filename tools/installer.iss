@@ -35,8 +35,9 @@ SignedUninstallerDir=..\dist\uninstaller
 #endif
 
 [Languages]
-Name: "en"; MessagesFile: "compiler:Default.isl"
-Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
+; InfoBeforeFile: SignPath exige mostrar al instalar qué datos envía la app
+Name: "en"; MessagesFile: "compiler:Default.isl"; InfoBeforeFile: "privacy-en.txt"
+Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"; InfoBeforeFile: "privacy-es.txt"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; Flags: unchecked

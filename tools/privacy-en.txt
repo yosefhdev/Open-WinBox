@@ -1,0 +1,18 @@
+﻿OpenWinBox has no account and no analytics of its own. Your settings stay on your PC.
+
+The app connects to the internet only in these cases:
+
+Weather widget (off on a new install)
+- Open-Meteo: forecast and city search.
+- BigDataCloud: city name for your device location.
+- ipapi.co: approximate location from your IP address, when Windows location is off.
+
+Glance widget (off on a new install)
+- Microsoft Bing: photo of the day.
+
+Updates
+- GitHub: only when you press Buscar actualizaciones.
+
+Each service receives your IP address when the app connects. To avoid these connections, leave those widgets off or turn them off in Configuración > Widgets funcionales.
+
+More information: https://github.com/yosefhdev/Open-WinBox#privacy

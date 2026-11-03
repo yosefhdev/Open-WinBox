@@ -72,7 +72,7 @@ For a widget called `Notes`:
 4. In `Settings/SettingsWindow.xaml`, copy another widget's row under *Widgets funcionales*, with a `ToggleSwitch` named `NotesToggle` and `Tag="Notes"`. Then add its line to `RefreshFeatures` in `SettingsWindow.xaml.cs`.
 5. If it has options, add an options class in `WidgetConfig.cs`, a page in `SettingsWindow.xaml`, and an entry in `_featurePages`. Views can listen to `App.FeatureOptionsChanged` to apply changes right away.
 
-If it connects to an online service, list that service in the README's Privacy section and in [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md).
+If it connects to an online service, list that service in the README's Privacy section, in [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md), and in `tools/privacy-en.txt` and `tools/privacy-es.txt`, which the installer shows.
 
 ## Tests
 

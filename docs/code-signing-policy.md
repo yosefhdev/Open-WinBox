@@ -30,4 +30,4 @@ OpenWinBox has no account and no analytics of its own. It connects to other syst
 - **Weather and Glance widgets:** they connect to the services listed in the [README](../README.md#privacy) only while they are turned on. Both are off on a new install.
 - **Updates:** the app connects to GitHub only when you press *Buscar actualizaciones*.
 
-Your settings stay on your PC in `%LOCALAPPDATA%\OpenWinBox`.
+Your settings stay on your PC in `%LOCALAPPDATA%\OpenWinBox`. The installer shows this information before installing.
