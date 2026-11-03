@@ -1,0 +1,14 @@
+# Salidas de compilación
+bin/
+obj/
+dist/
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+# Vistas previas que genera tools/make_icon.py
+*-preview*.png
+# Planes de trabajo: solo locales, no se publican
+docs/plans/
+/PLAN.md

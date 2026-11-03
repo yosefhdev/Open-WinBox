@@ -1,0 +1,85 @@
+<UserControl
+    x:Class="OpenWinBox.MusicView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Botones planos como el original: solo se marca el fondo al pasar el mouse -->
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="ButtonBackground" Color="Transparent" />
+        <SolidColorBrush x:Key="ButtonBorderBrush" Color="Transparent" />
+        <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent" />
+        <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="Transparent" />
+        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="Transparent" />
+        <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="Transparent" />
+    </UserControl.Resources>
+
+    <!-- Como el widget Música del original: carátula, título, artista y estado; barra de progreso; controles -->
+    <Grid>
+    <!-- Estilo "Carátula de fondo": la carátula cubre el widget, oscurecida para que el texto se lea -->
+    <Grid x:Name="Backdrop" Visibility="Collapsed">
+        <Image x:Name="BackdropImage" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <Rectangle Fill="#99000000" />
+    </Grid>
+    <Grid x:Name="Layout" Padding="14,12,14,8" RowDefinitions="Auto,Auto,*" RowSpacing="10">
+        <Grid x:Name="Header" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+            <Border x:Name="ArtworkBox" Width="56" Height="56" CornerRadius="6" Background="{ThemeResource SubtleFillColorSecondaryBrush}">
+                <Grid>
+                    <FontIcon x:Name="ArtworkPlaceholder" Glyph="&#xE8D6;" FontSize="22"
+                              Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    <Image x:Name="Artwork" Stretch="UniformToFill" />
+                </Grid>
+            </Border>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                <TextBlock x:Name="TitleText" FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                           Text="No se está reproduciendo nada" />
+                <TextBlock x:Name="ArtistText" FontSize="12" TextTrimming="CharacterEllipsis"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                <TextBlock x:Name="StatusText" FontSize="11" Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="Timeline" Grid.Row="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" Visibility="Collapsed">
+            <TextBlock x:Name="PositionText" FontSize="11" VerticalAlignment="Center"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            <!-- Barra propia en vez de ProgressBar: la de WinUI gastaba ~90 ms de CPU en cada avance de 1 s -->
+            <Grid Grid.Column="1" Height="3" VerticalAlignment="Center" CornerRadius="1.5">
+                <Rectangle Fill="{ThemeResource ControlStrongFillColorDefaultBrush}" Opacity="0.35" />
+                <Rectangle x:Name="ProgressFill" Fill="{ThemeResource AccentFillColorDefaultBrush}" RenderTransformOrigin="0,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform x:Name="ProgressScale" ScaleX="0" />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+            </Grid>
+            <TextBlock x:Name="DurationText" Grid.Column="2" FontSize="11" VerticalAlignment="Center"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+        </Grid>
+
+        <!-- Solo en el widget de Spotify, cuando Spotify está cerrado -->
+        <Button x:Name="OpenSpotifyButton" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                Visibility="Collapsed" Click="OpenSpotify_Click" Content="Abrir Spotify" />
+
+        <StackPanel x:Name="Controls" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+            <Button x:Name="ShuffleButton" Click="Shuffle_Click" Visibility="Collapsed"
+                    AutomationProperties.Name="Aleatorio" ToolTipService.ToolTip="Aleatorio">
+                <FontIcon x:Name="ShuffleIcon" Glyph="&#xE8B1;" FontSize="13" />
+            </Button>
+            <Button x:Name="PreviousButton" Click="Previous_Click" Background="Transparent" BorderThickness="0"
+                    AutomationProperties.Name="Anterior" ToolTipService.ToolTip="Anterior">
+                <FontIcon Glyph="&#xE892;" FontSize="14" />
+            </Button>
+            <Button x:Name="PlayButton" Click="Play_Click" Background="Transparent" BorderThickness="0"
+                    AutomationProperties.Name="Reproducir o pausar">
+                <FontIcon x:Name="PlayIcon" Glyph="&#xE768;" FontSize="18" />
+            </Button>
+            <Button x:Name="NextButton" Click="Next_Click" Background="Transparent" BorderThickness="0"
+                    AutomationProperties.Name="Siguiente" ToolTipService.ToolTip="Siguiente">
+                <FontIcon Glyph="&#xE893;" FontSize="14" />
+            </Button>
+            <Button x:Name="RepeatButton" Click="Repeat_Click" Visibility="Collapsed"
+                    AutomationProperties.Name="Repetir" ToolTipService.ToolTip="Repetir">
+                <FontIcon x:Name="RepeatIcon" Glyph="&#xE8EE;" FontSize="13" />
+            </Button>
+        </StackPanel>
+    </Grid>
+    </Grid>
+</UserControl>

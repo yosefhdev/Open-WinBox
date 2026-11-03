@@ -1,0 +1,139 @@
+<Window
+    x:Class="OpenWinBox.WidgetWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OpenWinBox">
+
+    <Window.SystemBackdrop>
+        <local:WidgetBackdrop />
+    </Window.SystemBackdrop>
+
+    <Grid x:Name="Root">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="TitleRow" Height="36" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Widgets funcionales (Música, Glance, Tiempo): ocupan toda la ventana, sin barra de título -->
+        <ContentPresenter x:Name="FeatureHost" Grid.RowSpan="2" Visibility="Collapsed" Background="Transparent" />
+
+        <!-- Agarradera para moverlos: aparece al pasar el mouse sobre el widget (como el original) -->
+        <local:DragHandle x:Name="Handle" Grid.RowSpan="2" Width="72" Height="22" Canvas.ZIndex="5"
+                          HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent"
+                          Opacity="0" Visibility="Collapsed"
+                          ToolTipService.ToolTip="Arrastrar widget" AutomationProperties.Name="Arrastrar widget">
+            <local:DragHandle.OpacityTransition>
+                <ScalarTransition Duration="0:0:0.15" />
+            </local:DragHandle.OpacityTransition>
+            <Border Width="36" Height="5" CornerRadius="2.5" VerticalAlignment="Center"
+                    Background="#F0FFFFFF" BorderBrush="#59000000" BorderThickness="0.5" />
+        </local:DragHandle>
+
+        <!-- Brillo en los bordes alineados por el imán (como el original); encima de todo y sin capturar clics -->
+        <Grid x:Name="GlowLayer" Grid.RowSpan="2" IsHitTestVisible="False" Canvas.ZIndex="10">
+            <Grid.Resources>
+                <Color x:Key="GlowColor">#3B9BFF</Color>
+            </Grid.Resources>
+            <Border x:Name="GlowLeft" Width="10" HorizontalAlignment="Left" Visibility="Collapsed">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                        <GradientStop Color="{StaticResource GlowColor}" Offset="0" />
+                        <GradientStop Color="#003B9BFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+            <Border x:Name="GlowRight" Width="10" HorizontalAlignment="Right" Visibility="Collapsed">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="1,0.5" EndPoint="0,0.5">
+                        <GradientStop Color="{StaticResource GlowColor}" Offset="0" />
+                        <GradientStop Color="#003B9BFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+            <Border x:Name="GlowTop" Height="10" VerticalAlignment="Top" Visibility="Collapsed">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="{StaticResource GlowColor}" Offset="0" />
+                        <GradientStop Color="#003B9BFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+            <Border x:Name="GlowBottom" Height="10" VerticalAlignment="Bottom" Visibility="Collapsed">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0.5,1" EndPoint="0.5,0">
+                        <GradientStop Color="{StaticResource GlowColor}" Offset="0" />
+                        <GradientStop Color="#003B9BFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+        </Grid>
+
+        <!-- Aviso al arrastrar otro widget sobre la barra de este: mantener 1.5 s y soltar para unirlos -->
+        <Border x:Name="MergeOverlay" Grid.RowSpan="2" Canvas.ZIndex="11" IsHitTestVisible="False" Opacity="0"
+                BorderBrush="#E86F55" BorderThickness="2" Background="#33E86F55">
+            <Border.OpacityTransition>
+                <ScalarTransition Duration="0:0:0.2" />
+            </Border.OpacityTransition>
+            <StackPanel Width="160" Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock x:Name="MergeText" HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" />
+                <ProgressBar x:Name="MergeProgress" Maximum="1" Foreground="#E86F55" />
+            </StackPanel>
+        </Border>
+
+        <!-- Barra de título como la del original: una pestaña por carpeta (ícono + nombre); clic derecho = menú del widget -->
+        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto" Padding="6,0,4,0">
+            <StackPanel x:Name="TabsPanel" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center" />
+            <!-- Candado si está bloqueado; fuera de DragBar para que muestre su tooltip -->
+            <Border x:Name="LockIcon" Grid.Column="1" Background="Transparent" Padding="4,0" VerticalAlignment="Center"
+                    Visibility="Collapsed" ToolTipService.ToolTip="Bloqueado: desbloquéalo desde ⋯ para moverlo"
+                    AutomationProperties.Name="Bloqueado">
+                <FontIcon Glyph="&#xE72E;" FontSize="10" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </Border>
+            <!-- Zona para arrastrar la ventana; las pestañas quedan fuera para recibir clics -->
+            <Grid x:Name="DragBar" Grid.Column="2" Background="Transparent" Padding="8,0,0,0">
+                <TextBlock x:Name="StatusText" VerticalAlignment="Center" FontSize="12" TextTrimming="CharacterEllipsis"
+                           Foreground="{ThemeResource SystemFillColorCautionBrush}" />
+            </Grid>
+            <Button Grid.Column="3"
+                    Content="&#xE710;" FontFamily="Segoe Fluent Icons" FontSize="10" Padding="8,6"
+                    Background="Transparent" BorderThickness="0"
+                    ToolTipService.ToolTip="Nuevo widget o pestaña" AutomationProperties.Name="Agregar"
+                    Click="Add_Click" />
+            <Button Grid.Column="4"
+                    Content="&#xE712;" FontFamily="Segoe Fluent Icons" FontSize="10" Padding="8,6"
+                    Background="Transparent" BorderThickness="0"
+                    ToolTipService.ToolTip="Opciones del widget" AutomationProperties.Name="Opciones"
+                    Click="More_Click" />
+        </Grid>
+
+        <!-- Celdas compactas como el original: ícono de 30, texto de 11.5 en dos líneas, ~5 columnas en 394 px -->
+        <!-- Mantener presionado y arrastrar un ícono lo cambia de lugar (orden manual, como el original) -->
+        <GridView x:Name="Items" Grid.Row="1" Padding="8,2,8,8" Background="Transparent"
+                  SelectionMode="Single" DoubleTapped="Items_DoubleTapped" KeyDown="Items_KeyDown"
+                  RightTapped="Items_RightTapped"
+                  CanDragItems="True" CanReorderItems="True" AllowDrop="True"
+                  DragItemsCompleted="Items_DragItemsCompleted"
+                  DragOver="Items_DragOver" Drop="Items_Drop">
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem" BasedOn="{StaticResource DefaultGridViewItemStyle}">
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="MinWidth" Value="0" />
+                    <Setter Property="MinHeight" Value="0" />
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="local:FileItem">
+                    <StackPanel Width="72" Padding="7,6,7,4" Spacing="5"
+                                ToolTipService.ToolTip="{x:Bind Name}" AutomationProperties.Name="{x:Bind Name}">
+                        <Image Source="{x:Bind Icon}" Width="30" Height="30" />
+                        <!-- Alto fijo de 2 líneas: GridView toma el tamaño de celda del primer elemento -->
+                        <TextBlock Text="{x:Bind Name}" TextAlignment="Center" TextWrapping="Wrap"
+                                   MaxLines="2" Height="30" LineHeight="15" LineStackingStrategy="BlockLineHeight"
+                                   TextTrimming="CharacterEllipsis" FontSize="11.5" />
+                    </StackPanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </Grid>
+</Window>
