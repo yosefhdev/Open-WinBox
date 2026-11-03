@@ -51,3 +51,5 @@ Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: 
 
 [Run]
 Filename: "{app}\OpenWinBox.exe"; Description: "{cm:LaunchProgram,OpenWinBox}"; Flags: nowait postinstall skipifsilent
+; Sin asistente (actualización desde la app): reabrirla sin preguntar
+Filename: "{app}\OpenWinBox.exe"; Flags: nowait; Check: WizardSilent

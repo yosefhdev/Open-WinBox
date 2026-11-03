@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.Graphics;
@@ -47,9 +46,13 @@ public sealed partial class SettingsWindow : Window
         _mergeDelayReady = true;
         MergeDelayText.Text = $"{MergeDelaySlider.Value:0.0} s";
         HotkeyWarning.IsOpen = !_app.HotkeyRegistered;
-        // InformationalVersion trae la etiqueta beta ("1.0.0-beta.1+<commit>"); el commit no se muestra
-        var version = typeof(App).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "";
-        VersionText.Text = $"OpenWinBox {version.Split('+')[0]}";
+        VersionText.Text = $"OpenWinBox {Updater.CurrentVersion}";
+        UpdateChannelCombo.SelectedIndex = IncludeBetas ? 1 : 0;
+        Closed += (_, _) =>
+        {
+            _closed = true;
+            _updateCts?.Cancel();
+        };
         RefreshWidgetList();
         _loading = false;
 
@@ -345,6 +348,104 @@ public sealed partial class SettingsWindow : Window
     private void LayerCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (!_loading) _app.SetPinned(LayerCombo.SelectedIndex == 0);
+    }
+
+    // ---------- Actualizaciones ----------
+
+    private System.Threading.CancellationTokenSource? _updateCts;
+    private UpdateRelease? _update;
+    private bool _downloading;
+    private bool _closed; // con la ventana cerrada ya no se tocan sus controles
+
+    private bool IncludeBetas => _app.Config.UpdateBetas ?? Updater.IsBeta(Updater.CurrentVersion);
+
+    private void UpdateChannelCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loading) return;
+        _app.Config.UpdateBetas = UpdateChannelCombo.SelectedIndex == 1;
+        _app.Config.Save();
+        UpdateBar.IsOpen = false; // el resultado anterior era de otro canal
+    }
+
+    private void ShowUpdateStatus(InfoBarSeverity severity, string title, string message, string? action = null)
+    {
+        UpdateBar.Severity = severity;
+        UpdateBar.Title = title;
+        UpdateBar.Message = message;
+        UpdateActionButton.Content = action;
+        UpdateActionButton.Visibility = action != null ? Visibility.Visible : Visibility.Collapsed;
+        UpdateNotesLink.Visibility = _update != null ? Visibility.Visible : Visibility.Collapsed;
+        UpdateProgress.Visibility = _downloading ? Visibility.Visible : Visibility.Collapsed;
+        UpdateBar.IsOpen = true;
+    }
+
+    private void SetUpdateControlsEnabled(bool enabled) =>
+        CheckUpdatesButton.IsEnabled = UpdateChannelCombo.IsEnabled = enabled;
+
+    private async void CheckUpdates_Click(object sender, RoutedEventArgs e)
+    {
+        var token = (_updateCts = new System.Threading.CancellationTokenSource()).Token;
+        var description = UpdateRow.Description;
+        _update = null;
+        UpdateBar.IsOpen = false;
+        SetUpdateControlsEnabled(false);
+        UpdateRow.Description = "Buscando actualizaciones…";
+        try
+        {
+            _update = await Updater.FindUpdateAsync(IncludeBetas, token);
+            if (_closed) return;
+            if (_update == null)
+                ShowUpdateStatus(InfoBarSeverity.Success, "Estás al día",
+                    $"La versión {Updater.CurrentVersion} es la más reciente del canal {(IncludeBetas ? "Betas" : "Oficiales")}.");
+            else
+            {
+                UpdateNotesLink.NavigateUri = new System.Uri(_update.PageUrl);
+                ShowUpdateStatus(InfoBarSeverity.Informational, $"OpenWinBox {_update.Version} está disponible",
+                    $"Tienes la versión {Updater.CurrentVersion}. Al actualizar, la app se cerrará un momento y volverá a abrirse.", "Actualizar");
+            }
+        }
+        catch (System.Exception ex) when (ex is System.Net.Http.HttpRequestException or System.OperationCanceledException or System.Text.Json.JsonException or KeyNotFoundException)
+        {
+            if (_closed) return;
+            ShowUpdateStatus(InfoBarSeverity.Error, "No se pudo buscar actualizaciones", "Revisa tu conexión a internet e inténtalo de nuevo.");
+        }
+        SetUpdateControlsEnabled(true);
+        UpdateRow.Description = description;
+    }
+
+    private async void UpdateAction_Click(object sender, RoutedEventArgs e)
+    {
+        if (_downloading)
+        {
+            _updateCts?.Cancel();
+            return;
+        }
+        if (_update is not { } update) return;
+
+        var token = (_updateCts = new System.Threading.CancellationTokenSource()).Token;
+        _downloading = true;
+        SetUpdateControlsEnabled(false);
+        UpdateProgress.Value = 0;
+        ShowUpdateStatus(InfoBarSeverity.Informational, $"Descargando OpenWinBox {update.Version}…", "Puedes seguir usando la app mientras tanto.", "Cancelar");
+        string? setup = null, error = null;
+        try
+        {
+            setup = await Updater.DownloadAsync(update, new System.Progress<double>(p => { if (!_closed) UpdateProgress.Value = p; }), token);
+            _app.InstallUpdate(setup);
+            return;
+        }
+        catch (System.OperationCanceledException) when (token.IsCancellationRequested) { }
+        catch (InvalidDataException) { error = "El archivo descargado no coincide con el publicado, así que no se instaló. Inténtalo de nuevo."; }
+        catch (System.ComponentModel.Win32Exception) { error = "Windows no permitió abrir el instalador. Inténtalo de nuevo."; }
+        catch (System.Exception ex) when (ex is System.Net.Http.HttpRequestException or System.OperationCanceledException or IOException or System.UnauthorizedAccessException)
+        {
+            error = "Revisa tu conexión a internet y el espacio en disco, e inténtalo de nuevo.";
+        }
+        _downloading = false;
+        if (_closed) return;
+        SetUpdateControlsEnabled(true);
+        if (error != null) ShowUpdateStatus(InfoBarSeverity.Error, "No se pudo actualizar", error, "Reintentar");
+        else ShowUpdateStatus(InfoBarSeverity.Informational, $"OpenWinBox {update.Version} está disponible", "Descarga cancelada.", "Actualizar");
     }
 
     private async void NewWidget_Click(object sender, RoutedEventArgs e)

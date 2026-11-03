@@ -392,6 +392,32 @@
                                 </Button>
                             </Grid>
                         </Border>
+                        <local:SettingRow x:Name="UpdateRow" Glyph="&#xE895;" Header="Actualizaciones"
+                                          Description="Comprueba si hay una versión nueva de OpenWinBox">
+                            <local:SettingRow.Action>
+                                <Button x:Name="CheckUpdatesButton" Content="Buscar actualizaciones" Click="CheckUpdates_Click" />
+                            </local:SettingRow.Action>
+                        </local:SettingRow>
+                        <local:SettingRow Glyph="&#xE7C1;" Header="Canal de actualizaciones"
+                                          Description="Oficiales: solo versiones estables. Betas: también versiones de prueba, con novedades antes y posibles fallos">
+                            <local:SettingRow.Action>
+                                <ComboBox x:Name="UpdateChannelCombo" MinWidth="200" SelectionChanged="UpdateChannelCombo_SelectionChanged"
+                                          AutomationProperties.Name="Canal de actualizaciones">
+                                    <ComboBoxItem Content="Oficiales" />
+                                    <ComboBoxItem Content="Betas" />
+                                </ComboBox>
+                            </local:SettingRow.Action>
+                        </local:SettingRow>
+                        <InfoBar x:Name="UpdateBar" IsClosable="False">
+                            <InfoBar.ActionButton>
+                                <Button x:Name="UpdateActionButton" Click="UpdateAction_Click" />
+                            </InfoBar.ActionButton>
+                            <StackPanel Spacing="4" Margin="0,0,0,8">
+                                <HyperlinkButton x:Name="UpdateNotesLink" Content="Ver los cambios" Padding="0" />
+                                <ProgressBar x:Name="UpdateProgress" Maximum="1" Margin="0,4,0,0"
+                                             AutomationProperties.Name="Progreso de la descarga" />
+                            </StackPanel>
+                        </InfoBar>
                         <!-- CC BY 4.0 de Open-Meteo exige atribución -->
                         <TextBlock Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap" Margin="4,8,4,0"
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}">

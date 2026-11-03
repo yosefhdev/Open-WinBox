@@ -57,6 +57,7 @@ public partial class App : Application
 
         Config = AppConfig.Load();
         ShellHost.MigrateAutoStart();
+        Updater.CleanDownloads();
         foreach (var widget in Config.Widgets.Where(w => !w.IsDisabled && (w.Kind != "File" || w.Folders.Count > 0)))
             OpenWidget(widget);
 
@@ -71,6 +72,22 @@ public partial class App : Application
         _shell.MenuRequested += (x, y) => (_trayMenu ??= new TrayMenu()).ShowAt(x, y);
 
         if (!Config.HasCompletedOnboarding) OpenOnboarding();
+    }
+
+    // El instalador se niega a seguir mientras exista el mutex: hay que soltarlo antes de lanzarlo y salir enseguida
+    public void InstallUpdate(string setupPath)
+    {
+        _singleInstance?.ReleaseMutex();
+        try
+        {
+            System.Diagnostics.Process.Start(setupPath, new[] { "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" });
+        }
+        catch
+        {
+            _singleInstance?.WaitOne(0);
+            throw;
+        }
+        Quit();
     }
 
     public void Quit()

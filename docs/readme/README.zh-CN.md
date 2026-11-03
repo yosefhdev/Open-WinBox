@@ -8,7 +8,7 @@
 
 [![下载](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-Windows%20%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F-E9705A?style=for-the-badge)](https://github.com/yosefhdev/OpenWinBox/releases)
 
-![版本](https://img.shields.io/badge/版本-1.0.0--beta.2-orange)
+![版本](https://img.shields.io/badge/版本-1.0.0--beta.3-orange)
 ![平台](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![许可证](https://img.shields.io/badge/许可证-MIT-green)
 
@@ -117,6 +117,12 @@ Windows 桌面很容易堆满零散文件，而查看其他地区的时间或切
 | 随 Windows 启动 | *Configuración → General → Lanzar al inicio*，或托盘菜单中的 *Iniciar con Windows* |
 
 </details>
+
+## 更新
+
+打开 *Configuración → Acerca de* 并点击 *Buscar actualizaciones*。如果有新版本，*Actualizar* 会下载并校验哈希值后安装，同时保留你的设置。应用会短暂关闭，然后重新打开。
+
+在 *Canal de actualizaciones* 中，选择 *Oficiales* 只接收稳定版本，或选择 *Betas* 同时接收测试版本。只有在你点击按钮时，OpenWinBox 才会为此连接 GitHub。
 
 ## 隐私
 

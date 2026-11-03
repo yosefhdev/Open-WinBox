@@ -73,6 +73,8 @@ public class AppConfig
     // "Default" (sistema), "Light" o "Dark": nombres de Microsoft.UI.Xaml.ElementTheme
     public string Theme { get; set; } = "Default";
     public bool HasCompletedOnboarding { get; set; }
+    // Canal de actualizaciones; null = según la versión instalada (quien usa una beta sigue en betas)
+    public bool? UpdateBetas { get; set; }
     // Ciudad elegida para el widget Tiempo; null = automática (Windows o aproximada por IP)
     public WeatherPlace? WeatherLocation { get; set; }
     public MusicOptions Music { get; set; } = new();

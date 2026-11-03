@@ -9,6 +9,11 @@ Versiones con [SemVer](https://semver.org/lang/es/). Mientras la app está en pr
 
 ## [Sin publicar]
 
+## [1.0.0-beta.3] - 2026-11-03
+
+- Buscar e instalar actualizaciones desde Configuración → Acerca de, comprobando el hash del instalador.
+- Canal de actualizaciones: Oficiales (solo versiones estables) o Betas.
+
 ## [1.0.0-beta.2] - 2026-11-01
 
 - Instalador para Windows (`OpenWinBox-<versión>-Setup.exe`): no requiere administrador ni instalar .NET.

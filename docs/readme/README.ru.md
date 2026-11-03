@@ -8,7 +8,7 @@
 
 [![Скачать](https://img.shields.io/badge/%D0%A1%D0%BA%D0%B0%D1%87%D0%B0%D1%82%D1%8C-%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D1%89%D0%B8%D0%BA%20%D0%B4%D0%BB%D1%8F%20Windows-E9705A?style=for-the-badge)](https://github.com/yosefhdev/OpenWinBox/releases)
 
-![Версия](https://img.shields.io/badge/версия-1.0.0--beta.2-orange)
+![Версия](https://img.shields.io/badge/версия-1.0.0--beta.3-orange)
 ![Платформа](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Лицензия](https://img.shields.io/badge/лицензия-MIT-green)
 
@@ -117,6 +117,12 @@
 | Запуск вместе с Windows | *Configuración → General → Lanzar al inicio*, или *Iniciar con Windows* в меню области уведомлений |
 
 </details>
+
+## Обновления
+
+Откройте *Configuración → Acerca de* и нажмите *Buscar actualizaciones*. Если есть новая версия, кнопка *Actualizar* скачает её, проверит хеш и установит, сохранив ваши настройки. Приложение ненадолго закроется и откроется снова.
+
+В разделе *Canal de actualizaciones* выберите *Oficiales*, чтобы получать только стабильные версии, или *Betas*, чтобы получать также тестовые. Для этого OpenWinBox подключается к GitHub только при нажатии кнопки.
 
 ## Конфиденциальность
 

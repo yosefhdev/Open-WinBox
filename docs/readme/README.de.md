@@ -8,7 +8,7 @@
 
 [![Herunterladen](https://img.shields.io/badge/Herunterladen-Windows--Installationsprogramm-E9705A?style=for-the-badge)](https://github.com/yosefhdev/OpenWinBox/releases)
 
-![Version](https://img.shields.io/badge/Version-1.0.0--beta.2-orange)
+![Version](https://img.shields.io/badge/Version-1.0.0--beta.3-orange)
 ![Plattform](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Lizenz](https://img.shields.io/badge/Lizenz-MIT-green)
 
@@ -117,6 +117,12 @@ Merke dir zwei Dinge: **F7** blendet alle Widgets ein oder aus, und das **Symbol
 | Mit Windows starten | *Configuración → General → Lanzar al inicio*, oder *Iniciar con Windows* im Menü des Infobereichs |
 
 </details>
+
+## Updates
+
+Öffne *Configuración → Acerca de* und klicke auf *Buscar actualizaciones*. Gibt es eine neue Version, lädt *Actualizar* sie herunter, prüft ihren Hash und installiert sie, wobei deine Einstellungen erhalten bleiben. Die App schließt sich kurz und öffnet sich wieder.
+
+Wähle unter *Canal de actualizaciones* die Option *Oficiales* für nur stabile Versionen oder *Betas*, um auch Testversionen zu erhalten. OpenWinBox verbindet sich dafür nur mit GitHub, wenn du auf die Schaltfläche klickst.
 
 ## Datenschutz
 

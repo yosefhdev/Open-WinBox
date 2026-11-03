@@ -8,7 +8,7 @@
 
 [![다운로드](https://img.shields.io/badge/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C-Windows%20%EC%84%A4%EC%B9%98%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8-E9705A?style=for-the-badge)](https://github.com/yosefhdev/OpenWinBox/releases)
 
-![버전](https://img.shields.io/badge/버전-1.0.0--beta.2-orange)
+![버전](https://img.shields.io/badge/버전-1.0.0--beta.3-orange)
 ![플랫폼](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![라이선스](https://img.shields.io/badge/라이선스-MIT-green)
 
@@ -117,6 +117,12 @@ Windows 바탕 화면은 흩어진 파일로 금방 가득 차고, 다른 나라
 | Windows와 함께 시작 | *Configuración → General → Lanzar al inicio*, 또는 트레이 메뉴의 *Iniciar con Windows* |
 
 </details>
+
+## 업데이트
+
+*Configuración → Acerca de*를 열고 *Buscar actualizaciones*를 누릅니다. 새 버전이 있으면 *Actualizar*가 다운로드하고 해시를 확인한 뒤 설정을 유지한 채 설치합니다. 앱이 잠시 닫혔다가 다시 열립니다.
+
+*Canal de actualizaciones*에서 안정 버전만 받으려면 *Oficiales*를, 테스트 버전도 받으려면 *Betas*를 선택합니다. OpenWinBox는 버튼을 누를 때만 이를 위해 GitHub에 연결합니다.
 
 ## 개인정보 보호
 

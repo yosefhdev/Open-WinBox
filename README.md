@@ -9,7 +9,7 @@ Your folders, music, clock, weather and audio controls, right on the desktop.
 
 [![Download](https://img.shields.io/badge/Download-Windows%20installer-E9705A?style=for-the-badge)](https://github.com/yosefhdev/OpenWinBox/releases)
 
-![Version](https://img.shields.io/badge/version-1.0.0--beta.2-orange)
+![Version](https://img.shields.io/badge/version-1.0.0--beta.3-orange)
 ![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -118,6 +118,12 @@ The two controls to remember are **F7**, which shows or hides all widgets, and t
 | Start with Windows | *Configuración → General → Lanzar al inicio*, or *Iniciar con Windows* in the tray menu |
 
 </details>
+
+## Updates
+
+Open *Configuración → Acerca de* and press *Buscar actualizaciones*. If there's a new version, *Actualizar* downloads it, checks its hash and installs it, keeping your settings. The app closes for a moment and opens again.
+
+In *Canal de actualizaciones*, choose *Oficiales* for stable releases only, or *Betas* to also get test versions. OpenWinBox only connects to GitHub for this when you press the button.
 
 ## Privacy
 

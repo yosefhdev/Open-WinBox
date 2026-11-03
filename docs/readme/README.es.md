@@ -8,7 +8,7 @@
 
 [![Descargar](https://img.shields.io/badge/Descargar-Instalador%20para%20Windows-E9705A?style=for-the-badge)](https://github.com/yosefhdev/OpenWinBox/releases)
 
-![Versión](https://img.shields.io/badge/versión-1.0.0--beta.2-orange)
+![Versión](https://img.shields.io/badge/versión-1.0.0--beta.3-orange)
 ![Plataforma](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Licencia](https://img.shields.io/badge/licencia-MIT-green)
 
@@ -117,6 +117,12 @@ Los dos controles que debes recordar son **F7**, que muestra u oculta todos los 
 | Iniciar con Windows | *Configuración → General → Lanzar al inicio*, o *Iniciar con Windows* en el menú de la bandeja |
 
 </details>
+
+## Actualizaciones
+
+Abre *Configuración → Acerca de* y pulsa *Buscar actualizaciones*. Si hay una versión nueva, *Actualizar* la descarga, comprueba su hash y la instala, conservando tu configuración. La app se cierra un momento y vuelve a abrirse.
+
+En *Canal de actualizaciones*, elige *Oficiales* para recibir solo versiones estables, o *Betas* para recibir también versiones de prueba. OpenWinBox solo se conecta a GitHub para esto cuando pulsas el botón.
 
 ## Privacidad
 

@@ -19,6 +19,7 @@ The app calls these services directly from the user's PC. No account or API key 
 
 | Service | Used for | Terms |
 |---|---|---|
+| [GitHub](https://github.com/) | Looking for and downloading new versions, only when the user presses the button | [GitHub Terms of Service](https://docs.github.com/site-policy/github-terms/github-terms-of-service). |
 | [Open-Meteo](https://open-meteo.com/) | Weather forecast and city search | Data under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); attribution is shown in **Settings → About**. The free API is for **non-commercial use only** ([terms](https://open-meteo.com/en/terms)). |
 | [BigDataCloud](https://www.bigdatacloud.com/) | City name for the device location (client-side reverse geocoding) | [Free client-side API](https://www.bigdatacloud.com/free-api/free-reverse-geocode-to-city-api) and fair-use policy; called only with the device's own current location. |
 | [ipapi.co](https://ipapi.co/) | Approximate location when Windows location is off | [ipapi.co terms](https://ipapi.co/terms/). |
