@@ -112,7 +112,7 @@
                   SelectionMode="Single" DoubleTapped="Items_DoubleTapped" KeyDown="Items_KeyDown"
                   RightTapped="Items_RightTapped"
                   CanDragItems="True" CanReorderItems="True" AllowDrop="True"
-                  DragItemsCompleted="Items_DragItemsCompleted"
+                  DragItemsStarting="Items_DragItemsStarting" DragItemsCompleted="Items_DragItemsCompleted"
                   DragOver="Items_DragOver" Drop="Items_Drop">
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem" BasedOn="{StaticResource DefaultGridViewItemStyle}">

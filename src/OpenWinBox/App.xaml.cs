@@ -28,6 +28,8 @@ public partial class App : Application
     private TrayMenu? _trayMenu;
     private WinEventProc? _foregroundProc; // referencia viva: Windows llama a este delegado
     private IntPtr _foregroundHook;
+    private const int StaggerMs = 45; // entre un widget y el siguiente al abrir la app
+    private bool _quitting;
 
     // Win+D trae el escritorio (Progman/WorkerW) al frente y tapa a los widgets; mientras tanto van encima de él
     public static bool DesktopInFront { get; private set; }
@@ -58,8 +60,12 @@ public partial class App : Application
         Config = AppConfig.Load();
         ShellHost.MigrateAutoStart();
         Updater.CleanDownloads();
+        var delay = 0;
         foreach (var widget in Config.Widgets.Where(w => !w.IsDisabled && (w.Kind != "File" || w.Folders.Count > 0)))
-            OpenWidget(widget);
+        {
+            OpenWidget(widget, delay);
+            delay += StaggerMs;
+        }
 
         // Out-of-context desde el hilo de UI: el callback llega por su loop de mensajes, sin TryEnqueue.
         // Sin los eventos propios: abrir un menú del widget no debe contar como "el escritorio dejó de estar al frente"
@@ -87,10 +93,18 @@ public partial class App : Application
             _singleInstance?.WaitOne(0);
             throw;
         }
-        Quit();
+        Shutdown(); // sin animación: el instalador ya corre y necesita los archivos libres
     }
 
-    public void Quit()
+    public async void Quit()
+    {
+        if (_quitting) return;
+        _quitting = true;
+        await Task.WhenAll(_widgets.Values.Select(w => w.FadeOutAsync()).ToList());
+        Shutdown();
+    }
+
+    private void Shutdown()
     {
         _shell?.Dispose();
         if (_foregroundHook != IntPtr.Zero) UnhookWinEvent(_foregroundHook);
@@ -102,13 +116,14 @@ public partial class App : Application
     // Widgets de archivos abiertos (para "Agrupar con…")
     public IEnumerable<WidgetConfig> FileWidgets => _widgets.Keys.Where(w => w.Kind == "File");
 
-    private void OpenWidget(WidgetConfig widget)
+    private void OpenWidget(WidgetConfig widget, int delayMs = 0)
     {
         var window = new WidgetWindow(widget, Config.Save);
         _widgets[widget] = window;
         ApplyTheme(window);
         window.Activate();
         window.SetPinnedToDesktop(Config.PinToDesktop); // después de Activate, que siempre la sube al frente
+        _ = window.EnterAsync(delayMs);
     }
 
     public void AddWidget(string folder, PointInt32? at = null, int width = 400, int height = 500)
@@ -145,7 +160,7 @@ public partial class App : Application
 
     public void RemoveWidget(WidgetConfig widget)
     {
-        if (_widgets.Remove(widget, out var window)) window.Close();
+        if (_widgets.Remove(widget, out var window)) _ = window.CloseAnimatedAsync();
         Config.Widgets.Remove(widget);
         Config.Save();
     }
@@ -223,7 +238,7 @@ public partial class App : Application
         var widget = Config.Feature(kind);
         widget.IsDisabled = !enabled;
         Config.Save();
-        if (!enabled && _widgets.Remove(widget, out var window)) window.Close();
+        if (!enabled && _widgets.Remove(widget, out var window)) _ = window.CloseAnimatedAsync();
         else if (enabled && !_widgets.ContainsKey(widget)) OpenWidget(widget);
         _settings?.RefreshFeatures();
     }

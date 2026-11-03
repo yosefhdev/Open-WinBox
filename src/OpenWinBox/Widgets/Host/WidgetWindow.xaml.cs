@@ -106,7 +106,9 @@ public sealed partial class WidgetWindow : Window
         // Fuera de la barra de tareas y Alt+Tab, como en el original: solo Configuración cuenta como ventana.
         // IsShownInSwitchers no alcanza; WS_EX_TOOLWINDOW sí (antes de mostrarla, la barra de tareas no lo relee después)
         AppWindow.IsShownInSwitchers = false;
-        SetWindowLongPtr(Hwnd, GWL_EXSTYLE, (GetWindowLongPtr(Hwnd, GWL_EXSTYLE) | WS_EX_TOOLWINDOW) & ~WS_EX_APPWINDOW);
+        // WS_EX_LAYERED: invisible desde antes de mostrarla, para que nunca se vea el cuadro negro de la ventana sin pintar
+        SetWindowLongPtr(Hwnd, GWL_EXSTYLE, (GetWindowLongPtr(Hwnd, GWL_EXSTYLE) | WS_EX_TOOLWINDOW | WS_EX_LAYERED) & ~WS_EX_APPWINDOW);
+        SetShown(0);
         // Nombre para lectores de pantalla en vez de "WinUI Desktop"
         Title = _config.Name ?? (IsFileWidget ? TitleOf(_config, _config.Folders[0]) : FeatureTitle(_config.Kind));
 
@@ -122,7 +124,7 @@ public sealed partial class WidgetWindow : Window
             t.Stop();
             if (!PopupOpen) SendToBottom();
         };
-        Closed += (_, _) => { _closed = true; _watchers.ForEach(w => w.Dispose()); _lowerTimer.Stop(); };
+        Closed += (_, _) => { _closed = true; _watchers.ForEach(w => w.Dispose()); _lowerTimer.Stop(); _fade?.Stop(); };
 
         InitSnapping();
         if (!IsFileWidget)
@@ -136,9 +138,72 @@ public sealed partial class WidgetWindow : Window
         foreach (var folder in _config.Folders.OrderBy(f => f != ActiveFolder))
         {
             Watch(folder);
-            _ = LoadFolderAsync(folder);
+            var load = LoadFolderAsync(folder);
+            if (folder == ActiveFolder) _firstLoad = load;
         }
         ShowFolder();
+    }
+
+    // ---------- Animaciones de entrada y salida ----------
+
+    private const int FirstPaintMs = 150, EnterMs = 280, ExitMs = 160, MaxIconWaitMs = 1500;
+    private Task _firstLoad = Task.CompletedTask;
+    private Microsoft.UI.Dispatching.DispatcherQueueTimer? _fade;
+    private double _shown;
+    private bool _leaving;
+
+    // Aparece ya con acrílico e íconos listos. delayMs escalona los widgets al abrir la app.
+    public async Task EnterAsync(int delayMs = 0)
+    {
+        await Task.WhenAny(_firstLoad, Task.Delay(MaxIconWaitMs));
+        await Task.Delay(FirstPaintMs + delayMs);
+        if (!_leaving && !_closed) await AnimateShown(1, EnterMs, t => 1 - Math.Pow(1 - t, 3));
+    }
+
+    public Task FadeOutAsync()
+    {
+        _leaving = true;
+        return AnimateShown(0, ExitMs, t => t * t * t);
+    }
+
+    public async Task CloseAnimatedAsync()
+    {
+        await FadeOutAsync();
+        if (!_closed) Close();
+    }
+
+    private Task AnimateShown(double to, int ms, Func<double, double> ease)
+    {
+        _fade?.Stop();
+        var done = new TaskCompletionSource();
+        if (_closed) { done.SetResult(); return done.Task; }
+        // Respeta "Efectos de animación" de Windows
+        if (!new Windows.UI.ViewManagement.UISettings().AnimationsEnabled) ms = 0;
+        var from = _shown;
+        var clock = System.Diagnostics.Stopwatch.StartNew();
+        _fade = DispatcherQueue.CreateTimer();
+        _fade.Interval = TimeSpan.FromMilliseconds(16);
+        _fade.Tick += (timer, _) =>
+        {
+            var t = ms == 0 ? 1 : Math.Min(1, clock.ElapsedMilliseconds / (double)ms);
+            SetShown(from + (to - from) * ease(t));
+            if (t < 1) return;
+            timer.Stop();
+            done.TrySetResult();
+        };
+        _fade.Start();
+        return done.Task;
+    }
+
+    // 0 = oculto, 1 = normal: la ventana se desvanece y el contenido sube y crece un poco
+    private void SetShown(double shown)
+    {
+        _shown = shown;
+        SetLayeredWindowAttributes(Hwnd, 0, (byte)Math.Round(shown * 255), LWA_ALPHA);
+        var scale = (float)(0.97 + 0.03 * shown);
+        Root.CenterPoint = new System.Numerics.Vector3(Root.ActualSize / 2, 0);
+        Root.Scale = new System.Numerics.Vector3(scale, scale, 1);
+        Root.Translation = new System.Numerics.Vector3(0, (float)((1 - shown) * 8), 0);
     }
 
     public void ShowOnDesktop()
@@ -398,9 +463,39 @@ public sealed partial class WidgetWindow : Window
         if (folder == ActiveFolder) Items.ItemsSource = _cache[folder];
     }
 
+    private bool _ownDrag; // el arrastre salió de este widget: reordenar lo maneja el GridView
+
+    // Da los archivos reales al arrastre para que se puedan soltar fuera (escritorio, Explorador, otro widget)
+    private void Items_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
+    {
+        var paths = e.Items.OfType<FileItem>().Select(i => i.Path).ToList();
+        try
+        {
+            // shortcut: bloquea la UI mientras Windows resuelve las rutas; pasar a SetDataProvider si tarda en unidades de red
+            var items = Task.Run(async () =>
+            {
+                var list = new List<Windows.Storage.IStorageItem>();
+                foreach (var path in paths)
+                    list.Add(Directory.Exists(path)
+                        ? await Windows.Storage.StorageFolder.GetFolderFromPathAsync(path)
+                        : await Windows.Storage.StorageFile.GetFileFromPathAsync(path));
+                return list;
+            }).GetAwaiter().GetResult();
+            e.Data.SetStorageItems(items, false); // false: si es de solo lectura, Windows solo permite copiar
+            e.Data.RequestedOperation = DataPackageOperation.Move | DataPackageOperation.Copy | DataPackageOperation.Link;
+            _ownDrag = true;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            StatusText.Text = ex.Message;
+            e.Cancel = true;
+        }
+    }
+
     // Tras soltar un ícono en otro lugar, guardar el orden actual de la pestaña
     private void Items_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
     {
+        _ownDrag = false;
         if (_cache.GetValueOrDefault(ActiveFolder) is not { } items) return;
         _config.Order[ActiveFolder] = items.Select(i => Path.GetFileName(i.Path)).ToList();
         _save();
@@ -414,7 +509,7 @@ public sealed partial class WidgetWindow : Window
     private void Items_DragOver(object sender, DragEventArgs e)
     {
         // Solo archivos de fuera; reordenar íconos del propio widget lo maneja el GridView
-        if (!e.DataView.Contains(StandardDataFormats.StorageItems)) return;
+        if (_ownDrag || !e.DataView.Contains(StandardDataFormats.StorageItems)) return;
         var copy = e.Modifiers.HasFlag(Windows.ApplicationModel.DataTransfer.DragDrop.DragDropModifiers.Control);
         e.AcceptedOperation = copy ? DataPackageOperation.Copy : DataPackageOperation.Move | DataPackageOperation.Link;
         e.DragUIOverride.Caption = $"Agregar a {TitleFor(ActiveFolder)}";
@@ -426,7 +521,7 @@ public sealed partial class WidgetWindow : Window
     // el archivo real de donde debe estar.
     private async void Items_Drop(object sender, DragEventArgs e)
     {
-        if (!e.DataView.Contains(StandardDataFormats.StorageItems)) return;
+        if (_ownDrag || !e.DataView.Contains(StandardDataFormats.StorageItems)) return;
         e.Handled = true;
         var folder = ActiveFolder;
         var copy = e.Modifiers.HasFlag(Windows.ApplicationModel.DataTransfer.DragDrop.DragDropModifiers.Control);
@@ -728,7 +823,10 @@ public sealed partial class WidgetWindow : Window
     private static readonly IntPtr HWND_BOTTOM = new(1), HWND_TOP = IntPtr.Zero, HWND_TOPMOST = new(-1), HWND_NOTOPMOST = new(-2);
     private const uint SWP_NOSIZE = 0x1, SWP_NOMOVE = 0x2, SWP_NOACTIVATE = 0x10;
     private const int GWL_EXSTYLE = -20, VK_LBUTTON = 0x01, VK_RBUTTON = 0x02;
-    private const nint WS_EX_NOACTIVATE = 0x08000000, WS_EX_TOOLWINDOW = 0x80, WS_EX_APPWINDOW = 0x40000, WS_EX_TOPMOST = 0x8;
+    private const nint WS_EX_NOACTIVATE = 0x08000000, WS_EX_TOOLWINDOW = 0x80, WS_EX_APPWINDOW = 0x40000, WS_EX_TOPMOST = 0x8, WS_EX_LAYERED = 0x80000;
+    private const uint LWA_ALPHA = 0x2;
+
+    [DllImport("user32.dll")] private static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint key, byte alpha, uint flags);
 
     [DllImport("user32.dll", SetLastError = true)]
     private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint flags);
