@@ -170,6 +170,10 @@ OpenWinBox uses [Semantic Versioning](https://semver.org/). Betas are numbered `
 
 Bug reports, ideas and pull requests are welcome. Please open an issue first for large changes. To get started with the code, see the [developer guide](docs/development.md).
 
+## Code signing
+
+See the [code signing policy](docs/code-signing-policy.md).
+
 ## License
 
 [MIT](LICENSE) © 2026 Yosefh. Third-party components and online services are listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Weather data by [Open-Meteo.com](https://open-meteo.com/) (CC BY 4.0).

@@ -107,4 +107,6 @@ gh release create v1.0.0-beta.1 dist/OpenWinBox-1.0.0-beta.1-Setup.exe dist/SHA2
 
 The in-app updater skips a release unless its tag is `v<version>` and it has both files with exactly these names. It offers prereleases only on the *Betas* channel.
 
-The installer isn't code-signed yet. `SHA256SUMS.txt` detects a damaged download, but it doesn't protect against someone who controls the GitHub account.
+The installer isn't code-signed yet. `SHA256SUMS.txt` detects a damaged download, but it doesn't protect against someone who controls the GitHub account. See the [code signing policy](code-signing-policy.md).
+
+The [Build installer](../.github/workflows/release.yml) workflow also builds the installer from a `v*` tag or by hand. It signs with SignPath when the `SIGNPATH_ORGANIZATION_ID` variable and `SIGNPATH_API_TOKEN` secret exist. The signing settings are in `.signpath/`.

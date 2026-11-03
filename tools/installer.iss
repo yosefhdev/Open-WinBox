@@ -28,6 +28,11 @@ Compression=lzma2/max
 SolidCompression=yes
 OutputDir=..\dist
 OutputBaseFilename=OpenWinBox-{#AppVersion}-Setup
+#ifdef SignedBuild
+; Usa el desinstalador firmado de esta carpeta: sin firma, Smart App Control puede bloquear sus copias temporales
+SignedUninstaller=yes
+SignedUninstallerDir=..\dist\uninstaller
+#endif
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"

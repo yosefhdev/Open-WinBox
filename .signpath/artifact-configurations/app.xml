@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <zip-file>
+    <directory path="app">
+      <pe-file path="OpenWinBox.exe" product-name="OpenWinBox">
+        <authenticode-sign/>
+      </pe-file>
+      <pe-file path="OpenWinBox.dll" product-name="OpenWinBox">
+        <authenticode-sign/>
+      </pe-file>
+    </directory>
+    <directory path="uninstaller">
+      <pe-file path="uninst-*.e32">
+        <authenticode-sign/>
+      </pe-file>
+    </directory>
+  </zip-file>
+</artifact-configuration>
