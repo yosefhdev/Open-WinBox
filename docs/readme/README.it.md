@@ -8,7 +8,7 @@
 
 [![Scarica](https://img.shields.io/badge/Scarica-Programma%20di%20installazione%20per%20Windows-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![Versione](https://img.shields.io/badge/versione-1.0.0--beta.1-orange)
+![Versione](https://img.shields.io/badge/versione-1.0.0--beta.2-orange)
 ![Piattaforma](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Licenza](https://img.shields.io/badge/licenza-MIT-green)
 

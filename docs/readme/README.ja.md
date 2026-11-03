@@ -8,7 +8,7 @@
 
 [![ダウンロード](https://img.shields.io/badge/%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89-Windows%20%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%A9%E3%83%BC-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![バージョン](https://img.shields.io/badge/バージョン-1.0.0--beta.1-orange)
+![バージョン](https://img.shields.io/badge/バージョン-1.0.0--beta.2-orange)
 ![プラットフォーム](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![ライセンス](https://img.shields.io/badge/ライセンス-MIT-green)
 

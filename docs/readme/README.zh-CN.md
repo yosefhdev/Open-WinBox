@@ -8,7 +8,7 @@
 
 [![下载](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-Windows%20%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![版本](https://img.shields.io/badge/版本-1.0.0--beta.1-orange)
+![版本](https://img.shields.io/badge/版本-1.0.0--beta.2-orange)
 ![平台](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![许可证](https://img.shields.io/badge/许可证-MIT-green)
 

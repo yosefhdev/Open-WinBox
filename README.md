@@ -9,7 +9,7 @@ Your folders, music, clock, weather and audio controls, right on the desktop.
 
 [![Download](https://img.shields.io/badge/Download-Windows%20installer-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![Version](https://img.shields.io/badge/version-1.0.0--beta.1-orange)
+![Version](https://img.shields.io/badge/version-1.0.0--beta.2-orange)
 ![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![License](https://img.shields.io/badge/license-MIT-green)
 

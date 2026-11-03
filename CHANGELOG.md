@@ -9,6 +9,8 @@ Versiones con [SemVer](https://semver.org/lang/es/). Mientras la app está en pr
 
 ## [Sin publicar]
 
+## [1.0.0-beta.2] - 2026-11-03
+
 - Animaciones de entrada y salida de los widgets; ya no aparece un cuadro negro al abrir la app.
 - Los archivos y accesos directos se pueden sacar de un widget arrastrándolos al escritorio o al Explorador.
 

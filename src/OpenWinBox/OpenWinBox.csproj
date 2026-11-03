@@ -9,7 +9,7 @@
     <!-- App de bandeja con poco trabajo: sin hilo de GC en segundo plano (menos hilos y memoria) -->
     <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
     <!-- SemVer: betas 1.0.0-beta.N hasta la versión final 1.0.0 (ver CHANGELOG.md) -->
-    <Version>1.0.0-beta.1</Version>
+    <Version>1.0.0-beta.2</Version>
     <!-- Generado con tools/make_icon.py -->
     <ApplicationIcon>Assets\OpenWinBox.ico</ApplicationIcon>
     <Platforms>x64</Platforms>

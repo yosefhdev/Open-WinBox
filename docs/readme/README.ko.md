@@ -8,7 +8,7 @@
 
 [![다운로드](https://img.shields.io/badge/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C-Windows%20%EC%84%A4%EC%B9%98%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![버전](https://img.shields.io/badge/버전-1.0.0--beta.1-orange)
+![버전](https://img.shields.io/badge/버전-1.0.0--beta.2-orange)
 ![플랫폼](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![라이선스](https://img.shields.io/badge/라이선스-MIT-green)
 
