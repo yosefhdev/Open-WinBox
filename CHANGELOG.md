@@ -9,6 +9,8 @@ Versiones con [SemVer](https://semver.org/lang/es/). Mientras la app está en pr
 
 ## [Sin publicar]
 
+- Arreglado: arrastrar un acceso directo (`.lnk`, `.url`) mostraba "Access is denied." y cancelaba el arrastre, así que no se podía reordenar ni sacar del widget. Al sacarlo a otro lugar, el original va a la Papelera.
+
 ## [1.0.0-beta.3] - 2026-11-03
 
 - La interfaz está en español e inglés: se elige en Configuración → General → Idioma, o sigue el idioma de Windows. El cambio se aplica al momento.

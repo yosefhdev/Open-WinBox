@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace OpenWinBox;
@@ -90,6 +91,20 @@ internal static class FileActions
         link.TargetPath = path;
         link.WorkingDirectory = Path.GetDirectoryName(path) ?? "";
         link.Save();
+    }
+
+    // Copia para arrastrar, en una carpeta propia por arrastre: si otro arrastre borrara una copia aún
+    // pendiente de revisar, el original parecería movido. Por eso solo se limpian las de más de una hora.
+    public static string DragCopy(string path)
+    {
+        var root = Path.Combine(Path.GetTempPath(), "OpenWinBox", "drag");
+        if (Directory.Exists(root))
+            foreach (var old in new DirectoryInfo(root).GetDirectories().Where(d => d.CreationTimeUtc < DateTime.UtcNow.AddHours(-1)))
+                try { old.Delete(true); } catch (Exception e) when (e is IOException or UnauthorizedAccessException) { }
+        var dir = Directory.CreateDirectory(Path.Combine(root, Guid.NewGuid().ToString("N"))).FullName;
+        var copy = Path.Combine(dir, Path.GetFileName(path));
+        File.Copy(path, copy);
+        return copy;
     }
 
     public static string UniquePath(string folder, string name)

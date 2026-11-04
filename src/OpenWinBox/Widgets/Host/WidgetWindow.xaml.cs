@@ -464,38 +464,59 @@ public sealed partial class WidgetWindow : Window
     }
 
     private bool _ownDrag; // el arrastre salió de este widget: reordenar lo maneja el GridView
+    private Dictionary<string, string>? _dragCopies; // copia temporal -> archivo original del arrastre en curso
 
     // Da los archivos reales al arrastre para que se puedan soltar fuera (escritorio, Explorador, otro widget)
     private void Items_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
     {
         var paths = e.Items.OfType<FileItem>().Select(i => i.Path).ToList();
+        var copies = new Dictionary<string, string>();
+        _ownDrag = true;
         try
         {
             // shortcut: bloquea la UI mientras Windows resuelve las rutas; pasar a SetDataProvider si tarda en unidades de red
             var items = Task.Run(async () =>
             {
                 var list = new List<Windows.Storage.IStorageItem>();
-                foreach (var path in paths)
-                    list.Add(Directory.Exists(path)
-                        ? await Windows.Storage.StorageFolder.GetFolderFromPathAsync(path)
-                        : await Windows.Storage.StorageFile.GetFileFromPathAsync(path));
+                foreach (var path in paths) list.Add(await DragItemAsync(path, copies));
                 return list;
             }).GetAwaiter().GetResult();
             e.Data.SetStorageItems(items, false); // false: si es de solo lectura, Windows solo permite copiar
             e.Data.RequestedOperation = DataPackageOperation.Move | DataPackageOperation.Copy | DataPackageOperation.Link;
-            _ownDrag = true;
+            _dragCopies = copies;
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        // Sin cancelar: reordenar dentro del widget no necesita los archivos, solo no se podrán sacar
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { }
+    }
+
+    // Windows.Storage niega el acceso a los .lnk y .url salvo en %TEMP%: se arrastra una copia temporal
+    private static async Task<Windows.Storage.IStorageItem> DragItemAsync(string path, Dictionary<string, string> copies)
+    {
+        if (Directory.Exists(path)) return await Windows.Storage.StorageFolder.GetFolderFromPathAsync(path);
+        try { return await Windows.Storage.StorageFile.GetFileFromPathAsync(path); }
+        catch (UnauthorizedAccessException)
         {
-            StatusText.Text = ex.Message;
-            e.Cancel = true;
+            var copy = FileActions.DragCopy(path);
+            copies[copy] = path;
+            return await Windows.Storage.StorageFile.GetFileFromPathAsync(copy);
         }
+    }
+
+    // Si la copia temporal desapareció, el destino la movió: quitar el original. A la Papelera porque soltar
+    // sobre la misma carpeta y aceptar "reemplazar" dejaría el original como único ejemplar.
+    private async void RecycleMovedOriginals(Dictionary<string, string> copies)
+    {
+        await Task.Delay(1500); // el Explorador termina de mover después de avisar que se soltó
+        foreach (var (copy, original) in copies)
+            if (!File.Exists(copy)) Try(() => FileActions.MoveToRecycleBin(original));
     }
 
     // Tras soltar un ícono en otro lugar, guardar el orden actual de la pestaña
     private void Items_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
     {
         _ownDrag = false;
+        if (_dragCopies is { Count: > 0 } copies) RecycleMovedOriginals(copies);
+        _dragCopies = null;
         if (_cache.GetValueOrDefault(ActiveFolder) is not { } items) return;
         _config.Order[ActiveFolder] = items.Select(i => Path.GetFileName(i.Path)).ToList();
         _save();
