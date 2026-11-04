@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Solo para el paquete de Microsoft Store. Name y Publisher salen de Partner Center; ver docs/development.md -->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap desktop rescap">
+
+  <Identity Name="OpenWinBox.Pending" Publisher="CN=00000000-0000-0000-0000-000000000000" Version="1.0.3.0" ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>OpenWinBox</DisplayName>
+    <PublisherDisplayName>Yosefh</PublisherDisplayName>
+    <Logo>Assets\Store\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-us" />
+    <Resource Language="es" />
+  </Resources>
+
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="$targetentrypoint$">
+      <uap:VisualElements
+        DisplayName="OpenWinBox"
+        Description="Desktop widgets for Windows"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Store\Square150x150Logo.png"
+        Square44x44Logo="Assets\Store\Square44x44Logo.png" />
+      <Extensions>
+        <!-- TaskId debe coincidir con ShellHost.StartupTaskId -->
+        <desktop:Extension Category="windows.startupTask" Executable="OpenWinBox.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="OpenWinBox" Enabled="false" DisplayName="OpenWinBox" />
+        </desktop:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

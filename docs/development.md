@@ -50,6 +50,7 @@ src/OpenWinBox/
     └── Audio/
 tools/
 ├── publish.ps1          Builds the installer and SHA256SUMS.txt
+├── publish-store.ps1    Builds the MSIX package for the Microsoft Store
 ├── installer.iss        Inno Setup script
 ├── UpdaterCheck/        Tests for the update logic and the translations
 └── make_icon.py         Generates Assets/OpenWinBox.ico
@@ -116,6 +117,24 @@ Run `tools/publish.ps1` in PowerShell. It creates these files in `dist/`:
 - `SHA256SUMS.txt`
 
 Don't change `AppId` in `tools/installer.iss`, because that is how a new version replaces the old one. The mutex name in `AppMutex` must match the one in `App.xaml.cs`.
+
+## Build the Microsoft Store package
+
+The Store build is the same app packaged as MSIX. The Store signs it and installs the WinUI runtime. Run `tools/publish-store.ps1`. It creates `dist/store/OpenWinBox_<package version>_x64_Test/OpenWinBox_<package version>_x64.msix`.
+
+Before you run it:
+
+1. Set `Version` in `src/OpenWinBox/Package.appxmanifest`. The script stops if it doesn't match the app version. Packages use four numbers ending in 0, and each one must be higher than the last: `1.0.0-beta.N` becomes `1.0.N.0`, and a final `X.Y.Z` becomes `X.(Y+1).Z.0`.
+2. For an upload, replace `Name` and `Publisher` in that file with the values under *Product identity* in Partner Center. The Store rejects the placeholders.
+
+To try it without uploading, turn on Developer Mode, unpack the `.msix` with `makeappx unpack`, and run `Add-AppxPackage -Register <folder>\AppxManifest.xml`. Remove it with `Get-AppxPackage OpenWinBox.Pending | Remove-AppxPackage`. A packaged copy reads your existing `%LOCALAPPDATA%\OpenWinBox\config.json`, so back it up first.
+
+The app detects the package at runtime with `ShellHost.IsPackaged`, and it changes four things:
+
+- **Updates.** Settings hides the update search, because the Store updates the package.
+- **Launch at startup.** It uses the `StartupTask` from the manifest instead of the `Run` registry key, which Windows doesn't read from a package.
+- **New folder widgets.** They go in `Documents\OpenWinBox`. New files in `AppData` go to a private folder that Windows deletes on uninstall.
+- **Settings folder button.** It opens the real private folder, because File Explorer doesn't see the redirection.
 
 ## Publish a release
 

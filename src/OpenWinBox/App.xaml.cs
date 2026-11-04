@@ -150,7 +150,10 @@ public partial class App : Application
     // Carpeta vacía propia para widgets/pestañas nuevas: "Nuevo widget", "Nuevo widget (2)"...
     public static string NewEmptyFolder()
     {
-        var root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "OpenWinBox", "widgets");
+        // En el paquete, AppData es privada y se borra al desinstalar: estos son archivos del usuario
+        var root = ShellHost.IsPackaged
+            ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "OpenWinBox")
+            : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "OpenWinBox", "widgets");
         Directory.CreateDirectory(root);
         return Directory.CreateDirectory(FileActions.UniquePath(root, Lang.T("common.newWidget"))).FullName;
     }

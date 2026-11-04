@@ -23,6 +23,22 @@
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
 
+  <!-- Paquete MSIX para Microsoft Store (tools/publish-store.ps1). La Store lo firma e instala el runtime de WinUI -->
+  <PropertyGroup Condition="'$(StoreBuild)' == 'true'">
+    <WindowsPackageType>MSIX</WindowsPackageType>
+    <WindowsAppSDKSelfContained>false</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+    <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+    <AppxBundle>Never</AppxBundle>
+    <AppxSymbolPackageEnabled>false</AppxSymbolPackageEnabled>
+    <AppxPackageDir>$(MSBuildProjectDirectory)\..\..\dist\store\</AppxPackageDir>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(StoreBuild)' == 'true'">
+    <Content Include="Assets\Store\*.png" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <!-- La bandeja y las ventanas cargan el .ico desde la carpeta de la app -->
     <Content Include="Assets\OpenWinBox.ico" CopyToOutputDirectory="PreserveNewest" />

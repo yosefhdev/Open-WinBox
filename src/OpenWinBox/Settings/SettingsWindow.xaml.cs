@@ -53,6 +53,8 @@ public sealed partial class SettingsWindow : Window
         MergeDelayText.Text = $"{MergeDelaySlider.Value:0.0} s";
         HotkeyWarning.IsOpen = !_app.HotkeyRegistered;
         VersionText.Text = $"OpenWinBox {Updater.CurrentVersion}";
+        // La Store actualiza el paquete, que además es de solo lectura
+        if (ShellHost.IsPackaged) UpdateRow.Visibility = UpdateChannelRow.Visibility = Visibility.Collapsed;
         UpdateChannelCombo.SelectedIndex = IncludeBetas ? 1 : 0;
         Closed += (_, _) =>
         {
@@ -348,7 +350,12 @@ public sealed partial class SettingsWindow : Window
 
     private void AutoStartToggle_Toggled(object sender, RoutedEventArgs e)
     {
-        if (!_loading) ShellHost.AutoStart = AutoStartToggle.IsOn;
+        if (_loading) return;
+        ShellHost.AutoStart = AutoStartToggle.IsOn;
+        // En el paquete no se puede activar si el usuario lo apagó en Aplicaciones de inicio
+        _loading = true;
+        AutoStartToggle.IsOn = ShellHost.AutoStart;
+        _loading = false;
     }
 
     private void ThemeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -476,7 +483,16 @@ public sealed partial class SettingsWindow : Window
     private void Onboarding_Click(object sender, RoutedEventArgs e) => _app.OpenOnboarding();
 
     private void OpenDataFolder_Click(object sender, RoutedEventArgs e) =>
-        Process.Start(new ProcessStartInfo(Path.GetDirectoryName(AppConfig.FilePath)!) { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo(DataFolder()) { UseShellExecute = true });
+
+    // Explorer no ve la redirección del paquete: hay que darle la ruta real
+    private static string DataFolder()
+    {
+        var folder = Path.GetDirectoryName(AppConfig.FilePath)!;
+        if (!ShellHost.IsPackaged) return folder;
+        var redirected = Path.Combine(Windows.Storage.ApplicationData.Current.LocalCacheFolder.Path, "Local", Path.GetFileName(folder));
+        return Directory.Exists(redirected) ? redirected : folder;
+    }
 
     private bool _mergeDelayReady; // el Slider dispara ValueChanged al cargarse con su mínimo: no guardar eso
 

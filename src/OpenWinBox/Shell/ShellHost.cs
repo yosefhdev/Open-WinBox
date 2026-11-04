@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Microsoft.Win32;
+using Windows.ApplicationModel;
 
 namespace OpenWinBox;
 
@@ -74,17 +76,47 @@ internal sealed class ShellHost : IDisposable
     // Antes el autoinicio se guardaba como "DeskBox2" (con la ruta del .exe viejo): pasarlo al nombre nuevo
     public static void MigrateAutoStart()
     {
+        if (IsPackaged) return;
         using var key = Registry.CurrentUser.OpenSubKey(RunKey, writable: true);
         if (key?.GetValue("DeskBox2") is not string) return;
         key.DeleteValue("DeskBox2");
         AutoStart = true;
     }
 
+    // Paquete de la Store: 15700 = APPMODEL_ERROR_NO_PACKAGE
+    public static bool IsPackaged { get; } = IsInPackage();
+
+    private static bool IsInPackage()
+    {
+        var length = 0;
+        return GetCurrentPackageFullName(ref length, null) != 15700;
+    }
+
+    // Debe coincidir con TaskId en Package.appxmanifest
+    private const string StartupTaskId = "OpenWinBox";
+
+    // shortcut: espera con tope para mantener AutoStart síncrono; pasar a async si llega a tardar
+    private static T? WaitFor<T>(Windows.Foundation.IAsyncOperation<T> operation)
+    {
+        var task = operation.AsTask();
+        return task.Wait(3000) ? task.Result : default;
+    }
+
     public static bool AutoStart
     {
-        get => Registry.CurrentUser.OpenSubKey(RunKey)?.GetValue(RunValue) is string;
+        // En el paquete, Windows no lee la clave Run: la escritura en HKCU queda privada del paquete
+        get => IsPackaged
+            ? WaitFor(StartupTask.GetAsync(StartupTaskId))?.State is StartupTaskState.Enabled or StartupTaskState.EnabledByPolicy
+            : Registry.CurrentUser.OpenSubKey(RunKey)?.GetValue(RunValue) is string;
         set
         {
+            if (IsPackaged)
+            {
+                if (WaitFor(StartupTask.GetAsync(StartupTaskId)) is not { } task) return;
+                if (value) WaitFor(task.RequestEnableAsync());
+                else task.Disable();
+                return;
+            }
             using var key = Registry.CurrentUser.CreateSubKey(RunKey);
             if (value) key.SetValue(RunValue, $"\"{Environment.ProcessPath}\"");
             else key.DeleteValue(RunValue, throwOnMissingValue: false);
@@ -162,4 +194,5 @@ internal sealed class ShellHost : IDisposable
     [DllImport("user32.dll")] private static extern bool GetCursorPos(out POINT pt);
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)] private static extern bool Shell_NotifyIcon(int message, ref NOTIFYICONDATA data);
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode)] private static extern IntPtr GetModuleHandle(string? name);
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)] private static extern int GetCurrentPackageFullName(ref int length, System.Text.StringBuilder? name);
 }

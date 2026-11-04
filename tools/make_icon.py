@@ -1,3 +1,4 @@
+import os
 import sys
 from PIL import Image, ImageDraw
 
@@ -55,4 +56,13 @@ frames = [(small if s <= 24 else big).resize((s, s), Image.LANCZOS) for s in siz
 frames[-1].save(OUT, format="ICO", sizes=[(s, s) for s in sizes], append_images=frames[:-1])
 big.resize((256, 256), Image.LANCZOS).save(OUT.replace(".ico", "-preview.png"))
 small.resize((64, 64), Image.LANCZOS).save(OUT.replace(".ico", "-preview-small.png"))
+
+# Iconos del paquete de la Store
+store = os.path.join(os.path.dirname(OUT), "Store")
+os.makedirs(store, exist_ok=True)
+big.resize((150, 150), Image.LANCZOS).save(os.path.join(store, "Square150x150Logo.png"))
+big.resize((50, 50), Image.LANCZOS).save(os.path.join(store, "StoreLogo.png"))
+big.resize((44, 44), Image.LANCZOS).save(os.path.join(store, "Square44x44Logo.png"))
+for s in (16, 24, 32, 48, 256):
+    (small if s <= 24 else big).resize((s, s), Image.LANCZOS).save(os.path.join(store, f"Square44x44Logo.targetsize-{s}_altform-unplated.png"))
 print("ok", OUT)

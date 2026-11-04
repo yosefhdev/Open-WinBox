@@ -404,7 +404,7 @@
                                 <Button x:Name="CheckUpdatesButton" Content="{local:T Key=settings.updates.check}" Click="CheckUpdates_Click" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE7C1;" Header="{local:T Key=settings.updates.channel}"
+                        <local:SettingRow x:Name="UpdateChannelRow" Glyph="&#xE7C1;" Header="{local:T Key=settings.updates.channel}"
                                           Description="{local:T Key=settings.updates.channel.desc}">
                             <local:SettingRow.Action>
                                 <ComboBox x:Name="UpdateChannelCombo" MinWidth="200" SelectionChanged="UpdateChannelCombo_SelectionChanged"
