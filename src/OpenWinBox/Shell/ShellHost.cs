@@ -47,9 +47,18 @@ internal sealed class ShellHost : IDisposable
             uFlags = 0x1 | 0x2 | 0x4, // NIF_MESSAGE | NIF_ICON | NIF_TIP
             uCallbackMessage = WM_TRAY,
             hIcon = LoadTrayIcon(),
-            szTip = HotkeyRegistered ? "OpenWinBox — F7 muestra/oculta" : "OpenWinBox — F7 ocupado por otra app",
+            szTip = TipText,
         };
         Shell_NotifyIcon(0 /* NIM_ADD */, ref _tray);
+    }
+
+    private string TipText => Lang.T(HotkeyRegistered ? "tray.tip.ok" : "tray.tip.busy");
+
+    // Al cambiar de idioma
+    public void RefreshTip()
+    {
+        _tray.szTip = TipText;
+        Shell_NotifyIcon(1 /* NIM_MODIFY */, ref _tray);
     }
 
     public static readonly string IconPath = System.IO.Path.Combine(AppContext.BaseDirectory, "Assets", "OpenWinBox.ico");

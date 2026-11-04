@@ -58,7 +58,7 @@ public sealed partial class GlanceView : UserControl
     }
 
     private static string TimeFormat => App.Current.Config.Glance.Use24Hour ? "HH:mm" : "h:mm";
-    private static string AmPm(DateTime t) => App.Current.Config.Glance.Use24Hour ? "" : t.Hour < 12 ? "a.m." : "p.m.";
+    private static string AmPm(DateTime t) => App.Current.Config.Glance.Use24Hour ? "" : Lang.T(t.Hour < 12 ? "glance.am" : "glance.pm");
 
     private static string Offset(TimeZoneInfo zone, DateTime now)
     {
@@ -84,8 +84,8 @@ public sealed partial class GlanceView : UserControl
         if (TimeText.Text != time) TimeText.Text = time;
         AmPmText.Text = AmPm(now);
 
-        var date = o.ShowDate ? now.ToString("M", CultureInfo.CurrentCulture) + (o.ShowYear ? $" {now.Year}" : "") : "";
-        var weekday = o.ShowWeekday ? now.ToString("dddd", CultureInfo.CurrentCulture) : "";
+        var date = o.ShowDate ? now.ToString("M", Lang.Culture) + (o.ShowYear ? $" {now.Year}" : "") : "";
+        var weekday = o.ShowWeekday ? now.ToString("dddd", Lang.Culture) : "";
         DateText.Text = string.Join("   ", new[] { date, weekday }.Where(s => s.Length > 0));
         DateText.Visibility = DateText.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
 

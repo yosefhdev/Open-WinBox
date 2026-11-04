@@ -38,7 +38,7 @@ public sealed partial class WidgetWindow : Window
 
     private bool IsFileWidget => _config.Kind == "File";
 
-    public static string FeatureTitle(string kind) => kind switch { "Music" => "Música", "Weather" => "Tiempo", _ => kind };
+    public static string FeatureTitle(string kind) => kind switch { "Music" => Lang.T("feature.music"), "Weather" => Lang.T("feature.weather"), _ => kind };
 
     private void SetupFeature()
     {
@@ -75,10 +75,10 @@ public sealed partial class WidgetWindow : Window
             var menu = new MenuFlyout { ShouldConstrainToRootBounds = false };
             if (_config.Kind != "Audio") // Audio no tiene opciones
             {
-                menu.Items.Add(Entry($"Configurar {FeatureTitle(_config.Kind)}", "", () => App.Current.OpenSettings(_config.Kind)));
+                menu.Items.Add(Entry(Lang.T("widget.configure", FeatureTitle(_config.Kind)), "", () => App.Current.OpenSettings(_config.Kind)));
                 menu.Items.Add(new MenuFlyoutSeparator());
             }
-            var off = Entry("Desactivar widget", "", () => App.Current.SetFeatureEnabled(_config.Kind, false));
+            var off = Entry(Lang.T("widget.disable"), "", () => App.Current.SetFeatureEnabled(_config.Kind, false));
             off.Foreground = (Brush)Application.Current.Resources["SystemFillColorCriticalBrush"];
             menu.Items.Add(off);
             ShowPopup(menu, FeatureHost, e.GetPosition(FeatureHost));
@@ -338,7 +338,7 @@ public sealed partial class WidgetWindow : Window
         if (outside != _dragOutside)
         {
             if (outside) _statusBeforeDrag = StatusText.Text; // no perder un mensaje de error previo
-            StatusText.Text = outside ? "Suelta para separar" : _statusBeforeDrag;
+            StatusText.Text = outside ? Lang.T("widget.splitHint") : _statusBeforeDrag;
             // Fuera del widget, una copia semitransparente de la pestaña sigue al cursor
             if (outside && _dragTab!.Content is UIElement content) _ghost = DragGhost.Show(content, c.X - GhostOffsetX, c.Y - GhostOffsetY);
             else { _ghost?.Close(); _ghost = null; }
@@ -455,7 +455,7 @@ public sealed partial class WidgetWindow : Window
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            if (folder == ActiveFolder) StatusText.Text = Directory.Exists(folder) ? $"Error: {ex.Message}" : $"No existe: {folder}";
+            if (folder == ActiveFolder) StatusText.Text = Directory.Exists(folder) ? Lang.T("widget.error", ex.Message) : Lang.T("widget.missing", folder);
             return;
         }
 
@@ -512,7 +512,7 @@ public sealed partial class WidgetWindow : Window
         if (_ownDrag || !e.DataView.Contains(StandardDataFormats.StorageItems)) return;
         var copy = e.Modifiers.HasFlag(Windows.ApplicationModel.DataTransfer.DragDrop.DragDropModifiers.Control);
         e.AcceptedOperation = copy ? DataPackageOperation.Copy : DataPackageOperation.Move | DataPackageOperation.Link;
-        e.DragUIOverride.Caption = $"Agregar a {TitleFor(ActiveFolder)}";
+        e.DragUIOverride.Caption = Lang.T("widget.dropAdd", TitleFor(ActiveFolder));
         e.Handled = true;
     }
 
@@ -553,31 +553,31 @@ public sealed partial class WidgetWindow : Window
         if ((e.OriginalSource as FrameworkElement)?.DataContext is FileItem item)
         {
             Items.SelectedItem = item;
-            menu.Items.Add(Entry("Abrir", "", () => FileActions.Open(item.Path), "Enter"));
-            menu.Items.Add(Entry("Ejecutar como administrador", "", () => FileActions.RunAsAdmin(item.Path)));
+            menu.Items.Add(Entry(Lang.T("widget.open"), "", () => FileActions.Open(item.Path), "Enter"));
+            menu.Items.Add(Entry(Lang.T("widget.runAsAdmin"), "", () => FileActions.RunAsAdmin(item.Path)));
             menu.Items.Add(new MenuFlyoutSeparator());
-            menu.Items.Add(Entry("Cambiar nombre", "", () => _ = RenameItemAsync(item), "F2"));
-            menu.Items.Add(Entry("Copiar ruta", "", () => CopyText(item.Path)));
-            menu.Items.Add(Entry("Abrir ubicación del archivo", "", () => FileActions.ShowInExplorer(item.Path)));
-            menu.Items.Add(Entry("Propiedades", "", () => FileActions.ShowProperties(item.Path)));
+            menu.Items.Add(Entry(Lang.T("widget.rename"), "", () => _ = RenameItemAsync(item), "F2"));
+            menu.Items.Add(Entry(Lang.T("widget.copyPath"), "", () => CopyText(item.Path)));
+            menu.Items.Add(Entry(Lang.T("widget.openLocation"), "", () => FileActions.ShowInExplorer(item.Path)));
+            menu.Items.Add(Entry(Lang.T("widget.properties"), "", () => FileActions.ShowProperties(item.Path)));
             menu.Items.Add(new MenuFlyoutSeparator());
-            menu.Items.Add(Entry("Volver al escritorio", "",
+            menu.Items.Add(Entry(Lang.T("widget.backToDesktop"), "",
                 () => Try(() => FileActions.MoveTo(item.Path, Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)))));
-            menu.Items.Add(Entry("Mover a la papelera de reciclaje", "", () => Try(() => FileActions.MoveToRecycleBin(item.Path)), "Supr"));
+            menu.Items.Add(Entry(Lang.T("widget.recycle"), "", () => Try(() => FileActions.MoveToRecycleBin(item.Path)), Lang.T("widget.recycle.key")));
         }
         else
         {
-            menu.Items.Add(Entry("Actualizar", "", () => _ = LoadFolderAsync(folder), "F5"));
-            menu.Items.Add(Entry("Nueva carpeta", "", () => Try(() => Directory.CreateDirectory(FileActions.UniquePath(folder, "Nueva carpeta")))));
-            menu.Items.Add(Entry("Abrir carpeta en el Explorador", "", () => FileActions.Open(folder)));
+            menu.Items.Add(Entry(Lang.T("common.refresh"), "", () => _ = LoadFolderAsync(folder), "F5"));
+            menu.Items.Add(Entry(Lang.T("widget.newFolder"), "", () => Try(() => Directory.CreateDirectory(FileActions.UniquePath(folder, Lang.T("widget.newFolder"))))));
+            menu.Items.Add(Entry(Lang.T("widget.openInExplorer"), "", () => FileActions.Open(folder)));
             menu.Items.Add(new MenuFlyoutSeparator());
-            menu.Items.Add(Entry("Ordenar por nombre", "", () =>
+            menu.Items.Add(Entry(Lang.T("widget.sortByName"), "", () =>
             {
                 _config.Order.Remove(folder);
                 _save();
                 _ = LoadFolderAsync(folder);
             }));
-            menu.Items.Add(Entry("Personalizar icono…", "", () => PickIcon(folder)));
+            menu.Items.Add(Entry(Lang.T("widget.customizeIcon"), "", () => PickIcon(folder)));
         }
         ShowPopup(menu, Items, e.GetPosition(Items));
         e.Handled = true;
@@ -587,19 +587,19 @@ public sealed partial class WidgetWindow : Window
     {
         var app = App.Current;
         var menu = new MenuFlyout { ShouldConstrainToRootBounds = false };
-        menu.Items.Add(Entry("Cambiar nombre", "", () => _ = RenameTitleAsync(anchor, folder)));
-        menu.Items.Add(Entry("Personalizar icono…", "", () => PickIcon(folder)));
+        menu.Items.Add(Entry(Lang.T("widget.rename"), "", () => _ = RenameTitleAsync(anchor, folder)));
+        menu.Items.Add(Entry(Lang.T("widget.customizeIcon"), "", () => PickIcon(folder)));
         menu.Items.Add(new MenuFlyoutSeparator());
-        menu.Items.Add(Entry("Agrupar otra carpeta como pestaña…", "", async () =>
+        menu.Items.Add(Entry(Lang.T("widget.groupFolder"), "", async () =>
         {
             if (await App.PickFolderAsync(this) is { } added) app.AddFolder(_config, added);
         }));
         if (_config.Folders.Count > 1)
-            menu.Items.Add(Entry("Quitar esta pestaña", "", () => app.RemoveFolder(_config, folder)));
-        menu.Items.Add(Entry("Abrir carpeta en el Explorador", "", () => FileActions.Open(folder)));
-        menu.Items.Add(Entry("Configuración de widgets de archivos", "", () => app.OpenSettings("Widgets")));
+            menu.Items.Add(Entry(Lang.T("widget.removeTab"), "", () => app.RemoveFolder(_config, folder)));
+        menu.Items.Add(Entry(Lang.T("widget.openInExplorer"), "", () => FileActions.Open(folder)));
+        menu.Items.Add(Entry(Lang.T("widget.fileWidgetSettings"), "", () => app.OpenSettings("Widgets")));
         menu.Items.Add(new MenuFlyoutSeparator());
-        var remove = Entry("Desactivar widget", "", () => app.RemoveWidget(_config));
+        var remove = Entry(Lang.T("widget.disable"), "", () => app.RemoveWidget(_config));
         remove.Foreground = (Brush)Application.Current.Resources["SystemFillColorCriticalBrush"];
         menu.Items.Add(remove);
         ShowPopup(menu, anchor);
@@ -629,7 +629,7 @@ public sealed partial class WidgetWindow : Window
     // los tapan. Subirlo mientras el menú está abierto y devolverlo al fondo al cerrarlo.
     private void ShowPopup(FlyoutBase popup, FrameworkElement anchor, Windows.Foundation.Point? at = null)
     {
-        // Contador: un menú que abre otro (p. ej. "Personalizar icono…") se cierra después de abrir el segundo
+        // Contador: un menú que abre otro (p. ej. Lang.T("widget.customizeIcon")) se cierra después de abrir el segundo
         _openPopups++;
         SetWindowPos(Hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
         popup.Closed += (_, _) =>
@@ -642,7 +642,7 @@ public sealed partial class WidgetWindow : Window
 
     private async Task RenameTitleAsync(FrameworkElement anchor, string folder)
     {
-        if (await PromptAsync(anchor, "Nombre del widget", TitleFor(folder)) is not { } name) return;
+        if (await PromptAsync(anchor, Lang.T("widget.widgetName"), TitleFor(folder)) is not { } name) return;
         if (name.Length == 0) _config.Titles.Remove(folder); // vacío = volver al nombre de la carpeta
         else _config.Titles[folder] = name;
         _save();
@@ -652,13 +652,13 @@ public sealed partial class WidgetWindow : Window
     private async Task RenameItemAsync(FileItem item)
     {
         var anchor = Items.ContainerFromItem(item) as FrameworkElement ?? Items;
-        if (await PromptAsync(anchor, "Cambiar nombre", item.Name) is not { Length: > 0 } name || name == item.Name) return;
+        if (await PromptAsync(anchor, Lang.T("widget.rename"), item.Name) is not { Length: > 0 } name || name == item.Name) return;
         var isFile = File.Exists(item.Path);
         // La extensión no se muestra (como el original), así que se conserva al renombrar
         var target = Path.Combine(Path.GetDirectoryName(item.Path)!, name + (isFile ? Path.GetExtension(item.Path) : ""));
         if (File.Exists(target) || Directory.Exists(target))
         {
-            StatusText.Text = $"Ya existe «{Path.GetFileName(target)}»";
+            StatusText.Text = Lang.T("widget.exists", Path.GetFileName(target));
             return;
         }
         Try(() =>
@@ -684,7 +684,7 @@ public sealed partial class WidgetWindow : Window
 
         var done = new TaskCompletionSource<string?>();
         var box = new TextBox { Text = initial, Width = 240 };
-        var ok = new Button { Content = "Aceptar", Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
+        var ok = new Button { Content = Lang.T("widget.ok"), Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
         var flyout = new Flyout
         {
             ShouldConstrainToRootBounds = false,
@@ -761,8 +761,8 @@ public sealed partial class WidgetWindow : Window
     private void Add_Click(object sender, RoutedEventArgs e)
     {
         var menu = new MenuFlyout { ShouldConstrainToRootBounds = false };
-        menu.Items.Add(Entry("Nuevo widget", "", App.Current.AddEmptyWidget));
-        menu.Items.Add(Entry("Nueva pestaña en este widget", "", () => App.Current.AddEmptyTab(_config)));
+        menu.Items.Add(Entry(Lang.T("common.newWidget"), "", App.Current.AddEmptyWidget));
+        menu.Items.Add(Entry(Lang.T("widget.newTab"), "", () => App.Current.AddEmptyTab(_config)));
         ShowPopup(menu, (FrameworkElement)sender);
     }
 
@@ -772,10 +772,10 @@ public sealed partial class WidgetWindow : Window
         // Renombrar lo que se ve junto al icono de la pestaña activa
         var tab = TabsPanel.Children[_config.Folders.IndexOf(folder)] as FrameworkElement ?? TabsPanel;
         var menu = new MenuFlyout { ShouldConstrainToRootBounds = false };
-        menu.Items.Add(Entry("Cambiar nombre", "", () => _ = RenameTitleAsync(tab, folder)));
-        menu.Items.Add(Entry("Cambiar icono…", "", () => PickIcon(folder)));
+        menu.Items.Add(Entry(Lang.T("widget.rename"), "", () => _ = RenameTitleAsync(tab, folder)));
+        menu.Items.Add(Entry(Lang.T("widget.changeIcon"), "", () => PickIcon(folder)));
         menu.Items.Add(new MenuFlyoutSeparator());
-        var lockItem = new ToggleMenuFlyoutItem { Text = "Bloquear posición", IsChecked = _config.IsLocked, Icon = new FontIcon { Glyph = "\uE72E" } };
+        var lockItem = new ToggleMenuFlyoutItem { Text = Lang.T("widget.lockPosition"), IsChecked = _config.IsLocked, Icon = new FontIcon { Glyph = "\uE72E" } };
         lockItem.Click += (_, _) =>
         {
             _config.IsLocked = !_config.IsLocked;
@@ -785,8 +785,8 @@ public sealed partial class WidgetWindow : Window
         menu.Items.Add(lockItem);
         menu.Items.Add(GroupMenu());
         menu.Items.Add(new MenuFlyoutSeparator());
-        menu.Items.Add(Entry("Ocultar (F7 para mostrar)", "", () => AppWindow.Hide()));
-        var off = Entry("Desactivar widget", "", () => App.Current.RemoveWidget(_config));
+        menu.Items.Add(Entry(Lang.T("widget.hide"), "", () => AppWindow.Hide()));
+        var off = Entry(Lang.T("widget.disable"), "", () => App.Current.RemoveWidget(_config));
         off.Foreground = (Brush)Application.Current.Resources["SystemFillColorCriticalBrush"];
         menu.Items.Add(off);
         ShowPopup(menu, (FrameworkElement)sender);
@@ -797,11 +797,11 @@ public sealed partial class WidgetWindow : Window
     // Un elemento por cada otro widget de archivos: sus pestañas se suman a este y el otro se cierra
     private MenuFlyoutSubItem GroupMenu()
     {
-        var sub = new MenuFlyoutSubItem { Text = "Agrupar con…", Icon = new FontIcon { Glyph = "\uE71B" } };
+        var sub = new MenuFlyoutSubItem { Text = Lang.T("widget.groupWith"), Icon = new FontIcon { Glyph = "\uE71B" } };
         foreach (var other in App.Current.FileWidgets.Where(w => w != _config).ToList())
         {
             var folder = ActiveFolderOf(other);
-            var text = TitleOf(other, folder) + (other.Folders.Count > 1 ? $" ({other.Folders.Count} pestañas)" : "");
+            var text = other.Folders.Count > 1 ? Lang.T("widget.tabCount", TitleOf(other, folder), other.Folders.Count) : TitleOf(other, folder);
             var item = new MenuFlyoutItem { Text = text, Icon = IconPicker.MenuIcon(other.Icons.GetValueOrDefault(folder)) };
             // Esta ventana se recrea al unir: no cerrarla dentro de su propio evento
             item.Click += (_, _) => DispatcherQueue.TryEnqueue(() => App.Current.MergeWidgets(_config, other));
@@ -810,7 +810,7 @@ public sealed partial class WidgetWindow : Window
         if (sub.Items.Count == 0)
         {
             sub.IsEnabled = false;
-            sub.Items.Add(new MenuFlyoutItem { Text = "No hay otros widgets", IsEnabled = false });
+            sub.Items.Add(new MenuFlyoutItem { Text = Lang.T("widget.noOthers"), IsEnabled = false });
         }
         return sub;
     }

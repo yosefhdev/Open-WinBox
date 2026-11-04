@@ -8,7 +8,7 @@
 
 [![Herunterladen](https://img.shields.io/badge/Herunterladen-Windows--Installationsprogramm-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![Version](https://img.shields.io/badge/Version-1.0.0--beta.2-orange)
+![Version](https://img.shields.io/badge/Version-1.0.0--beta.3-orange)
 ![Plattform](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Lizenz](https://img.shields.io/badge/Lizenz-MIT-green)
 
@@ -75,7 +75,7 @@ Schalte jedes einzeln ein oder aus und klicke in den Einstellungen auf seine Zei
 ## Bedienung
 
 > [!TIP]
-> Die Oberfläche ist derzeit auf **Spanisch**. Die Beschriftungen, die du auf dem Bildschirm siehst, stehen hier *kursiv*.
+> Die Oberfläche gibt es auf **Englisch** und **Spanisch**. Ist Windows auf eine andere Sprache eingestellt, erscheint sie auf Englisch; ändern kannst du das unter *Settings → General → Language*. Die Beschriftungen, die du auf dem Bildschirm siehst, stehen hier *kursiv* und auf Englisch.
 
 Merke dir zwei Dinge: **F7** blendet alle Widgets ein oder aus, und das **Symbol im Infobereich** öffnet per Rechtsklick das Menü.
 
@@ -86,9 +86,9 @@ Merke dir zwei Dinge: **F7** blendet alle Widgets ein oder aus, und das **Symbol
 | Aktion | So geht's |
 |---|---|
 | Alle Widgets ein- oder ausblenden | Drücke **F7** oder klicke mit links auf das Symbol im Infobereich |
-| Einstellungen öffnen | Rechtsklick auf das Symbol im Infobereich → *Configuración…*, oder starte die App erneut |
-| Neues Widget | **+** auf einem Widget → *Nuevo widget*, oder *Configuración → Widgets de archivos → Nuevo widget* |
-| Neuer Tab in einem Widget | **+** → *Nueva pestaña en este widget* |
+| Einstellungen öffnen | Rechtsklick auf das Symbol im Infobereich → *Settings*, oder starte die App erneut |
+| Neues Widget | **+** auf einem Widget → *New widget*, oder *Settings → File widgets → New widget* |
+| Neuer Tab in einem Widget | **+** → *New tab in this widget* |
 | Dateien hinzufügen | Ziehe Dateien oder Verknüpfungen auf das Widget (halte **Strg** gedrückt, um eine Verknüpfung zu kopieren statt zu verschieben) |
 
 </details>
@@ -99,8 +99,8 @@ Merke dir zwei Dinge: **F7** blendet alle Widgets ein oder aus, und das **Symbol
 
 | Aktion | So geht's |
 |---|---|
-| Umbenennen, Symbol ändern, sperren, gruppieren | **⋯** auf dem Widget → *Cambiar nombre*, *Cambiar icono…*, *Bloquear posición*, *Agrupar con…* |
-| Zwei Widgets gruppieren | Ziehe ein Widget an seiner Leiste und halte es über die Leiste eines anderen, bis *Suelta para unir* erscheint, dann lass los |
+| Umbenennen, Symbol ändern, sperren, gruppieren | **⋯** auf dem Widget → *Rename*, *Change icon…*, *Lock position*, *Group with…* |
+| Zwei Widgets gruppieren | Ziehe ein Widget an seiner Leiste und halte es über die Leiste eines anderen, bis *Release to merge* erscheint, dann lass los |
 | Tabs umsortieren oder trennen | Ziehe einen Tab seitwärts zum Umsortieren oder aus dem Widget heraus, um ihn eigenständig zu machen |
 | Funktions-Widget verschieben | Fahre mit der Maus darüber und ziehe am Griff oben |
 
@@ -112,17 +112,17 @@ Merke dir zwei Dinge: **F7** blendet alle Widgets ein oder aus, und das **Symbol
 
 | Aktion | So geht's |
 |---|---|
-| Funktions-Widgets ein- oder ausschalten | *Configuración → Widgets funcionales* |
-| Design ändern | *Configuración → Apariencia → Tema* |
-| Mit Windows starten | *Configuración → General → Lanzar al inicio*, oder *Iniciar con Windows* im Menü des Infobereichs |
+| Funktions-Widgets ein- oder ausschalten | *Settings → Functional widgets* |
+| Design ändern | *Settings → Appearance → Theme* |
+| Mit Windows starten | *Settings → General → Launch at startup*, oder *Start with Windows* im Menü des Infobereichs |
 
 </details>
 
 ## Updates
 
-Öffne *Configuración → Acerca de* und klicke auf *Buscar actualizaciones*. Gibt es eine neue Version, lädt *Actualizar* sie herunter, prüft ihren Hash und installiert sie, wobei deine Einstellungen erhalten bleiben. Die App schließt sich kurz und öffnet sich wieder.
+Öffne *Settings → About* und klicke auf *Check for updates*. Gibt es eine neue Version, lädt *Update* sie herunter, prüft ihren Hash und installiert sie, wobei deine Einstellungen erhalten bleiben. Die App schließt sich kurz und öffnet sich wieder.
 
-Wähle unter *Canal de actualizaciones* die Option *Oficiales* für nur stabile Versionen oder *Betas*, um auch Testversionen zu erhalten. OpenWinBox verbindet sich dafür nur mit GitHub, wenn du auf die Schaltfläche klickst.
+Wähle unter *Update channel* die Option *Official* für nur stabile Versionen oder *Betas*, um auch Testversionen zu erhalten. OpenWinBox verbindet sich dafür nur mit GitHub, wenn du auf die Schaltfläche klickst.
 
 ## Datenschutz
 
@@ -141,7 +141,7 @@ Die Widgets Musik und Spotify lesen, was Windows als aktuelle Wiedergabe meldet,
 
 ## Deinstallieren
 
-1. Wähle *Salir* im Menü des Infobereichs.
+1. Wähle *Exit* im Menü des Infobereichs.
 2. Deinstalliere OpenWinBox unter **Windows-Einstellungen → Apps → Installierte Apps**. Dabei wird auch der Autostart entfernt.
 3. Optional: Lösche `%LOCALAPPDATA%\OpenWinBox`, um auch deine Einstellungen zu entfernen.
 

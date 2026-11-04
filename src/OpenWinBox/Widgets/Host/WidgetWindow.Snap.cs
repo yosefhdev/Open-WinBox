@@ -115,7 +115,7 @@ public sealed partial class WidgetWindow
         target.ShowMergeOverlay(progress);
         // El origen tapa casi todo el destino: mostrar el aviso también aquí, bajo el cursor
         ShowMergeOverlay(progress);
-        StatusText.Text = progress >= 1 ? $"Suelta para unir con «{target.TitleFor(target.ActiveFolder)}»" : "Mantén para unir…";
+        StatusText.Text = progress >= 1 ? Lang.T("widget.mergeWith", target.TitleFor(target.ActiveFolder)) : Lang.T("widget.mergeHold");
     }
 
     // Al soltar se decide por el tiempo medido, no por el timer (que puede no haber avanzado)
@@ -138,7 +138,7 @@ public sealed partial class WidgetWindow
         if (_closed) return;
         MergeOverlay.Opacity = progress < 0 ? 0 : progress >= 1 ? 1 : 0.6;
         MergeProgress.Value = Math.Clamp(progress, 0, 1);
-        MergeText.Text = progress >= 1 ? "Suelta para unir" : "Mantén para unir…";
+        MergeText.Text = progress >= 1 ? Lang.T("widget.merge") : Lang.T("widget.mergeHold");
     }
 
     // Arrastre desde la agarradera de los widgets funcionales: la ventana sigue al mouse y usa el mismo imán.

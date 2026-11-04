@@ -72,6 +72,8 @@ public class AppConfig
     public int MergeDelayMs { get; set; } = 800;
     // "Default" (sistema), "Light" o "Dark": nombres de Microsoft.UI.Xaml.ElementTheme
     public string Theme { get; set; } = "Default";
+    // Lang.FollowWindows o un código de Lang.Available; las configs anteriores siguen a Windows
+    public string Language { get; set; } = Lang.FollowWindows;
     public bool HasCompletedOnboarding { get; set; }
     // Canal de actualizaciones; null = según la versión instalada (quien usa una beta sigue en betas)
     public bool? UpdateBetas { get; set; }

@@ -60,7 +60,7 @@ internal static class FileActions
             fFlags = 0x40 | 0x10, // FOF_ALLOWUNDO | FOF_NOCONFIRMATION (la papelera ya es reversible)
         };
         var result = SHFileOperation(ref op);
-        if (result != 0) throw new IOException($"No se pudo mover a la papelera (código {result}).");
+        if (result != 0) throw new IOException(Lang.T("file.recycleError", result));
     }
 
     // Mueve a la carpeta indicada sin pisar nada: "x (2).lnk" si ya existe

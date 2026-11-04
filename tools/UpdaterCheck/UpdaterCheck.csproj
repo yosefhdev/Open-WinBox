@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- Pruebas de la lógica pura de Updater.cs, sin WinUI: dotnet run desde esta carpeta -->
+  <!-- Pruebas de la lógica pura de Updater.cs y Lang.cs, sin WinUI: dotnet run desde esta carpeta -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <Compile Include="..\..\src\OpenWinBox\Core\Updater.cs" />
+    <Compile Include="..\..\src\OpenWinBox\Core\Lang.cs" />
+    <EmbeddedResource Include="..\..\src\OpenWinBox\Strings\*.json" LogicalName="Strings.%(Filename).json" />
   </ItemGroup>
 
 </Project>

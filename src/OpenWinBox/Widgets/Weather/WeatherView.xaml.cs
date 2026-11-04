@@ -89,7 +89,7 @@ public sealed partial class WeatherView : UserControl
         {
             // Sin internet: dejar lo último conocido y avisar de cuándo es
             if (ReadCache() is { } cached) Show(cached, stale: true);
-            else ConditionText.Text = "Sin conexión";
+            else ConditionText.Text = Lang.T("common.noConnection");
         }
         finally
         {
@@ -129,7 +129,7 @@ public sealed partial class WeatherView : UserControl
         try
         {
             using var doc = JsonDocument.Parse(await Http.GetStringAsync(FormattableString.Invariant(
-                $"https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={lat:0.####}&longitude={lon:0.####}&localityLanguage=es")));
+                $"https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={lat:0.####}&longitude={lon:0.####}&localityLanguage={Lang.Culture.TwoLetterISOLanguageName}")));
             var root = doc.RootElement;
             foreach (var key in new[] { "city", "locality", "principalSubdivision" })
                 if (root.TryGetProperty(key, out var v) && v.GetString() is { Length: > 0 } name) return name;
@@ -146,32 +146,33 @@ public sealed partial class WeatherView : UserControl
         IconText.Text = icon;
         TempText.Text = $"{Math.Round(s.Temp)}°C";
         ConditionText.Text = text;
-        FeelsText.Text = $"Se siente {Math.Round(s.Feels)}°C";
+        FeelsText.Text = Lang.T("weather.feelsLike", Math.Round(s.Feels));
         HumidityText.Text = $"{s.Humidity}%";
         WindText.Text = $"{Math.Round(s.Wind)} km/h";
         RainText.Text = $"{s.Rain}%";
-        PlaceText.Text = (s.Place ?? "Ubicación actual") + (stale ? $"  ·  sin conexión, datos de las {s.At:HH:mm}" : "");
+        var place = s.Place ?? Lang.T("common.currentLocation");
+        PlaceText.Text = stale ? Lang.T("weather.stale", place, s.At.ToString("HH:mm")) : place;
         ToolTipService.SetToolTip(PlaceText, App.Current.Config.WeatherLocation == null
-            ? "Ubicación automática. Cámbiala con ⚙" : "Ubicación elegida en Configuración");
+            ? Lang.T("weather.tip.auto") : Lang.T("weather.tip.chosen"));
     }
 
     // Códigos del tiempo WMO que usa Open-Meteo
     private static (string Icon, string Text) Describe(int code, bool day) => code switch
     {
-        0 => (day ? "☀️" : "🌙", "Despejado"),
-        1 => (day ? "🌤️" : "🌙", "Mayormente despejado"),
-        2 => (day ? "⛅" : "☁️", "Parcialmente nublado"),
-        3 => ("☁️", "Cubierto"),
-        45 or 48 => ("🌫️", "Niebla"),
-        51 or 53 or 55 => ("🌦️", "Llovizna"),
-        56 or 57 => ("🌧️", "Llovizna helada"),
-        61 or 63 or 65 => ("🌧️", "Lluvia"),
-        66 or 67 => ("🌧️", "Lluvia helada"),
-        71 or 73 or 75 or 77 => ("🌨️", "Nieve"),
-        80 or 81 or 82 => ("🌦️", "Chubascos"),
-        85 or 86 => ("🌨️", "Chubascos de nieve"),
-        95 => ("⛈️", "Tormenta"),
-        96 or 99 => ("⛈️", "Tormenta con granizo"),
+        0 => (day ? "☀️" : "🌙", Lang.T("weather.clear")),
+        1 => (day ? "🌤️" : "🌙", Lang.T("weather.mostlyClear")),
+        2 => (day ? "⛅" : "☁️", Lang.T("weather.partlyCloudy")),
+        3 => ("☁️", Lang.T("weather.overcast")),
+        45 or 48 => ("🌫️", Lang.T("weather.fog")),
+        51 or 53 or 55 => ("🌦️", Lang.T("weather.drizzle")),
+        56 or 57 => ("🌧️", Lang.T("weather.freezingDrizzle")),
+        61 or 63 or 65 => ("🌧️", Lang.T("weather.rain")),
+        66 or 67 => ("🌧️", Lang.T("weather.freezingRain")),
+        71 or 73 or 75 or 77 => ("🌨️", Lang.T("weather.snow")),
+        80 or 81 or 82 => ("🌦️", Lang.T("weather.showers")),
+        85 or 86 => ("🌨️", Lang.T("weather.snowShowers")),
+        95 => ("⛈️", Lang.T("weather.storm")),
+        96 or 99 => ("⛈️", Lang.T("weather.hailStorm")),
         _ => ("🌡️", "—"),
     };
 

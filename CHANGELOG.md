@@ -9,6 +9,10 @@ Versiones con [SemVer](https://semver.org/lang/es/). Mientras la app está en pr
 
 ## [Sin publicar]
 
+## [1.0.0-beta.3] - 2026-11-03
+
+- La interfaz está en español e inglés: se elige en Configuración → General → Idioma, o sigue el idioma de Windows. El cambio se aplica al momento.
+
 ## [1.0.0-beta.2] - 2026-11-03
 
 - Animaciones de entrada y salida de los widgets; ya no aparece un cuadro negro al abrir la app.

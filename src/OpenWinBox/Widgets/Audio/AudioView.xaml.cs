@@ -74,7 +74,7 @@ public sealed partial class AudioView : UserControl
     private void ShowDevice(MMDevice? device, TextBlock name, Slider slider, TextBlock value, FontIcon muteIcon, string on, string off)
     {
         slider.IsEnabled = device != null;
-        if (device == null) { name.Text = "Ninguno"; value.Text = ""; return; }
+        if (device == null) { name.Text = Lang.T("audio.none"); value.Text = ""; return; }
         try
         {
             if (!_deviceNames.TryGetValue(device.ID, out var friendly)) _deviceNames[device.ID] = friendly = device.FriendlyName;
@@ -136,7 +136,7 @@ public sealed partial class AudioView : UserControl
 
     private (string? Key, string Name, string? Path) Describe(AudioSessionControl session)
     {
-        if (session.IsSystemSoundsSession) return ("system", "Sonidos del sistema", null);
+        if (session.IsSystemSoundsSession) return ("system", Lang.T("audio.systemSounds"), null);
         var pid = session.GetProcessID;
         if (pid == 0) return (null, "", null);
         if (!_processes.TryGetValue(pid, out var info))
@@ -179,14 +179,14 @@ public sealed partial class AudioView : UserControl
         grid.Children.Add(label);
 
         var slider = new Slider { Maximum = 100, VerticalAlignment = VerticalAlignment.Center };
-        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(slider, $"Volumen de {name}");
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(slider, Lang.T("audio.appVolume", name));
         Grid.SetColumn(slider, 2);
         grid.Children.Add(slider);
 
         var muteIcon = new FontIcon { Glyph = "", FontSize = 14 };
         var mute = new Button { Content = muteIcon, Padding = new Thickness(6) };
-        ToolTipService.SetToolTip(mute, "Silenciar");
-        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(mute, $"Silenciar {name}");
+        ToolTipService.SetToolTip(mute, Lang.T("common.mute"));
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(mute, Lang.T("audio.muteApp", name));
         Grid.SetColumn(mute, 3);
         grid.Children.Add(mute);
 
@@ -256,7 +256,7 @@ public sealed partial class AudioView : UserControl
             menu.Items.Add(item);
             device.Dispose();
         }
-        if (menu.Items.Count == 0) menu.Items.Add(new MenuFlyoutItem { Text = "No hay dispositivos", IsEnabled = false });
+        if (menu.Items.Count == 0) menu.Items.Add(new MenuFlyoutItem { Text = Lang.T("audio.noDevices"), IsEnabled = false });
         if (ShowPopup != null) ShowPopup(menu, (FrameworkElement)sender);
         else menu.ShowAt((FrameworkElement)sender);
     }

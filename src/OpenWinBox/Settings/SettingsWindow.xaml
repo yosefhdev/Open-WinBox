@@ -2,8 +2,7 @@
     x:Class="OpenWinBox.SettingsWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:OpenWinBox"
-    Title="OpenWinBox — Configuración">
+    xmlns:local="using:OpenWinBox">
 
     <Window.SystemBackdrop>
         <MicaBackdrop />
@@ -19,22 +18,22 @@
                         IsBackButtonVisible="Collapsed" IsSettingsVisible="False"
                         SelectionChanged="Nav_SelectionChanged">
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="General" Tag="General">
+                <NavigationViewItem Content="{local:T Key=settings.nav.general}" Tag="General">
                     <NavigationViewItem.Icon><FontIcon Glyph="&#xE80F;" Foreground="#F7A541" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Apariencia" Tag="Apariencia">
+                <NavigationViewItem Content="{local:T Key=settings.nav.appearance}" Tag="Apariencia">
                     <NavigationViewItem.Icon><FontIcon Glyph="&#xE734;" Foreground="#F5C518" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Widgets de archivos" Tag="Widgets">
+                <NavigationViewItem Content="{local:T Key=settings.nav.fileWidgets}" Tag="Widgets">
                     <NavigationViewItem.Icon><FontIcon Glyph="&#xE8B7;" Foreground="#4A9FEA" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Widgets funcionales" Tag="Funcionales">
+                <NavigationViewItem Content="{local:T Key=settings.nav.featureWidgets}" Tag="Funcionales">
                     <NavigationViewItem.Icon><FontIcon Glyph="&#xE74C;" Foreground="#4CC38A" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Atajos e interacción" Tag="Atajos">
+                <NavigationViewItem Content="{local:T Key=settings.nav.shortcuts}" Tag="Atajos">
                     <NavigationViewItem.Icon><FontIcon Glyph="&#xE724;" Foreground="#3B82F6" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Acerca de" Tag="Acerca">
+                <NavigationViewItem Content="{local:T Key=settings.nav.about}" Tag="Acerca">
                     <NavigationViewItem.Icon><FontIcon Glyph="&#xE946;" Foreground="#4A9FEA" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
@@ -44,27 +43,34 @@
                     <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,8,0,16">
                         <!-- Solo en las páginas de un widget: vuelve a "Widgets funcionales" -->
                         <Button x:Name="SubPageBack" Style="{StaticResource NavigationBackButtonNormalStyle}" Visibility="Collapsed"
-                                Click="SubPageBack_Click" AutomationProperties.Name="Volver a Widgets funcionales"
-                                ToolTipService.ToolTip="Volver a Widgets funcionales" />
+                                Click="SubPageBack_Click" AutomationProperties.Name="{local:T Key=settings.backToFeatures}"
+                                ToolTipService.ToolTip="{local:T Key=settings.backToFeatures}" />
                         <TextBlock x:Name="PageTitle" Style="{StaticResource TitleTextBlockStyle}" VerticalAlignment="Center" />
                     </StackPanel>
 
                     <!-- General -->
                     <StackPanel x:Name="GeneralPage" Spacing="4">
-                        <local:SettingRow Glyph="&#xE7E8;" Header="Lanzar al inicio"
-                                          Description="Inicia OpenWinBox en segundo plano después de iniciar sesión en Windows">
+                        <local:SettingRow Glyph="&#xE7E8;" Header="{local:T Key=settings.autoStart}"
+                                          Description="{local:T Key=settings.autoStart.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch x:Name="AutoStartToggle" OnContent="" OffContent="" MinWidth="0"
-                                              Toggled="AutoStartToggle_Toggled" AutomationProperties.Name="Lanzar al inicio" />
+                                              Toggled="AutoStartToggle_Toggled" AutomationProperties.Name="{local:T Key=settings.autoStart}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE8A5;" Header="Primeros pasos"
-                                          Description="Repasa cómo crear widgets, mostrarlos con F7 y mantenerlos en el escritorio">
+                        <local:SettingRow Glyph="&#xE774;" Header="{local:T Key=settings.language}"
+                                          Description="{local:T Key=settings.language.desc}">
+                            <local:SettingRow.Action>
+                                <ComboBox x:Name="LanguageCombo" MinWidth="200" SelectionChanged="LanguageCombo_SelectionChanged"
+                                          AutomationProperties.Name="{local:T Key=settings.language}" />
+                            </local:SettingRow.Action>
+                        </local:SettingRow>
+                        <local:SettingRow Glyph="&#xE8A5;" Header="{local:T Key=settings.onboarding}"
+                                          Description="{local:T Key=settings.onboarding.desc}">
                             <local:SettingRow.Action>
                                 <Button Click="Onboarding_Click">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <FontIcon Glyph="&#xE8A5;" FontSize="14" />
-                                        <TextBlock Text="Ver" />
+                                        <TextBlock Text="{local:T Key=settings.onboarding.view}" />
                                     </StackPanel>
                                 </Button>
                             </local:SettingRow.Action>
@@ -73,13 +79,13 @@
 
                     <!-- Apariencia -->
                     <StackPanel x:Name="AparienciaPage" Spacing="4" Visibility="Collapsed">
-                        <local:SettingRow Glyph="&#xE790;" Header="Tema" Description="Se aplica a todas las ventanas y widgets">
+                        <local:SettingRow Glyph="&#xE790;" Header="{local:T Key=settings.theme}" Description="{local:T Key=settings.theme.desc}">
                             <local:SettingRow.Action>
                                 <ComboBox x:Name="ThemeCombo" MinWidth="200" SelectionChanged="ThemeCombo_SelectionChanged"
-                                          AutomationProperties.Name="Tema">
-                                    <ComboBoxItem Content="Usar el del sistema" Tag="Default" />
-                                    <ComboBoxItem Content="Claro" Tag="Light" />
-                                    <ComboBoxItem Content="Oscuro" Tag="Dark" />
+                                          AutomationProperties.Name="{local:T Key=settings.theme}">
+                                    <ComboBoxItem Content="{local:T Key=settings.theme.system}" Tag="Default" />
+                                    <ComboBoxItem Content="{local:T Key=settings.theme.light}" Tag="Light" />
+                                    <ComboBoxItem Content="{local:T Key=settings.theme.dark}" Tag="Dark" />
                                 </ComboBox>
                             </local:SettingRow.Action>
                         </local:SettingRow>
@@ -87,87 +93,87 @@
 
                     <!-- Widgets de archivos -->
                     <StackPanel x:Name="WidgetsPage" Spacing="4" Visibility="Collapsed">
-                        <local:SettingRow Glyph="&#xE710;" Header="Nuevo widget"
-                                          Description="Elige una carpeta; su contenido aparece en un widget nuevo en el escritorio">
+                        <local:SettingRow Glyph="&#xE710;" Header="{local:T Key=common.newWidget}"
+                                          Description="{local:T Key=settings.newWidget.desc}">
                             <local:SettingRow.Action>
                                 <Button Style="{StaticResource AccentButtonStyle}" Click="NewWidget_Click">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <FontIcon Glyph="&#xE710;" FontSize="14" />
-                                        <TextBlock Text="Nuevo widget" />
+                                        <TextBlock Text="{local:T Key=common.newWidget}" />
                                     </StackPanel>
                                 </Button>
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE71B;" Header="Tiempo para agrupar"
-                                          Description="Cuánto mantener un widget sobre la barra de otro para unirlos como pestañas">
+                        <local:SettingRow Glyph="&#xE71B;" Header="{local:T Key=settings.mergeDelay}"
+                                          Description="{local:T Key=settings.mergeDelay.desc}">
                             <local:SettingRow.Action>
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <Slider x:Name="MergeDelaySlider" Width="180" Minimum="0.2" Maximum="3" StepFrequency="0.1"
-                                            ValueChanged="MergeDelaySlider_ValueChanged" AutomationProperties.Name="Tiempo para agrupar, en segundos" />
+                                            ValueChanged="MergeDelaySlider_ValueChanged" AutomationProperties.Name="{local:T Key=settings.mergeDelay.name}" />
                                     <TextBlock x:Name="MergeDelayText" VerticalAlignment="Center" MinWidth="40" />
                                 </StackPanel>
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <TextBlock Text="Tus widgets" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
+                        <TextBlock Text="{local:T Key=settings.yourWidgets}" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
                         <StackPanel x:Name="WidgetList" Spacing="4" />
                     </StackPanel>
 
                     <!-- Widgets funcionales: clic en una fila (o en ›) abre su configuración en esta misma ventana -->
                     <StackPanel x:Name="FuncionalesPage" Spacing="4" Visibility="Collapsed">
-                        <local:SettingRow Glyph="&#xE8D6;" Header="Música" Tag="Music" Tapped="FeatureRow_Tapped"
-                                          Description="Control de medios del sistema, progreso y carátula de lo que se está reproduciendo">
+                        <local:SettingRow Glyph="&#xE8D6;" Header="{local:T Key=feature.music}" Tag="Music" Tapped="FeatureRow_Tapped"
+                                          Description="{local:T Key=settings.music.desc}">
                             <local:SettingRow.Action>
                                 <StackPanel Orientation="Horizontal" Spacing="4">
                                     <ToggleSwitch x:Name="MusicToggle" OnContent="" OffContent="" MinWidth="0" Tag="Music"
-                                                  Toggled="FeatureToggle_Toggled" AutomationProperties.Name="Música" />
+                                                  Toggled="FeatureToggle_Toggled" AutomationProperties.Name="{local:T Key=feature.music}" />
                                     <Button Tag="Music" Click="OpenFeature_Click" Background="Transparent" BorderThickness="0"
-                                            AutomationProperties.Name="Configurar Música" ToolTipService.ToolTip="Configurar Música">
+                                            AutomationProperties.Name="{local:T Key=settings.music.configure}" ToolTipService.ToolTip="{local:T Key=settings.music.configure}">
                                         <FontIcon Glyph="&#xE76C;" FontSize="12" />
                                     </Button>
                                 </StackPanel>
                             </local:SettingRow.Action>
                         </local:SettingRow>
                         <local:SettingRow Glyph="&#xE787;" Header="Glance" Tag="Glance" Tapped="FeatureRow_Tapped"
-                                          Description="La hora y la fecha de un vistazo, sobre la foto del día de Bing">
+                                          Description="{local:T Key=settings.glance.desc}">
                             <local:SettingRow.Action>
                                 <StackPanel Orientation="Horizontal" Spacing="4">
                                     <ToggleSwitch x:Name="GlanceToggle" OnContent="" OffContent="" MinWidth="0" Tag="Glance"
                                                   Toggled="FeatureToggle_Toggled" AutomationProperties.Name="Glance" />
                                     <Button Tag="Glance" Click="OpenFeature_Click" Background="Transparent" BorderThickness="0"
-                                            AutomationProperties.Name="Configurar Glance" ToolTipService.ToolTip="Configurar Glance">
+                                            AutomationProperties.Name="{local:T Key=settings.glance.configure}" ToolTipService.ToolTip="{local:T Key=settings.glance.configure}">
                                         <FontIcon Glyph="&#xE76C;" FontSize="12" />
                                     </Button>
                                 </StackPanel>
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE706;" Header="Tiempo" Tag="Weather" Tapped="FeatureRow_Tapped"
-                                          Description="Clima actual de tu ubicación: temperatura, humedad, viento y precipitación">
+                        <local:SettingRow Glyph="&#xE706;" Header="{local:T Key=feature.weather}" Tag="Weather" Tapped="FeatureRow_Tapped"
+                                          Description="{local:T Key=settings.weather.desc}">
                             <local:SettingRow.Action>
                                 <StackPanel Orientation="Horizontal" Spacing="4">
                                     <ToggleSwitch x:Name="WeatherToggle" OnContent="" OffContent="" MinWidth="0" Tag="Weather"
-                                                  Toggled="FeatureToggle_Toggled" AutomationProperties.Name="Tiempo" />
+                                                  Toggled="FeatureToggle_Toggled" AutomationProperties.Name="{local:T Key=feature.weather}" />
                                     <Button Tag="Weather" Click="OpenFeature_Click" Background="Transparent" BorderThickness="0"
-                                            AutomationProperties.Name="Configurar Tiempo" ToolTipService.ToolTip="Configurar Tiempo">
+                                            AutomationProperties.Name="{local:T Key=settings.weather.configure}" ToolTipService.ToolTip="{local:T Key=settings.weather.configure}">
                                         <FontIcon Glyph="&#xE76C;" FontSize="12" />
                                     </Button>
                                 </StackPanel>
                             </local:SettingRow.Action>
                         </local:SettingRow>
                         <local:SettingRow Glyph="&#xE7F6;" Header="Spotify" Tag="Spotify" Tapped="FeatureRow_Tapped"
-                                          Description="Solo lo que suena en Spotify, con sus colores, aleatorio y repetir, aunque se reproduzca otra cosa">
+                                          Description="{local:T Key=settings.spotify.desc}">
                             <local:SettingRow.Action>
                                 <StackPanel Orientation="Horizontal" Spacing="4">
                                     <ToggleSwitch x:Name="SpotifyToggle" OnContent="" OffContent="" MinWidth="0" Tag="Spotify"
                                                   Toggled="FeatureToggle_Toggled" AutomationProperties.Name="Spotify" />
                                     <Button Tag="Spotify" Click="OpenFeature_Click" Background="Transparent" BorderThickness="0"
-                                            AutomationProperties.Name="Configurar Spotify" ToolTipService.ToolTip="Configurar Spotify">
+                                            AutomationProperties.Name="{local:T Key=settings.spotify.configure}" ToolTipService.ToolTip="{local:T Key=settings.spotify.configure}">
                                         <FontIcon Glyph="&#xE76C;" FontSize="12" />
                                     </Button>
                                 </StackPanel>
                             </local:SettingRow.Action>
                         </local:SettingRow>
                         <local:SettingRow Glyph="&#xE767;" Header="Audio"
-                                          Description="Elige la salida y el micrófono, y ajusta el volumen de cada app, como en Win+G">
+                                          Description="{local:T Key=settings.audio.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch x:Name="AudioToggle" OnContent="" OffContent="" MinWidth="0" Tag="Audio"
                                               Toggled="FeatureToggle_Toggled" AutomationProperties.Name="Audio" />
@@ -177,187 +183,187 @@
 
                     <!-- Widgets funcionales › Música -->
                     <StackPanel x:Name="MusicOptionsPage" Spacing="4" Visibility="Collapsed">
-                        <TextBlock Text="Estilo" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,0,0,4" />
+                        <TextBlock Text="{local:T Key=common.style}" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,0,0,4" />
                         <!-- Vista previa en vivo de cada estilo con lo que está sonando; clic para elegirlo -->
                         <ContentPresenter x:Name="MusicStylePreviews" />
-                        <TextBlock Text="Elementos visibles" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
-                        <local:SettingRow Glyph="&#xE8B9;" Header="Carátula" Description="Imagen del álbum o del video">
+                        <TextBlock Text="{local:T Key=common.visibleItems}" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
+                        <local:SettingRow Glyph="&#xE8B9;" Header="{local:T Key=common.artwork}" Description="{local:T Key=settings.artwork.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Music.ShowArtwork" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Carátula" />
+                                              AutomationProperties.Name="{local:T Key=common.artwork}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE77B;" Header="Artista" Description="Debajo del título">
+                        <local:SettingRow Glyph="&#xE77B;" Header="{local:T Key=common.artist}" Description="{local:T Key=settings.artist.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Music.ShowArtist" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Artista" />
+                                              AutomationProperties.Name="{local:T Key=common.artist}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE946;" Header="Estado" Description="Reproduciendo o en pausa (no aparece en el estilo Compacto)">
+                        <local:SettingRow Glyph="&#xE946;" Header="{local:T Key=common.status}" Description="{local:T Key=settings.status.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Music.ShowStatus" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Estado" />
+                                              AutomationProperties.Name="{local:T Key=common.status}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE916;" Header="Barra de progreso" Description="Tiempo transcurrido y duración (no aparece en el estilo Compacto)">
+                        <local:SettingRow Glyph="&#xE916;" Header="{local:T Key=common.progressBar}" Description="{local:T Key=settings.progress.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Music.ShowProgress" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Barra de progreso" />
+                                              AutomationProperties.Name="{local:T Key=common.progressBar}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE768;" Header="Controles" Description="Anterior, reproducir o pausar y siguiente">
+                        <local:SettingRow Glyph="&#xE768;" Header="{local:T Key=common.controls}" Description="{local:T Key=settings.controls.music.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Music.ShowControls" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Controles" />
+                                              AutomationProperties.Name="{local:T Key=common.controls}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
                     </StackPanel>
 
                     <!-- Widgets funcionales › Spotify -->
                     <StackPanel x:Name="SpotifyOptionsPage" Spacing="4" Visibility="Collapsed">
-                        <TextBlock Text="Estilo" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,0,0,4" />
+                        <TextBlock Text="{local:T Key=common.style}" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,0,0,4" />
                         <!-- Vista previa en vivo de cada estilo con lo que está sonando; clic para elegirlo -->
                         <ContentPresenter x:Name="SpotifyStylePreviews" />
-                        <TextBlock Text="Elementos visibles" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
-                        <local:SettingRow Glyph="&#xE8B9;" Header="Carátula" Description="Imagen del álbum o del video">
+                        <TextBlock Text="{local:T Key=common.visibleItems}" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
+                        <local:SettingRow Glyph="&#xE8B9;" Header="{local:T Key=common.artwork}" Description="{local:T Key=settings.artwork.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Spotify.ShowArtwork" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Carátula" />
+                                              AutomationProperties.Name="{local:T Key=common.artwork}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE77B;" Header="Artista" Description="Debajo del título">
+                        <local:SettingRow Glyph="&#xE77B;" Header="{local:T Key=common.artist}" Description="{local:T Key=settings.artist.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Spotify.ShowArtist" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Artista" />
+                                              AutomationProperties.Name="{local:T Key=common.artist}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE946;" Header="Estado" Description="Reproduciendo o en pausa (no aparece en el estilo Compacto)">
+                        <local:SettingRow Glyph="&#xE946;" Header="{local:T Key=common.status}" Description="{local:T Key=settings.status.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Spotify.ShowStatus" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Estado" />
+                                              AutomationProperties.Name="{local:T Key=common.status}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE916;" Header="Barra de progreso" Description="Tiempo transcurrido y duración (no aparece en el estilo Compacto)">
+                        <local:SettingRow Glyph="&#xE916;" Header="{local:T Key=common.progressBar}" Description="{local:T Key=settings.progress.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Spotify.ShowProgress" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Barra de progreso" />
+                                              AutomationProperties.Name="{local:T Key=common.progressBar}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE768;" Header="Controles" Description="Aleatorio, anterior, reproducir o pausar, siguiente y repetir">
+                        <local:SettingRow Glyph="&#xE768;" Header="{local:T Key=common.controls}" Description="{local:T Key=settings.controls.spotify.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Spotify.ShowControls" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Controles" />
+                                              AutomationProperties.Name="{local:T Key=common.controls}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
                     </StackPanel>
 
                     <!-- Widgets funcionales › Glance -->
                     <StackPanel x:Name="GlanceOptionsPage" Spacing="4" Visibility="Collapsed">
-                        <TextBlock Text="Elementos visibles" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
-                        <local:SettingRow Glyph="&#xE787;" Header="Fecha" Description="Día y mes debajo de la hora">
+                        <TextBlock Text="{local:T Key=common.visibleItems}" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
+                        <local:SettingRow Glyph="&#xE787;" Header="{local:T Key=settings.date}" Description="{local:T Key=settings.date.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Glance.ShowDate" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Fecha" />
+                                              AutomationProperties.Name="{local:T Key=settings.date}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE787;" Header="Año" Description="Junto a la fecha">
+                        <local:SettingRow Glyph="&#xE787;" Header="{local:T Key=settings.year}" Description="{local:T Key=settings.year.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Glance.ShowYear" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Año" />
+                                              AutomationProperties.Name="{local:T Key=settings.year}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE8BF;" Header="Día de la semana" Description="Lunes, martes…">
+                        <local:SettingRow Glyph="&#xE8BF;" Header="{local:T Key=settings.weekday}" Description="{local:T Key=settings.weekday.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Glance.ShowWeekday" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Día de la semana" />
+                                              AutomationProperties.Name="{local:T Key=settings.weekday}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE823;" Header="Formato de 24 horas" Description="Apagado: 12 horas con a.m. y p.m.">
+                        <local:SettingRow Glyph="&#xE823;" Header="{local:T Key=settings.hour24}" Description="{local:T Key=settings.hour24.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Glance.Use24Hour" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Formato de 24 horas" />
+                                              AutomationProperties.Name="{local:T Key=settings.hour24}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <TextBlock Text="Segundo reloj" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
-                        <local:SettingRow Glyph="&#xE774;" Header="Mostrar un segundo reloj" Description="La hora de otra zona horaria, al lado del principal y del mismo tamaño">
+                        <TextBlock Text="{local:T Key=settings.secondClock}" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
+                        <local:SettingRow Glyph="&#xE774;" Header="{local:T Key=settings.secondClock.show}" Description="{local:T Key=settings.secondClock.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Glance.ShowSecondClock" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Mostrar un segundo reloj" />
+                                              AutomationProperties.Name="{local:T Key=settings.secondClock.show}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE8AC;" Header="Nombre del reloj principal" Description="Vacío: la ciudad de la zona horaria de Windows">
+                        <local:SettingRow Glyph="&#xE8AC;" Header="{local:T Key=settings.localLabel}" Description="{local:T Key=settings.localLabel.desc}">
                             <local:SettingRow.Action>
                                 <TextBox x:Name="LocalLabelBox" Width="200" TextChanged="LocalLabelBox_TextChanged"
-                                         AutomationProperties.Name="Nombre del reloj principal" />
+                                         AutomationProperties.Name="{local:T Key=settings.localLabel}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE909;" Header="Zona horaria" Description="La del segundo reloj">
+                        <local:SettingRow Glyph="&#xE909;" Header="{local:T Key=common.timeZone}" Description="{local:T Key=settings.timeZone.desc}">
                             <local:SettingRow.Action>
                                 <ComboBox x:Name="TimeZoneCombo" Width="320" SelectionChanged="TimeZoneCombo_SelectionChanged"
-                                          AutomationProperties.Name="Zona horaria del segundo reloj" />
+                                          AutomationProperties.Name="{local:T Key=settings.timeZone.name}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE8AC;" Header="Nombre del segundo reloj" Description="Vacío: el nombre de la zona (p. ej. Madrid)">
+                        <local:SettingRow Glyph="&#xE8AC;" Header="{local:T Key=settings.secondLabel}" Description="{local:T Key=settings.secondLabel.desc}">
                             <local:SettingRow.Action>
-                                <TextBox x:Name="SecondLabelBox" Width="200" PlaceholderText="Nombre del reloj"
-                                         TextChanged="SecondLabelBox_TextChanged" AutomationProperties.Name="Nombre del segundo reloj" />
+                                <TextBox x:Name="SecondLabelBox" Width="200" PlaceholderText="{local:T Key=settings.clockName}"
+                                         TextChanged="SecondLabelBox_TextChanged" AutomationProperties.Name="{local:T Key=settings.secondLabel}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
                     </StackPanel>
 
                     <!-- Widgets funcionales › Tiempo -->
                     <StackPanel x:Name="WeatherOptionsPage" Spacing="4" Visibility="Collapsed">
-                        <local:SettingRow x:Name="WeatherLocationRow" Glyph="&#xE81D;" Header="Ubicación del clima">
+                        <local:SettingRow x:Name="WeatherLocationRow" Glyph="&#xE81D;" Header="{local:T Key=settings.location}">
                             <local:SettingRow.Action>
                                 <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <AutoSuggestBox x:Name="CitySearch" Width="260" PlaceholderText="Buscar ciudad…" QueryIcon="Find"
+                                    <AutoSuggestBox x:Name="CitySearch" Width="260" PlaceholderText="{local:T Key=settings.citySearch}" QueryIcon="Find"
                                                     TextChanged="CitySearch_TextChanged" SuggestionChosen="CitySearch_SuggestionChosen"
-                                                    QuerySubmitted="CitySearch_QuerySubmitted" AutomationProperties.Name="Buscar ciudad" />
-                                    <Button x:Name="AutoLocationButton" Content="Usar automática" Click="AutoLocation_Click" />
+                                                    QuerySubmitted="CitySearch_QuerySubmitted" AutomationProperties.Name="{local:T Key=settings.citySearch.name}" />
+                                    <Button x:Name="AutoLocationButton" Content="{local:T Key=settings.useAutomatic}" Click="AutoLocation_Click" />
                                 </StackPanel>
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <TextBlock Text="Elementos visibles" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
-                        <local:SettingRow Glyph="&#xE9CA;" Header="Sensación térmica" Description="Se siente…, debajo del estado del cielo">
+                        <TextBlock Text="{local:T Key=common.visibleItems}" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="0,16,0,4" />
+                        <local:SettingRow Glyph="&#xE9CA;" Header="{local:T Key=settings.feelsLike}" Description="{local:T Key=settings.feelsLike.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Weather.ShowFeelsLike" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Sensación térmica" />
+                                              AutomationProperties.Name="{local:T Key=settings.feelsLike}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE945;" Header="Humedad" Description="Porcentaje de humedad del aire">
+                        <local:SettingRow Glyph="&#xE945;" Header="{local:T Key=common.humidity}" Description="{local:T Key=settings.humidity.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Weather.ShowHumidity" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Humedad" />
+                                              AutomationProperties.Name="{local:T Key=common.humidity}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE9F1;" Header="Viento" Description="Velocidad del viento en km/h">
+                        <local:SettingRow Glyph="&#xE9F1;" Header="{local:T Key=common.wind}" Description="{local:T Key=settings.wind.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Weather.ShowWind" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Viento" />
+                                              AutomationProperties.Name="{local:T Key=common.wind}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE9E0;" Header="Precipitación" Description="Probabilidad de lluvia para hoy">
+                        <local:SettingRow Glyph="&#xE9E0;" Header="{local:T Key=common.precipitation}" Description="{local:T Key=settings.rain.desc}">
                             <local:SettingRow.Action>
                                 <ToggleSwitch OnContent="" OffContent="" MinWidth="0" Tag="Weather.ShowRain" Toggled="OptionToggle_Toggled"
-                                              AutomationProperties.Name="Precipitación" />
+                                              AutomationProperties.Name="{local:T Key=common.precipitation}" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
                     </StackPanel>
 
                     <!-- Atajos e interacción -->
                     <StackPanel x:Name="AtajosPage" Spacing="4" Visibility="Collapsed">
-                        <local:SettingRow Glyph="&#xE81E;" Header="Capa de widgets"
-                                          Description="Fijo en el escritorio: siempre detrás de tus apps. Normal: se comportan como ventanas comunes">
+                        <local:SettingRow Glyph="&#xE81E;" Header="{local:T Key=settings.layer}"
+                                          Description="{local:T Key=settings.layer.desc}">
                             <local:SettingRow.Action>
                                 <ComboBox x:Name="LayerCombo" MinWidth="200" SelectionChanged="LayerCombo_SelectionChanged"
-                                          AutomationProperties.Name="Capa de widgets">
-                                    <ComboBoxItem Content="Fijo en el escritorio" />
-                                    <ComboBoxItem Content="Normal" />
+                                          AutomationProperties.Name="{local:T Key=settings.layer}">
+                                    <ComboBoxItem Content="{local:T Key=settings.layer.pinned}" />
+                                    <ComboBoxItem Content="{local:T Key=settings.layer.normal}" />
                                 </ComboBox>
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE765;" Header="Tecla de acceso rápido global"
-                                          Description="F7 muestra u oculta todos los widgets, igual que el clic izquierdo en el ícono de la bandeja">
+                        <local:SettingRow Glyph="&#xE765;" Header="{local:T Key=settings.hotkey}"
+                                          Description="{local:T Key=settings.hotkey.desc}">
                             <local:SettingRow.Action>
                                 <Border Padding="10,4" CornerRadius="4" BorderThickness="1"
                                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -367,11 +373,11 @@
                             </local:SettingRow.Action>
                         </local:SettingRow>
                         <InfoBar x:Name="HotkeyWarning" Severity="Warning" IsClosable="False"
-                                 Title="F7 está ocupado por otra aplicación"
-                                 Message="Cierra la otra app (por ejemplo, el DeskBox original) y reinicia OpenWinBox. Mientras tanto usa el ícono de la bandeja." />
+                                 Title="{local:T Key=settings.hotkeyBusy.title}"
+                                 Message="{local:T Key=settings.hotkeyBusy.message}" />
                         <InfoBar IsOpen="True" Severity="Informational" IsClosable="False"
-                                 Title="¿Por qué los atajos de teclado a veces no responden?"
-                                 Message="Si la ventana activa se ejecuta como administrador (por ejemplo, el Administrador de tareas), Windows bloquea los atajos globales. Es una limitación de Windows." />
+                                 Title="{local:T Key=settings.hotkeyAdmin.title}"
+                                 Message="{local:T Key=settings.hotkeyAdmin.message}" />
                     </StackPanel>
 
                     <!-- Acerca de -->
@@ -381,30 +387,30 @@
                                 <Image x:Name="AboutIcon" Width="40" Height="40" />
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
                                     <TextBlock x:Name="VersionText" Style="{StaticResource BodyStrongTextBlockStyle}" />
-                                    <TextBlock Text="Widgets de código abierto para el escritorio de Windows." Style="{StaticResource CaptionTextBlockStyle}"
+                                    <TextBlock Text="{local:T Key=settings.about.tagline}" Style="{StaticResource CaptionTextBlockStyle}"
                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                                 </StackPanel>
                                 <Button Grid.Column="2" Click="OpenDataFolder_Click">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <FontIcon Glyph="&#xE838;" FontSize="14" />
-                                        <TextBlock Text="Carpeta de configuración" />
+                                        <TextBlock Text="{local:T Key=settings.about.dataFolder}" />
                                     </StackPanel>
                                 </Button>
                             </Grid>
                         </Border>
-                        <local:SettingRow x:Name="UpdateRow" Glyph="&#xE895;" Header="Actualizaciones"
-                                          Description="Comprueba si hay una versión nueva de OpenWinBox">
+                        <local:SettingRow x:Name="UpdateRow" Glyph="&#xE895;" Header="{local:T Key=settings.updates}"
+                                          Description="{local:T Key=settings.updates.desc}">
                             <local:SettingRow.Action>
-                                <Button x:Name="CheckUpdatesButton" Content="Buscar actualizaciones" Click="CheckUpdates_Click" />
+                                <Button x:Name="CheckUpdatesButton" Content="{local:T Key=settings.updates.check}" Click="CheckUpdates_Click" />
                             </local:SettingRow.Action>
                         </local:SettingRow>
-                        <local:SettingRow Glyph="&#xE7C1;" Header="Canal de actualizaciones"
-                                          Description="Oficiales: solo versiones estables. Betas: también versiones de prueba, con novedades antes y posibles fallos">
+                        <local:SettingRow Glyph="&#xE7C1;" Header="{local:T Key=settings.updates.channel}"
+                                          Description="{local:T Key=settings.updates.channel.desc}">
                             <local:SettingRow.Action>
                                 <ComboBox x:Name="UpdateChannelCombo" MinWidth="200" SelectionChanged="UpdateChannelCombo_SelectionChanged"
-                                          AutomationProperties.Name="Canal de actualizaciones">
-                                    <ComboBoxItem Content="Oficiales" />
-                                    <ComboBoxItem Content="Betas" />
+                                          AutomationProperties.Name="{local:T Key=settings.updates.channel}">
+                                    <ComboBoxItem Content="{local:T Key=settings.updates.official}" />
+                                    <ComboBoxItem Content="{local:T Key=settings.updates.betas}" />
                                 </ComboBox>
                             </local:SettingRow.Action>
                         </local:SettingRow>
@@ -413,17 +419,17 @@
                                 <Button x:Name="UpdateActionButton" Click="UpdateAction_Click" />
                             </InfoBar.ActionButton>
                             <StackPanel Spacing="4" Margin="0,0,0,8">
-                                <HyperlinkButton x:Name="UpdateNotesLink" Content="Ver los cambios" Padding="0" />
+                                <HyperlinkButton x:Name="UpdateNotesLink" Content="{local:T Key=settings.updates.notes}" Padding="0" />
                                 <ProgressBar x:Name="UpdateProgress" Maximum="1" Margin="0,4,0,0"
-                                             AutomationProperties.Name="Progreso de la descarga" />
+                                             AutomationProperties.Name="{local:T Key=settings.updates.progress}" />
                             </StackPanel>
                         </InfoBar>
                         <!-- CC BY 4.0 de Open-Meteo exige atribución -->
                         <TextBlock Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap" Margin="4,8,4,0"
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}">
-                            <Run Text="Software libre bajo licencia MIT. Datos del clima:" />
+                            <Run Text="{local:T Key=settings.about.credits1}" />
                             <Hyperlink NavigateUri="https://open-meteo.com/">Open-Meteo.com</Hyperlink>
-                            <Run Text="(CC BY 4.0). Fotos del día: Microsoft Bing. Nombre de la ciudad:" />
+                            <Run Text="{local:T Key=settings.about.credits2}" />
                             <Hyperlink NavigateUri="https://www.bigdatacloud.com/">BigDataCloud</Hyperlink><Run Text="." />
                         </TextBlock>
                     </StackPanel>

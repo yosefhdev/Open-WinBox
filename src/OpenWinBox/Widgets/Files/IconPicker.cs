@@ -9,18 +9,18 @@ using Windows.Storage.Pickers;
 
 namespace OpenWinBox;
 
-// "Personalizar icono" como en el original: pestañas Emoji / Imagen, categorías, Aleatorio y Restaurar
+// Lang.T("icon.title") como en el original: pestañas Emoji / Imagen, categorías, Aleatorio y Restaurar
 internal static class IconPicker
 {
-    private static readonly (string Name, string Emojis)[] Categories =
+    private static (string Name, string Emojis)[] Categories => new[]
     {
-        ("Caras", "😀😃😄😁😆😅😂🤣😊😇🙂😉😍🥰😘😎🤓🥳🤩😏😴🤔🤯😱😡🥶🤠👻"),
-        ("Personas", "👋👍👎👏🙌🙏💪🧠👀👤👥🧑‍💻👨‍🎨👩‍🚀🧙🦸🥷👑🎓💼🧳🎒👓🕶️"),
-        ("Animales", "🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🦁🐮🐷🐸🐵🐔🐧🐦🦄🐝🦋🐢🐍🐙🐬🐳🌵🌸🌻🍀"),
-        ("Comida", "🍎🍊🍋🍉🍇🍓🍒🍑🥑🥕🌽🍞🧀🍔🍟🍕🌮🍣🍩🍪🎂🍫🍿☕🍵🍺🍷🥤"),
-        ("Viajes", "🚗🚕🚌🏎️🚓🚑🚒✈️🚀🛸🚁⛵🚢🚲🛴🏠🏢🏰🗽🗼⛰️🏖️🏝️🌋🌍🌙⭐☀️🌈"),
-        ("Objetos", "💻🖥️⌨️🖱️🎮🕹️📱📷🎥🎧🎤🎸🎹📚📖📝✏️📌📎📁📂🗂️🗃️🔧🔨🛠️⚙️🔑💡🎨🧩🎲"),
-        ("Símbolos", "❤️🧡💛💚💙💜🖤🤍⭐✨🔥💯✅❌⚠️❓❗💬🔔🎵➕➖🔴🟠🟡🟢🔵🟣⚫⚪"),
+        (Lang.T("icon.cat.faces"), "😀😃😄😁😆😅😂🤣😊😇🙂😉😍🥰😘😎🤓🥳🤩😏😴🤔🤯😱😡🥶🤠👻"),
+        (Lang.T("icon.cat.people"), "👋👍👎👏🙌🙏💪🧠👀👤👥🧑‍💻👨‍🎨👩‍🚀🧙🦸🥷👑🎓💼🧳🎒👓🕶️"),
+        (Lang.T("icon.cat.animals"), "🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🦁🐮🐷🐸🐵🐔🐧🐦🦄🐝🦋🐢🐍🐙🐬🐳🌵🌸🌻🍀"),
+        (Lang.T("icon.cat.food"), "🍎🍊🍋🍉🍇🍓🍒🍑🥑🥕🌽🍞🧀🍔🍟🍕🌮🍣🍩🍪🎂🍫🍿☕🍵🍺🍷🥤"),
+        (Lang.T("icon.cat.travel"), "🚗🚕🚌🏎️🚓🚑🚒✈️🚀🛸🚁⛵🚢🚲🛴🏠🏢🏰🗽🗼⛰️🏖️🏝️🌋🌍🌙⭐☀️🌈"),
+        (Lang.T("icon.cat.objects"), "💻🖥️⌨️🖱️🎮🕹️📱📷🎥🎧🎤🎸🎹📚📖📝✏️📌📎📁📂🗂️🗃️🔧🔨🛠️⚙️🔑💡🎨🧩🎲"),
+        (Lang.T("icon.cat.symbols"), "❤️🧡💛💚💙💜🖤🤍⭐✨🔥💯✅❌⚠️❓❗💬🔔🎵➕➖🔴🟠🟡🟢🔵🟣⚫⚪"),
     };
 
     public static readonly string ImagesFolder = Path.Combine(
@@ -51,7 +51,7 @@ internal static class IconPicker
             HorizontalScrollMode = ScrollMode.Enabled, VerticalScrollMode = ScrollMode.Disabled,
         }, grid } };
 
-        var chooseImage = new Button { Content = "Elegir imagen de la PC…", Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
+        var chooseImage = new Button { Content = Lang.T("icon.chooseImage"), Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
         chooseImage.Click += async (_, _) =>
         {
             var picker = new FileOpenPicker { SuggestedStartLocation = PickerLocationId.PicturesLibrary };
@@ -69,12 +69,12 @@ internal static class IconPicker
             Spacing = 10, Visibility = Visibility.Collapsed, Padding = new Thickness(0, 8, 0, 8),
             Children =
             {
-                new TextBlock { Text = "Usa una imagen PNG, JPG o ICO. Se guarda una copia dentro de OpenWinBox.", TextWrapping = TextWrapping.Wrap },
+                new TextBlock { Text = Lang.T("icon.imageHint"), TextWrapping = TextWrapping.Wrap },
                 chooseImage,
             },
         };
 
-        var tabs = new SelectorBar { Items = { new SelectorBarItem { Text = "Emoji" }, new SelectorBarItem { Text = "Imagen" } } };
+        var tabs = new SelectorBar { Items = { new SelectorBarItem { Text = Lang.T("icon.emoji") }, new SelectorBarItem { Text = Lang.T("icon.image") } } };
         tabs.SelectionChanged += (s, _) =>
         {
             var isEmoji = s.Items.IndexOf(s.SelectedItem) == 0;
@@ -83,13 +83,13 @@ internal static class IconPicker
         };
         tabs.SelectedItem = tabs.Items[0];
 
-        var random = new Button { Content = "Aleatorio" };
+        var random = new Button { Content = Lang.T("icon.random") };
         random.Click += (_, _) =>
         {
             var all = Categories.SelectMany(c => SplitEmojis(c.Emojis)).ToArray();
             Pick("emoji:" + all[Random.Shared.Next(all.Length)]);
         };
-        var reset = new Button { Content = "Restaurar valor predeterminado" };
+        var reset = new Button { Content = Lang.T("icon.reset") };
         reset.Click += (_, _) => Pick(null);
 
         flyout.Content = new StackPanel
@@ -99,8 +99,8 @@ internal static class IconPicker
             {
                 new StackPanel { Spacing = 2, Children =
                 {
-                    new TextBlock { Text = "Personalizar icono", Style = (Style)Application.Current.Resources["BodyStrongTextBlockStyle"] },
-                    new TextBlock { Text = "Elige un emoji o una imagen para este widget", FontSize = 12,
+                    new TextBlock { Text = Lang.T("icon.title"), Style = (Style)Application.Current.Resources["BodyStrongTextBlockStyle"] },
+                    new TextBlock { Text = Lang.T("icon.subtitle"), FontSize = 12,
                         Foreground = (Brush)Application.Current.Resources["TextFillColorSecondaryBrush"] },
                 } },
                 tabs, emojiPanel, imagePanel,

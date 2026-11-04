@@ -8,7 +8,7 @@
 
 [![Descargar](https://img.shields.io/badge/Descargar-Instalador%20para%20Windows-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![Versión](https://img.shields.io/badge/versión-1.0.0--beta.2-orange)
+![Versión](https://img.shields.io/badge/versión-1.0.0--beta.3-orange)
 ![Plataforma](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Licencia](https://img.shields.io/badge/licencia-MIT-green)
 
@@ -75,7 +75,7 @@ Activa o desactiva cada uno por separado, y haz clic en su fila de Configuració
 ## Cómo se usa
 
 > [!TIP]
-> La interfaz está en **español**. Los textos que verás en pantalla aparecen en *cursiva*.
+> La interfaz está disponible en **español** e **inglés**. Sigue el idioma de Windows y puedes cambiarlo en *Configuración → General → Idioma*. Los textos que verás en pantalla aparecen en *cursiva*.
 
 Los dos controles que debes recordar son **F7**, que muestra u oculta todos los widgets, y el **ícono de la bandeja**, que abre el menú con clic derecho.
 

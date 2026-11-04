@@ -33,7 +33,7 @@ public sealed partial class TrayMenu : Window
         // Fuera de la barra de tareas y Alt+Tab (ver WidgetWindow)
         AppWindow.IsShownInSwitchers = false;
         SetWindowLongPtr(Hwnd, GWL_EXSTYLE, (GetWindowLongPtr(Hwnd, GWL_EXSTYLE) | WS_EX_TOOLWINDOW) & ~WS_EX_APPWINDOW);
-        Title = "Menú de OpenWinBox";
+        Title = Lang.T("tray.title");
         AppIcon.Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(new Uri(ShellHost.IconPath));
         Activated += (_, e) => { if (e.WindowActivationState == WindowActivationState.Deactivated) AppWindow.Hide(); };
     }
@@ -44,7 +44,7 @@ public sealed partial class TrayMenu : Window
     public void ShowAt(int x, int y)
     {
         App.ApplyTheme(this);
-        Status.Text = _app.HotkeyRegistered ? "F7 muestra u oculta los widgets" : "F7 está ocupado por otra app";
+        Status.Text = _app.HotkeyRegistered ? Lang.T("tray.status.ok") : Lang.T("tray.status.busy");
         PinSwitch.IsOn = _app.Config.PinToDesktop;
         AutoStartSwitch.IsOn = ShellHost.AutoStart;
 

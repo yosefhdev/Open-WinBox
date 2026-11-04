@@ -1,7 +1,8 @@
 <UserControl
     x:Class="OpenWinBox.MusicView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OpenWinBox">
 
     <!-- Botones planos como el original: solo se marca el fondo al pasar el mouse -->
     <UserControl.Resources>
@@ -31,7 +32,7 @@
             </Border>
             <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
                 <TextBlock x:Name="TitleText" FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
-                           Text="No se está reproduciendo nada" />
+                           Text="{local:T Key=music.nothingPlaying}" />
                 <TextBlock x:Name="ArtistText" FontSize="12" TextTrimming="CharacterEllipsis"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                 <TextBlock x:Name="StatusText" FontSize="11" Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
@@ -56,27 +57,27 @@
 
         <!-- Solo en el widget de Spotify, cuando Spotify está cerrado -->
         <Button x:Name="OpenSpotifyButton" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
-                Visibility="Collapsed" Click="OpenSpotify_Click" Content="Abrir Spotify" />
+                Visibility="Collapsed" Click="OpenSpotify_Click" Content="{local:T Key=music.openSpotify}" />
 
         <StackPanel x:Name="Controls" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
             <Button x:Name="ShuffleButton" Click="Shuffle_Click" Visibility="Collapsed"
-                    AutomationProperties.Name="Aleatorio" ToolTipService.ToolTip="Aleatorio">
+                    AutomationProperties.Name="{local:T Key=music.shuffle}" ToolTipService.ToolTip="{local:T Key=music.shuffle}">
                 <FontIcon x:Name="ShuffleIcon" Glyph="&#xE8B1;" FontSize="13" />
             </Button>
             <Button x:Name="PreviousButton" Click="Previous_Click" Background="Transparent" BorderThickness="0"
-                    AutomationProperties.Name="Anterior" ToolTipService.ToolTip="Anterior">
+                    AutomationProperties.Name="{local:T Key=music.previous}" ToolTipService.ToolTip="{local:T Key=music.previous}">
                 <FontIcon Glyph="&#xE892;" FontSize="14" />
             </Button>
             <Button x:Name="PlayButton" Click="Play_Click" Background="Transparent" BorderThickness="0"
-                    AutomationProperties.Name="Reproducir o pausar">
+                    AutomationProperties.Name="{local:T Key=music.playPause}">
                 <FontIcon x:Name="PlayIcon" Glyph="&#xE768;" FontSize="18" />
             </Button>
             <Button x:Name="NextButton" Click="Next_Click" Background="Transparent" BorderThickness="0"
-                    AutomationProperties.Name="Siguiente" ToolTipService.ToolTip="Siguiente">
+                    AutomationProperties.Name="{local:T Key=music.next}" ToolTipService.ToolTip="{local:T Key=music.next}">
                 <FontIcon Glyph="&#xE893;" FontSize="14" />
             </Button>
             <Button x:Name="RepeatButton" Click="Repeat_Click" Visibility="Collapsed"
-                    AutomationProperties.Name="Repetir" ToolTipService.ToolTip="Repetir">
+                    AutomationProperties.Name="{local:T Key=music.repeat}" ToolTipService.ToolTip="{local:T Key=music.repeat}">
                 <FontIcon x:Name="RepeatIcon" Glyph="&#xE8EE;" FontSize="13" />
             </Button>
         </StackPanel>

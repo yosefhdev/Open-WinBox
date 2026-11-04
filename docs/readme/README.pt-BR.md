@@ -8,7 +8,7 @@
 
 [![Baixar](https://img.shields.io/badge/Baixar-Instalador%20para%20Windows-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![Versão](https://img.shields.io/badge/versão-1.0.0--beta.2-orange)
+![Versão](https://img.shields.io/badge/versão-1.0.0--beta.3-orange)
 ![Plataforma](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Licença](https://img.shields.io/badge/licença-MIT-green)
 
@@ -75,7 +75,7 @@ Ative ou desative cada um separadamente e clique na linha dele nas configuraçõ
 ## Como usar
 
 > [!TIP]
-> A interface está em **espanhol** por enquanto. Os textos que você verá na tela aparecem em *itálico*.
+> A interface está disponível em **inglês** e **espanhol**. Se o Windows estiver em outro idioma, ela aparece em inglês; você pode mudar em *Settings → General → Language*. Os textos que você verá na tela aparecem em *itálico*, em inglês.
 
 Os dois controles para lembrar são **F7**, que mostra ou oculta todos os widgets, e o **ícone da bandeja**, que abre o menu com o botão direito.
 
@@ -86,9 +86,9 @@ Os dois controles para lembrar são **F7**, que mostra ou oculta todos os widget
 | Ação | Como |
 |---|---|
 | Mostrar ou ocultar todos os widgets | Pressione **F7** ou clique com o botão esquerdo no ícone da bandeja |
-| Abrir as configurações | Botão direito no ícone da bandeja → *Configuración…*, ou abra o aplicativo de novo |
-| Novo widget | **+** em qualquer widget → *Nuevo widget*, ou *Configuración → Widgets de archivos → Nuevo widget* |
-| Nova aba em um widget | **+** → *Nueva pestaña en este widget* |
+| Abrir as configurações | Botão direito no ícone da bandeja → *Settings*, ou abra o aplicativo de novo |
+| Novo widget | **+** em qualquer widget → *New widget*, ou *Settings → File widgets → New widget* |
+| Nova aba em um widget | **+** → *New tab in this widget* |
 | Adicionar arquivos | Arraste arquivos ou atalhos para o widget (segure **Ctrl** para copiar um atalho em vez de movê-lo) |
 
 </details>
@@ -99,8 +99,8 @@ Os dois controles para lembrar são **F7**, que mostra ou oculta todos os widget
 
 | Ação | Como |
 |---|---|
-| Renomear, trocar o ícone, travar, agrupar | **⋯** no widget → *Cambiar nombre*, *Cambiar icono…*, *Bloquear posición*, *Agrupar con…* |
-| Agrupar dois widgets | Arraste um widget pela barra e segure sobre a barra de outro até aparecer *Suelta para unir*; depois solte |
+| Renomear, trocar o ícone, travar, agrupar | **⋯** no widget → *Rename*, *Change icon…*, *Lock position*, *Group with…* |
+| Agrupar dois widgets | Arraste um widget pela barra e segure sobre a barra de outro até aparecer *Release to merge*; depois solte |
 | Reordenar ou separar abas | Arraste uma aba para os lados para reordená-la, ou para fora do widget para torná-la independente |
 | Mover um widget funcional | Passe o cursor sobre ele e arraste a alça na parte superior |
 
@@ -112,17 +112,17 @@ Os dois controles para lembrar são **F7**, que mostra ou oculta todos os widget
 
 | Ação | Como |
 |---|---|
-| Ativar ou desativar widgets funcionais | *Configuración → Widgets funcionales* |
-| Mudar o tema | *Configuración → Apariencia → Tema* |
-| Iniciar com o Windows | *Configuración → General → Lanzar al inicio*, ou *Iniciar con Windows* no menu da bandeja |
+| Ativar ou desativar widgets funcionais | *Settings → Functional widgets* |
+| Mudar o tema | *Settings → Appearance → Theme* |
+| Iniciar com o Windows | *Settings → General → Launch at startup*, ou *Start with Windows* no menu da bandeja |
 
 </details>
 
 ## Atualizações
 
-Abra *Configuración → Acerca de* e clique em *Buscar actualizaciones*. Se houver uma versão nova, *Actualizar* baixa, confere o hash e instala, mantendo suas configurações. O aplicativo fecha por um instante e abre de novo.
+Abra *Settings → About* e clique em *Check for updates*. Se houver uma versão nova, *Update* baixa, confere o hash e instala, mantendo suas configurações. O aplicativo fecha por um instante e abre de novo.
 
-Em *Canal de actualizaciones*, escolha *Oficiales* para receber só versões estáveis, ou *Betas* para receber também versões de teste. O OpenWinBox só se conecta ao GitHub para isso quando você clica no botão.
+Em *Update channel*, escolha *Official* para receber só versões estáveis, ou *Betas* para receber também versões de teste. O OpenWinBox só se conecta ao GitHub para isso quando você clica no botão.
 
 ## Privacidade
 
@@ -141,7 +141,7 @@ Os widgets Música e Spotify leem o que o Windows informa estar tocando, então 
 
 ## Desinstalar
 
-1. Escolha *Salir* no menu da bandeja.
+1. Escolha *Exit* no menu da bandeja.
 2. Desinstale o OpenWinBox em **Configurações do Windows → Aplicativos → Aplicativos instalados**. Isso também remove a inicialização com o Windows.
 3. Opcional: apague `%LOCALAPPDATA%\OpenWinBox` para remover também as suas configurações.
 

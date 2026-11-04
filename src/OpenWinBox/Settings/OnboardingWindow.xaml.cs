@@ -18,6 +18,7 @@ public sealed partial class OnboardingWindow : Window
     public OnboardingWindow()
     {
         InitializeComponent();
+        Title = Lang.T("onboarding.title");
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(DragArea);
         AppWindow.SetIcon(ShellHost.IconPath);
@@ -44,7 +45,7 @@ public sealed partial class OnboardingWindow : Window
         _step = step;
         Pips.SelectedPageIndex = step;
         BackButton.Visibility = step > 0 ? Visibility.Visible : Visibility.Collapsed;
-        NextButton.Content = step == StepCount - 1 ? "Empezar" : "Siguiente";
+        NextButton.Content = step == StepCount - 1 ? Lang.T("onboarding.start") : Lang.T("onboarding.next");
         IllustrationKey.Visibility = step == 2 ? Visibility.Visible : Visibility.Collapsed;
         IllustrationIcon.Visibility = step == 2 ? Visibility.Collapsed : Visibility.Visible;
 
@@ -52,36 +53,34 @@ public sealed partial class OnboardingWindow : Window
         {
             case 0:
                 IllustrationIcon.Glyph = "";
-                StepTitle.Text = "Una capa de organización ligera en tu escritorio";
-                StepText.Text = "OpenWinBox pone tus carpetas en widgets sobre el escritorio: tus accesos directos a mano, " +
-                                "sin tapar las apps en las que trabajas.";
+                StepTitle.Text = Lang.T("onboarding.step1.title");
+                StepText.Text = Lang.T("onboarding.step1.text");
                 var count = _app.Config.Widgets.Count;
                 StepExtra.Content = Check(count > 0
-                    ? $"Tienes {count} widget{(count == 1 ? "" : "s")} listo{(count == 1 ? "" : "s")} en el escritorio."
-                    : "Aún no tienes widgets; crearás el primero en el siguiente paso.");
+                    ? (count == 1 ? Lang.T("onboarding.step1.readyOne") : Lang.T("onboarding.step1.readyMany", count))
+                    : Lang.T("onboarding.step1.none"));
                 break;
 
             case 1:
                 IllustrationIcon.Glyph = "";
-                StepTitle.Text = "Tus carpetas, en widgets";
-                StepText.Text = "Cada widget muestra el contenido de una carpeta. Si agregas varias carpetas a un widget, " +
-                                "aparecen como pestañas. Doble clic abre el elemento.";
+                StepTitle.Text = Lang.T("onboarding.step2.title");
+                StepText.Text = Lang.T("onboarding.step2.text");
                 var result = new StackPanel { Spacing = 10 };
-                var create = new Button { Content = "Nuevo widget", Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
+                var create = new Button { Content = Lang.T("common.newWidget"), Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
                 create.Click += async (_, _) =>
                 {
                     if (await App.PickFolderAsync(this) is not { } folder) return;
                     _app.AddWidget(folder);
-                    result.Children.Add(Check($"Widget creado: {Path.GetFileName(folder.TrimEnd('\\'))}"));
+                    result.Children.Add(Check(Lang.T("onboarding.step2.created", Path.GetFileName(folder.TrimEnd('\\')))));
                 };
                 result.Children.Add(create);
                 StepExtra.Content = result;
                 break;
 
             case 2:
-                StepTitle.Text = "Convocar en cualquier momento, despedir en cualquier momento";
-                StepText.Text = "Pulsa F7 o haz clic izquierdo en el ícono de OpenWinBox en la bandeja.";
-                var toggle = new Button { Content = "Mostrar u ocultar", Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
+                StepTitle.Text = Lang.T("onboarding.step3.title");
+                StepText.Text = Lang.T("onboarding.step3.text");
+                var toggle = new Button { Content = Lang.T("onboarding.step3.toggle"), Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
                 toggle.Click += (_, _) => _app.ToggleWidgets();
                 StepExtra.Content = new StackPanel
                 {
@@ -90,20 +89,19 @@ public sealed partial class OnboardingWindow : Window
                     {
                         toggle,
                         _app.HotkeyRegistered
-                            ? Check("Prueba la acción o continúa al siguiente paso.")
-                            : Check("F7 está ocupado por otra app (¿el DeskBox original?). Ciérrala y reinicia OpenWinBox.", ""),
+                            ? Check(Lang.T("onboarding.step3.try"))
+                            : Check(Lang.T("onboarding.step3.busy"), ""),
                     },
                 };
                 break;
 
             case 3:
                 IllustrationIcon.Glyph = "";
-                StepTitle.Text = "Siempre detrás de tus apps";
-                StepText.Text = "Los widgets viven en el escritorio y nunca tapan la ventana en la que trabajas. " +
-                                "Puedes cambiar esto cuando quieras en Configuración.";
-                var pin = new ToggleSwitch { Header = "Mantener los widgets en el escritorio", IsOn = _app.Config.PinToDesktop };
+                StepTitle.Text = Lang.T("onboarding.step4.title");
+                StepText.Text = Lang.T("onboarding.step4.text");
+                var pin = new ToggleSwitch { Header = Lang.T("onboarding.step4.pin"), IsOn = _app.Config.PinToDesktop };
                 pin.Toggled += (_, _) => _app.SetPinned(pin.IsOn);
-                var autoStart = new ToggleSwitch { Header = "Lanzar al iniciar Windows", IsOn = ShellHost.AutoStart };
+                var autoStart = new ToggleSwitch { Header = Lang.T("onboarding.step4.autoStart"), IsOn = ShellHost.AutoStart };
                 autoStart.Toggled += (_, _) => ShellHost.AutoStart = autoStart.IsOn;
                 StepExtra.Content = new StackPanel { Spacing = 8, Children = { pin, autoStart } };
                 break;

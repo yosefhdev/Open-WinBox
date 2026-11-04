@@ -8,7 +8,7 @@
 
 [![다운로드](https://img.shields.io/badge/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C-Windows%20%EC%84%A4%EC%B9%98%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![버전](https://img.shields.io/badge/버전-1.0.0--beta.2-orange)
+![버전](https://img.shields.io/badge/버전-1.0.0--beta.3-orange)
 ![플랫폼](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![라이선스](https://img.shields.io/badge/라이선스-MIT-green)
 
@@ -75,7 +75,7 @@ Windows 바탕 화면은 흩어진 파일로 금방 가득 차고, 다른 나라
 ## 사용 방법
 
 > [!TIP]
-> 현재 인터페이스는 **스페인어**입니다. 화면에 표시되는 문구는 *기울임꼴*로 적었습니다.
+> 인터페이스는 **영어**와 **스페인어**를 지원합니다. Windows가 다른 언어이면 영어로 표시되며, *Settings → General → Language*에서 바꿀 수 있습니다. 화면에 표시되는 문구는 영어 *기울임꼴*로 적었습니다.
 
 기억할 조작은 두 가지입니다. **F7**은 모든 위젯을 표시하거나 숨기고, **트레이 아이콘**을 마우스 오른쪽 버튼으로 클릭하면 메뉴가 열립니다.
 
@@ -86,9 +86,9 @@ Windows 바탕 화면은 흩어진 파일로 금방 가득 차고, 다른 나라
 | 작업 | 방법 |
 |---|---|
 | 모든 위젯 표시 또는 숨기기 | **F7**을 누르거나 트레이 아이콘을 왼쪽 클릭합니다 |
-| 설정 열기 | 트레이 아이콘을 오른쪽 클릭 → *Configuración…*, 또는 앱을 다시 실행합니다 |
-| 새 위젯 | 위젯의 **+** → *Nuevo widget*, 또는 *Configuración → Widgets de archivos → Nuevo widget* |
-| 위젯에 새 탭 추가 | **+** → *Nueva pestaña en este widget* |
+| 설정 열기 | 트레이 아이콘을 오른쪽 클릭 → *Settings*, 또는 앱을 다시 실행합니다 |
+| 새 위젯 | 위젯의 **+** → *New widget*, 또는 *Settings → File widgets → New widget* |
+| 위젯에 새 탭 추가 | **+** → *New tab in this widget* |
 | 파일 추가 | 파일이나 바로 가기를 위젯으로 끕니다(**Ctrl**을 누르면 바로 가기를 이동하지 않고 복사합니다) |
 
 </details>
@@ -99,8 +99,8 @@ Windows 바탕 화면은 흩어진 파일로 금방 가득 차고, 다른 나라
 
 | 작업 | 방법 |
 |---|---|
-| 이름 변경, 아이콘 변경, 잠금, 그룹화 | 위젯의 **⋯** → *Cambiar nombre*, *Cambiar icono…*, *Bloquear posición*, *Agrupar con…* |
-| 위젯 두 개 묶기 | 위젯의 막대를 끌어 다른 위젯의 막대 위에서 *Suelta para unir*가 나타날 때까지 기다린 다음 놓습니다 |
+| 이름 변경, 아이콘 변경, 잠금, 그룹화 | 위젯의 **⋯** → *Rename*, *Change icon…*, *Lock position*, *Group with…* |
+| 위젯 두 개 묶기 | 위젯의 막대를 끌어 다른 위젯의 막대 위에서 *Release to merge*가 나타날 때까지 기다린 다음 놓습니다 |
 | 탭 순서 변경 또는 분리 | 탭을 옆으로 끌어 순서를 바꾸거나, 위젯 밖으로 끌어 독립시킵니다 |
 | 기능 위젯 이동 | 마우스를 올린 다음 위쪽 핸들을 끕니다 |
 
@@ -112,17 +112,17 @@ Windows 바탕 화면은 흩어진 파일로 금방 가득 차고, 다른 나라
 
 | 작업 | 방법 |
 |---|---|
-| 기능 위젯 켜기 또는 끄기 | *Configuración → Widgets funcionales* |
-| 테마 변경 | *Configuración → Apariencia → Tema* |
-| Windows와 함께 시작 | *Configuración → General → Lanzar al inicio*, 또는 트레이 메뉴의 *Iniciar con Windows* |
+| 기능 위젯 켜기 또는 끄기 | *Settings → Functional widgets* |
+| 테마 변경 | *Settings → Appearance → Theme* |
+| Windows와 함께 시작 | *Settings → General → Launch at startup*, 또는 트레이 메뉴의 *Start with Windows* |
 
 </details>
 
 ## 업데이트
 
-*Configuración → Acerca de*를 열고 *Buscar actualizaciones*를 누릅니다. 새 버전이 있으면 *Actualizar*가 다운로드하고 해시를 확인한 뒤 설정을 유지한 채 설치합니다. 앱이 잠시 닫혔다가 다시 열립니다.
+*Settings → About*를 열고 *Check for updates*를 누릅니다. 새 버전이 있으면 *Update*가 다운로드하고 해시를 확인한 뒤 설정을 유지한 채 설치합니다. 앱이 잠시 닫혔다가 다시 열립니다.
 
-*Canal de actualizaciones*에서 안정 버전만 받으려면 *Oficiales*를, 테스트 버전도 받으려면 *Betas*를 선택합니다. OpenWinBox는 버튼을 누를 때만 이를 위해 GitHub에 연결합니다.
+*Update channel*에서 안정 버전만 받으려면 *Official*를, 테스트 버전도 받으려면 *Betas*를 선택합니다. OpenWinBox는 버튼을 누를 때만 이를 위해 GitHub에 연결합니다.
 
 ## 개인정보 보호
 
@@ -141,7 +141,7 @@ OpenWinBox에는 계정과 자체 분석 기능이 없습니다. 설정은 PC의
 
 ## 제거
 
-1. 트레이 메뉴에서 *Salir*를 선택합니다.
+1. 트레이 메뉴에서 *Exit*를 선택합니다.
 2. **Windows 설정 → 앱 → 설치된 앱**에서 OpenWinBox를 제거합니다. Windows와 함께 시작하는 항목도 함께 제거됩니다.
 3. 선택 사항: 설정까지 지우려면 `%LOCALAPPDATA%\OpenWinBox`를 삭제합니다.
 

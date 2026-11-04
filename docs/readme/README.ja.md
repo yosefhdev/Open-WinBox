@@ -8,7 +8,7 @@
 
 [![ダウンロード](https://img.shields.io/badge/%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89-Windows%20%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%A9%E3%83%BC-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![バージョン](https://img.shields.io/badge/バージョン-1.0.0--beta.2-orange)
+![バージョン](https://img.shields.io/badge/バージョン-1.0.0--beta.3-orange)
 ![プラットフォーム](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![ライセンス](https://img.shields.io/badge/ライセンス-MIT-green)
 
@@ -75,7 +75,7 @@ Windows のデスクトップはファイルが散らかりがちで、海外の
 ## 使い方
 
 > [!TIP]
-> 現在、画面の表示は**スペイン語**です。画面に表示される文言は*斜体*で記載しています。
+> 画面の表示は**英語**と**スペイン語**に対応しています。Windows が他の言語の場合は英語で表示され、*Settings → General → Language* で変更できます。画面に表示される文言は英語の*斜体*で記載しています。
 
 覚えておく操作は 2 つです。**F7** ですべてのウィジェットを表示／非表示にし、**トレイアイコン**を右クリックするとメニューが開きます。
 
@@ -86,9 +86,9 @@ Windows のデスクトップはファイルが散らかりがちで、海外の
 | 操作 | 方法 |
 |---|---|
 | すべてのウィジェットを表示／非表示 | **F7** を押すか、トレイアイコンを左クリックします |
-| 設定を開く | トレイアイコンを右クリック → *Configuración…*、またはアプリをもう一度起動します |
-| 新しいウィジェット | ウィジェットの **+** → *Nuevo widget*、または *Configuración → Widgets de archivos → Nuevo widget* |
-| ウィジェットに新しいタブを追加 | **+** → *Nueva pestaña en este widget* |
+| 設定を開く | トレイアイコンを右クリック → *Settings*、またはアプリをもう一度起動します |
+| 新しいウィジェット | ウィジェットの **+** → *New widget*、または *Settings → File widgets → New widget* |
+| ウィジェットに新しいタブを追加 | **+** → *New tab in this widget* |
 | ファイルを追加 | ファイルやショートカットをウィジェットにドラッグします（**Ctrl** を押しながらドラッグすると、ショートカットを移動せずコピーします） |
 
 </details>
@@ -99,8 +99,8 @@ Windows のデスクトップはファイルが散らかりがちで、海外の
 
 | 操作 | 方法 |
 |---|---|
-| 名前変更、アイコン変更、固定、グループ化 | ウィジェットの **⋯** → *Cambiar nombre*、*Cambiar icono…*、*Bloquear posición*、*Agrupar con…* |
-| 2 つのウィジェットをまとめる | ウィジェットをバーでドラッグし、別のウィジェットのバーの上で *Suelta para unir* が表示されるまで保持してから離します |
+| 名前変更、アイコン変更、固定、グループ化 | ウィジェットの **⋯** → *Rename*、*Change icon…*、*Lock position*、*Group with…* |
+| 2 つのウィジェットをまとめる | ウィジェットをバーでドラッグし、別のウィジェットのバーの上で *Release to merge* が表示されるまで保持してから離します |
 | タブの並べ替えや分離 | タブを左右にドラッグして並べ替えるか、ウィジェットの外へドラッグして独立させます |
 | 機能ウィジェットを移動 | カーソルを合わせ、上部のハンドルをドラッグします |
 
@@ -112,17 +112,17 @@ Windows のデスクトップはファイルが散らかりがちで、海外の
 
 | 操作 | 方法 |
 |---|---|
-| 機能ウィジェットのオン／オフ | *Configuración → Widgets funcionales* |
-| テーマの変更 | *Configuración → Apariencia → Tema* |
-| Windows と同時に起動 | *Configuración → General → Lanzar al inicio*、またはトレイメニューの *Iniciar con Windows* |
+| 機能ウィジェットのオン／オフ | *Settings → Functional widgets* |
+| テーマの変更 | *Settings → Appearance → Theme* |
+| Windows と同時に起動 | *Settings → General → Launch at startup*、またはトレイメニューの *Start with Windows* |
 
 </details>
 
 ## アップデート
 
-*Configuración → Acerca de* を開き、*Buscar actualizaciones* を押します。新しいバージョンがあれば、*Actualizar* でダウンロードとハッシュの確認を行い、設定を保持したままインストールします。アプリは一度閉じてから再び開きます。
+*Settings → About* を開き、*Check for updates* を押します。新しいバージョンがあれば、*Update* でダウンロードとハッシュの確認を行い、設定を保持したままインストールします。アプリは一度閉じてから再び開きます。
 
-*Canal de actualizaciones* で、安定版のみを受け取るには *Oficiales* を、テスト版も受け取るには *Betas* を選択します。OpenWinBox がこのために GitHub に接続するのは、ボタンを押したときだけです。
+*Update channel* で、安定版のみを受け取るには *Official* を、テスト版も受け取るには *Betas* を選択します。OpenWinBox がこのために GitHub に接続するのは、ボタンを押したときだけです。
 
 ## プライバシー
 
@@ -141,7 +141,7 @@ OpenWinBox にはアカウントも独自の分析機能もありません。設
 
 ## アンインストール
 
-1. トレイメニューで *Salir* を選択します。
+1. トレイメニューで *Exit* を選択します。
 2. **Windows の設定 → アプリ → インストールされているアプリ** から OpenWinBox をアンインストールします。Windows と同時に起動する設定も削除されます。
 3. 任意：`%LOCALAPPDATA%\OpenWinBox` を削除すると、設定も消去されます。
 

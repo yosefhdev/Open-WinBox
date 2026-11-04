@@ -21,7 +21,7 @@
         <local:DragHandle x:Name="Handle" Grid.RowSpan="2" Width="72" Height="22" Canvas.ZIndex="5"
                           HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent"
                           Opacity="0" Visibility="Collapsed"
-                          ToolTipService.ToolTip="Arrastrar widget" AutomationProperties.Name="Arrastrar widget">
+                          ToolTipService.ToolTip="{local:T Key=widget.drag}" AutomationProperties.Name="{local:T Key=widget.drag}">
             <local:DragHandle.OpacityTransition>
                 <ScalarTransition Duration="0:0:0.15" />
             </local:DragHandle.OpacityTransition>
@@ -85,8 +85,8 @@
             <StackPanel x:Name="TabsPanel" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center" />
             <!-- Candado si está bloqueado; fuera de DragBar para que muestre su tooltip -->
             <Border x:Name="LockIcon" Grid.Column="1" Background="Transparent" Padding="4,0" VerticalAlignment="Center"
-                    Visibility="Collapsed" ToolTipService.ToolTip="Bloqueado: desbloquéalo desde ⋯ para moverlo"
-                    AutomationProperties.Name="Bloqueado">
+                    Visibility="Collapsed" ToolTipService.ToolTip="{local:T Key=widget.locked.tip}"
+                    AutomationProperties.Name="{local:T Key=widget.locked}">
                 <FontIcon Glyph="&#xE72E;" FontSize="10" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
             </Border>
             <!-- Zona para arrastrar la ventana; las pestañas quedan fuera para recibir clics -->
@@ -97,12 +97,12 @@
             <Button Grid.Column="3"
                     Content="&#xE710;" FontFamily="Segoe Fluent Icons" FontSize="10" Padding="8,6"
                     Background="Transparent" BorderThickness="0"
-                    ToolTipService.ToolTip="Nuevo widget o pestaña" AutomationProperties.Name="Agregar"
+                    ToolTipService.ToolTip="{local:T Key=widget.add.tip}" AutomationProperties.Name="{local:T Key=widget.add}"
                     Click="Add_Click" />
             <Button Grid.Column="4"
                     Content="&#xE712;" FontFamily="Segoe Fluent Icons" FontSize="10" Padding="8,6"
                     Background="Transparent" BorderThickness="0"
-                    ToolTipService.ToolTip="Opciones del widget" AutomationProperties.Name="Opciones"
+                    ToolTipService.ToolTip="{local:T Key=widget.options.tip}" AutomationProperties.Name="{local:T Key=widget.options}"
                     Click="More_Click" />
         </Grid>
 

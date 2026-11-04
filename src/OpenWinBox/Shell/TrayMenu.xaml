@@ -55,7 +55,7 @@
             </Grid>
             <Rectangle Height="1" Margin="4,0,4,4" Fill="{ThemeResource DividerStrokeColorDefaultBrush}" />
 
-            <Button Style="{StaticResource MenuRow}" Click="Toggle_Click" AutomationProperties.Name="Mostrar u ocultar widgets">
+            <Button Style="{StaticResource MenuRow}" Click="Toggle_Click" AutomationProperties.Name="{local:T Key=tray.toggle.name}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -63,7 +63,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <FontIcon Glyph="&#xE890;" Style="{StaticResource MenuIcon}" />
-                    <TextBlock Grid.Column="1" Text="Mostrar / ocultar widgets" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Text="{local:T Key=tray.toggle}" VerticalAlignment="Center" />
                     <!-- Tecla del atajo -->
                     <Border Grid.Column="2" Padding="6,1" CornerRadius="4" VerticalAlignment="Center"
                             BorderThickness="1" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -74,7 +74,7 @@
                 </Grid>
             </Button>
 
-            <Button Style="{StaticResource MenuRow}" Click="Pin_Click" AutomationProperties.Name="Mantener en el escritorio">
+            <Button Style="{StaticResource MenuRow}" Click="Pin_Click" AutomationProperties.Name="{local:T Key=tray.pin}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -82,12 +82,12 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <FontIcon Glyph="&#xE718;" Style="{StaticResource MenuIcon}" />
-                    <TextBlock Grid.Column="1" Text="Mantener en el escritorio" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Text="{local:T Key=tray.pin}" VerticalAlignment="Center" />
                     <Canvas Grid.Column="2" Width="40" Height="20"><ToggleSwitch x:Name="PinSwitch" Style="{StaticResource MenuSwitch}" /></Canvas>
                 </Grid>
             </Button>
 
-            <Button Style="{StaticResource MenuRow}" Click="AutoStart_Click" AutomationProperties.Name="Iniciar con Windows">
+            <Button Style="{StaticResource MenuRow}" Click="AutoStart_Click" AutomationProperties.Name="{local:T Key=tray.autoStart}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -95,21 +95,21 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <FontIcon Glyph="&#xE768;" Style="{StaticResource MenuIcon}" />
-                    <TextBlock Grid.Column="1" Text="Iniciar con Windows" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Text="{local:T Key=tray.autoStart}" VerticalAlignment="Center" />
                     <Canvas Grid.Column="2" Width="40" Height="20"><ToggleSwitch x:Name="AutoStartSwitch" Style="{StaticResource MenuSwitch}" /></Canvas>
                 </Grid>
             </Button>
 
             <Rectangle Height="1" Margin="4" Fill="{ThemeResource DividerStrokeColorDefaultBrush}" />
 
-            <Button Style="{StaticResource MenuRow}" Click="Settings_Click" AutomationProperties.Name="Configuración">
+            <Button Style="{StaticResource MenuRow}" Click="Settings_Click" AutomationProperties.Name="{local:T Key=common.settings}">
                 <StackPanel Orientation="Horizontal">
                     <FontIcon Glyph="&#xE713;" Style="{StaticResource MenuIcon}" />
-                    <TextBlock Text="Configuración" VerticalAlignment="Center" />
+                    <TextBlock Text="{local:T Key=common.settings}" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
 
-            <Button Style="{StaticResource MenuRow}" Click="Exit_Click" AutomationProperties.Name="Salir">
+            <Button Style="{StaticResource MenuRow}" Click="Exit_Click" AutomationProperties.Name="{local:T Key=tray.exit}">
                 <!-- Salir se marca en rojo al pasar el mouse: es la única acción que cierra la app -->
                 <Button.Resources>
                     <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#33E81123" />
@@ -117,7 +117,7 @@
                 </Button.Resources>
                 <StackPanel Orientation="Horizontal">
                     <FontIcon Glyph="&#xE7E8;" Style="{StaticResource MenuIcon}" />
-                    <TextBlock Text="Salir" VerticalAlignment="Center" />
+                    <TextBlock Text="{local:T Key=tray.exit}" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
         </StackPanel>

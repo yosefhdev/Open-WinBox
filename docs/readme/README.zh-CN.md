@@ -8,7 +8,7 @@
 
 [![下载](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-Windows%20%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![版本](https://img.shields.io/badge/版本-1.0.0--beta.2-orange)
+![版本](https://img.shields.io/badge/版本-1.0.0--beta.3-orange)
 ![平台](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![许可证](https://img.shields.io/badge/许可证-MIT-green)
 
@@ -75,7 +75,7 @@ Windows 桌面很容易堆满零散文件，而查看其他地区的时间或切
 ## 使用方法
 
 > [!TIP]
-> 目前界面为**西班牙语**。屏幕上显示的文字在下文中以*斜体*标出。
+> 界面提供**英语**和**西班牙语**。如果 Windows 使用其他语言，界面将显示为英语；可在 *Settings → General → Language* 中更改。屏幕上显示的文字在下文中以*斜体*标出，并使用英语。
 
 只需记住两个操作：**F7** 显示或隐藏所有小组件，右键单击**托盘图标**打开菜单。
 
@@ -86,9 +86,9 @@ Windows 桌面很容易堆满零散文件，而查看其他地区的时间或切
 | 操作 | 方法 |
 |---|---|
 | 显示或隐藏所有小组件 | 按 **F7**，或左键单击托盘图标 |
-| 打开设置 | 右键单击托盘图标 → *Configuración…*，或再次启动应用 |
-| 新建小组件 | 在任意小组件上点击 **+** → *Nuevo widget*，或 *Configuración → Widgets de archivos → Nuevo widget* |
-| 在小组件中新建标签页 | **+** → *Nueva pestaña en este widget* |
+| 打开设置 | 右键单击托盘图标 → *Settings*，或再次启动应用 |
+| 新建小组件 | 在任意小组件上点击 **+** → *New widget*，或 *Settings → File widgets → New widget* |
+| 在小组件中新建标签页 | **+** → *New tab in this widget* |
 | 添加文件 | 将文件或快捷方式拖到小组件上（按住 **Ctrl** 可复制快捷方式而不是移动） |
 
 </details>
@@ -99,8 +99,8 @@ Windows 桌面很容易堆满零散文件，而查看其他地区的时间或切
 
 | 操作 | 方法 |
 |---|---|
-| 重命名、更换图标、锁定、分组 | 小组件上的 **⋯** → *Cambiar nombre*、*Cambiar icono…*、*Bloquear posición*、*Agrupar con…* |
-| 合并两个小组件 | 拖动小组件的标题栏，停在另一个小组件的标题栏上，直到出现 *Suelta para unir*，然后松开 |
+| 重命名、更换图标、锁定、分组 | 小组件上的 **⋯** → *Rename*、*Change icon…*、*Lock position*、*Group with…* |
+| 合并两个小组件 | 拖动小组件的标题栏，停在另一个小组件的标题栏上，直到出现 *Release to merge*，然后松开 |
 | 调整或分离标签页 | 左右拖动标签页可调整顺序，拖出小组件可使其独立 |
 | 移动功能小组件 | 将鼠标悬停在其上，然后拖动顶部的手柄 |
 
@@ -112,17 +112,17 @@ Windows 桌面很容易堆满零散文件，而查看其他地区的时间或切
 
 | 操作 | 方法 |
 |---|---|
-| 开关功能小组件 | *Configuración → Widgets funcionales* |
-| 更改主题 | *Configuración → Apariencia → Tema* |
-| 随 Windows 启动 | *Configuración → General → Lanzar al inicio*，或托盘菜单中的 *Iniciar con Windows* |
+| 开关功能小组件 | *Settings → Functional widgets* |
+| 更改主题 | *Settings → Appearance → Theme* |
+| 随 Windows 启动 | *Settings → General → Launch at startup*，或托盘菜单中的 *Start with Windows* |
 
 </details>
 
 ## 更新
 
-打开 *Configuración → Acerca de* 并点击 *Buscar actualizaciones*。如果有新版本，*Actualizar* 会下载并校验哈希值后安装，同时保留你的设置。应用会短暂关闭，然后重新打开。
+打开 *Settings → About* 并点击 *Check for updates*。如果有新版本，*Update* 会下载并校验哈希值后安装，同时保留你的设置。应用会短暂关闭，然后重新打开。
 
-在 *Canal de actualizaciones* 中，选择 *Oficiales* 只接收稳定版本，或选择 *Betas* 同时接收测试版本。只有在你点击按钮时，OpenWinBox 才会为此连接 GitHub。
+在 *Update channel* 中，选择 *Official* 只接收稳定版本，或选择 *Betas* 同时接收测试版本。只有在你点击按钮时，OpenWinBox 才会为此连接 GitHub。
 
 ## 隐私
 
@@ -141,7 +141,7 @@ OpenWinBox 没有账户，也没有自己的分析统计。你的设置保存在
 
 ## 卸载
 
-1. 在托盘菜单中选择 *Salir*。
+1. 在托盘菜单中选择 *Exit*。
 2. 在 **Windows 设置 → 应用 → 已安装的应用** 中卸载 OpenWinBox。这也会移除其开机启动项。
 3. 可选：删除 `%LOCALAPPDATA%\OpenWinBox` 以同时清除你的设置。
 

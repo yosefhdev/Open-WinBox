@@ -58,6 +58,7 @@ public partial class App : Application
             (_, _) => dispatcher.TryEnqueue(() => OpenSettings()), null, Timeout.Infinite, executeOnlyOnce: false);
 
         Config = AppConfig.Load();
+        Lang.Apply(Config.Language);
         ShellHost.MigrateAutoStart();
         Updater.CleanDownloads();
         var delay = 0;
@@ -151,7 +152,7 @@ public partial class App : Application
     {
         var root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "OpenWinBox", "widgets");
         Directory.CreateDirectory(root);
-        return Directory.CreateDirectory(FileActions.UniquePath(root, "Nuevo widget")).FullName;
+        return Directory.CreateDirectory(FileActions.UniquePath(root, Lang.T("common.newWidget"))).FullName;
     }
 
     public void AddEmptyWidget() => AddWidget(NewEmptyFolder());
@@ -281,12 +282,45 @@ public partial class App : Application
             root.RequestedTheme = Enum.TryParse<ElementTheme>(Current.Config.Theme, out var t) ? t : ElementTheme.Default;
     }
 
+    // Los textos se leen al crear cada ventana: recrearlas aplica el idioma sin reiniciar la app
+    public void SetLanguage(string language)
+    {
+        Config.Language = language;
+        Config.Save();
+        Lang.Apply(language);
+        _shell?.RefreshTip();
+        _trayMenu?.Close();
+        _trayMenu = null;
+        foreach (var (widget, old) in _widgets.ToList())
+        {
+            var hidden = !old.AppWindow.IsVisible; // ocultos con F7: seguir ocultos
+            Reopen(widget);
+            if (hidden) _widgets[widget].AppWindow.Hide();
+        }
+        if (_onboarding is { } onboarding)
+        {
+            _onboarding = null;
+            OpenOnboarding();
+            onboarding.Close();
+        }
+        if (_settings is { } settings)
+        {
+            // Primero la nueva, en el mismo lugar y página, para que no parpadee
+            var (page, position, size) = (settings.CurrentPage, settings.AppWindow.Position, settings.AppWindow.Size);
+            _settings = null;
+            OpenSettings(page);
+            _settings!.AppWindow.MoveAndResize(new RectInt32(position.X, position.Y, size.Width, size.Height));
+            settings.Close();
+        }
+    }
+
     public void OpenSettings(string page = "General")
     {
         if (_settings == null)
         {
-            _settings = new SettingsWindow(page);
-            _settings.Closed += (_, _) => _settings = null;
+            var settings = new SettingsWindow(page);
+            settings.Closed += (_, _) => { if (_settings == settings) _settings = null; };
+            _settings = settings;
         }
         else _settings.ShowPage(page);
         // El hook omite ventanas propias: sin esto los widgets topmost taparían Configuración
@@ -298,8 +332,9 @@ public partial class App : Application
     {
         if (_onboarding == null)
         {
-            _onboarding = new OnboardingWindow();
-            _onboarding.Closed += (_, _) => _onboarding = null;
+            var onboarding = new OnboardingWindow();
+            onboarding.Closed += (_, _) => { if (_onboarding == onboarding) _onboarding = null; };
+            _onboarding = onboarding;
         }
         _onboarding.Activate();
     }

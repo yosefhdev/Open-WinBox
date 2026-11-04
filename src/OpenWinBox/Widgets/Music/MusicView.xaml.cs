@@ -122,7 +122,7 @@ public sealed partial class MusicView : UserControl
         Controls.Visibility = Show(Options.ShowControls && !(SpotifyOnly && session == null));
         if (session == null)
         {
-            TitleText.Text = SpotifyOnly ? "Spotify no está abierto" : "No se está reproduciendo nada";
+            TitleText.Text = SpotifyOnly ? Lang.T("music.spotifyClosed") : Lang.T("music.nothingPlaying");
             ArtistText.Text = StatusText.Text = "";
             Artwork.Source = BackdropImage.Source = null;
             ArtworkPlaceholder.Visibility = Visibility.Visible;
@@ -133,7 +133,7 @@ public sealed partial class MusicView : UserControl
         catch (Exception) { return; } // la app de origen se cerró mientras preguntábamos
         if (session != _session) return;
 
-        TitleText.Text = string.IsNullOrEmpty(props.Title) ? "Sin título" : props.Title;
+        TitleText.Text = string.IsNullOrEmpty(props.Title) ? Lang.T("music.untitled") : props.Title;
         ArtistText.Text = props.Artist;
         if (props.Thumbnail != null)
         {
@@ -159,7 +159,7 @@ public sealed partial class MusicView : UserControl
         // En pausa la posición no cambia: no despertar cada segundo
         if (_playing && IsLoaded) _tick.Start(); else _tick.Stop();
         PlayIcon.Glyph = _playing ? "" : "";
-        StatusText.Text = info == null ? "" : _playing ? "Reproduciendo" : "En pausa";
+        StatusText.Text = info == null ? "" : _playing ? Lang.T("music.playing") : Lang.T("music.paused");
         PreviousButton.IsEnabled = info?.Controls.IsPreviousEnabled == true;
         NextButton.IsEnabled = info?.Controls.IsNextEnabled == true;
         PlayButton.IsEnabled = info != null;
@@ -201,7 +201,7 @@ public sealed partial class MusicView : UserControl
     private void OpenSpotify_Click(object sender, RoutedEventArgs e)
     {
         try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("spotify:") { UseShellExecute = true }); }
-        catch (System.ComponentModel.Win32Exception) { TitleText.Text = "Spotify no está instalado"; }
+        catch (System.ComponentModel.Win32Exception) { TitleText.Text = Lang.T("music.spotifyMissing"); }
     }
 
     private void UpdateTimeline()

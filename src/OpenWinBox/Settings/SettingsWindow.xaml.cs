@@ -17,6 +17,7 @@ public sealed partial class SettingsWindow : Window
     public SettingsWindow(string page)
     {
         InitializeComponent();
+        Title = Lang.T("settings.title");
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(TitleBar);
         AppWindow.Resize(new SizeInt32(1000, 720));
@@ -39,6 +40,11 @@ public sealed partial class SettingsWindow : Window
         LoadFeatureOptions();
 
         AutoStartToggle.IsOn = ShellHost.AutoStart;
+        LanguageCombo.Items.Add(new ComboBoxItem { Content = Lang.T("settings.language.system"), Tag = Lang.FollowWindows });
+        // Cada idioma con su propio nombre: se encuentra aunque la interfaz esté en uno que no se entiende
+        foreach (var (code, name) in Lang.Available) LanguageCombo.Items.Add(new ComboBoxItem { Content = name, Tag = code });
+        LanguageCombo.SelectedItem = LanguageCombo.Items.Cast<ComboBoxItem>().FirstOrDefault(i => (string)i.Tag == _app.Config.Language)
+                                     ?? LanguageCombo.Items[0];
         ThemeCombo.SelectedItem = ThemeCombo.Items.Cast<ComboBoxItem>().FirstOrDefault(i => (string)i.Tag == _app.Config.Theme)
                                   ?? ThemeCombo.Items[0];
         LayerCombo.SelectedIndex = _app.Config.PinToDesktop ? 0 : 1;
@@ -60,6 +66,8 @@ public sealed partial class SettingsWindow : Window
     }
 
     // tag: una sección del menú ("General", "Funcionales"…) o un widget funcional ("Music", "Glance", "Weather")
+    public string CurrentPage { get; private set; } = "General"; // para volver a ella al cambiar de idioma
+
     public void ShowPage(string tag)
     {
         var section = _featurePages.ContainsKey(tag) ? "Funcionales" : tag;
@@ -72,6 +80,7 @@ public sealed partial class SettingsWindow : Window
         if (args.SelectedItem is not NavigationViewItem item) return;
         ShowOnly(_pages[(string)item.Tag]);
         PageTitle.Text = (string)item.Content;
+        CurrentPage = (string)item.Tag;
         SubPageBack.Visibility = Visibility.Collapsed;
     }
 
@@ -88,14 +97,16 @@ public sealed partial class SettingsWindow : Window
     private void OpenFeaturePage(string kind)
     {
         ShowOnly(_featurePages[kind]);
-        PageTitle.Text = $"Widgets funcionales  ›  {WidgetWindow.FeatureTitle(kind)}";
+        PageTitle.Text = $"{Lang.T("settings.nav.featureWidgets")}  ›  {WidgetWindow.FeatureTitle(kind)}";
+        CurrentPage = kind;
         SubPageBack.Visibility = Visibility.Visible;
     }
 
     private void SubPageBack_Click(object sender, RoutedEventArgs e)
     {
         ShowOnly(FuncionalesPage);
-        PageTitle.Text = "Widgets funcionales";
+        PageTitle.Text = Lang.T("settings.nav.featureWidgets");
+        CurrentPage = "Funcionales";
         SubPageBack.Visibility = Visibility.Collapsed;
     }
 
@@ -145,7 +156,7 @@ public sealed partial class SettingsWindow : Window
     // Tarjetas con el widget real en cada estilo (a escala, con lo que está sonando); elegir una cambia el estilo
     private GridView StyleGallery(MusicOptions options, bool spotify)
     {
-        var styles = new[] { ("Standard", "Estándar"), ("Compact", "Compacto"), ("Backdrop", "Carátula de fondo") };
+        var styles = new[] { ("Standard", Lang.T("settings.style.standard")), ("Compact", Lang.T("settings.style.compact")), ("Backdrop", Lang.T("settings.style.backdrop")) };
         var gallery = new GridView { SelectionMode = ListViewSelectionMode.Single };
         foreach (var (id, name) in styles)
         {
@@ -172,7 +183,7 @@ public sealed partial class SettingsWindow : Window
                     new TextBlock { Text = name, HorizontalAlignment = HorizontalAlignment.Center },
                 },
             };
-            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(item, $"Estilo {name}");
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(item, Lang.T("settings.style.name", name));
             gallery.Items.Add(item);
         }
         gallery.SelectedIndex = System.Math.Max(0, System.Array.FindIndex(styles, s => s.Item1 == options.Style));
@@ -211,7 +222,7 @@ public sealed partial class SettingsWindow : Window
     private void UpdateSecondLabelPlaceholder()
     {
         try { SecondLabelBox.PlaceholderText = GlanceView.DefaultLabel(System.TimeZoneInfo.FindSystemTimeZoneById(_app.Config.Glance.SecondTimeZone)); }
-        catch (System.TimeZoneNotFoundException) { SecondLabelBox.PlaceholderText = "Nombre del reloj"; }
+        catch (System.TimeZoneNotFoundException) { SecondLabelBox.PlaceholderText = Lang.T("settings.clockName"); }
     }
 
     private void RefreshWidgetList()
@@ -219,16 +230,16 @@ public sealed partial class SettingsWindow : Window
         WidgetList.Children.Clear();
         foreach (var widget in _app.Config.Widgets.Where(w => w.Folders.Count > 0))
         {
-            var add = new Button { Content = "Agregar carpeta" };
-            ToolTipService.SetToolTip(add, "Agrega otra carpeta a este widget como pestaña");
+            var add = new Button { Content = Lang.T("settings.addFolder") };
+            ToolTipService.SetToolTip(add, Lang.T("settings.addFolder.tip"));
             add.Click += async (_, _) =>
             {
                 if (await App.PickFolderAsync(this) is not { } folder) return;
                 _app.AddFolder(widget, folder);
                 RefreshWidgetList();
             };
-            var remove = new Button { Content = "Quitar" };
-            ToolTipService.SetToolTip(remove, "Quita el widget del escritorio. Tus archivos no se borran.");
+            var remove = new Button { Content = Lang.T("settings.remove") };
+            ToolTipService.SetToolTip(remove, Lang.T("settings.remove.tip"));
             remove.Click += (_, _) =>
             {
                 _app.RemoveWidget(widget);
@@ -246,7 +257,7 @@ public sealed partial class SettingsWindow : Window
         if (WidgetList.Children.Count == 0)
             WidgetList.Children.Add(new TextBlock
             {
-                Text = "Aún no tienes widgets. Crea el primero con «Nuevo widget».",
+                Text = Lang.T("settings.noWidgets"),
                 Style = (Style)Application.Current.Resources["CaptionTextBlockStyle"],
             });
     }
@@ -273,8 +284,8 @@ public sealed partial class SettingsWindow : Window
     {
         var chosen = _app.Config.WeatherLocation;
         WeatherLocationRow.Description = chosen == null
-            ? "Automática: la ubicación de Windows o, si está apagada, una aproximada por tu IP"
-            : $"Elegida: {chosen.Name}";
+            ? Lang.T("settings.location.auto")
+            : Lang.T("settings.location.chosen", chosen.Name);
         AutoLocationButton.IsEnabled = chosen != null;
     }
 
@@ -287,7 +298,7 @@ public sealed partial class SettingsWindow : Window
         try
         {
             using var doc = System.Text.Json.JsonDocument.Parse(await Http.GetStringAsync(
-                $"https://geocoding-api.open-meteo.com/v1/search?name={System.Uri.EscapeDataString(text)}&count=6&language=es"));
+                $"https://geocoding-api.open-meteo.com/v1/search?name={System.Uri.EscapeDataString(text)}&count=6&language={Lang.Culture.TwoLetterISOLanguageName}"));
             if (sender.Text.Trim() != text) return; // ya escribió otra cosa
             var results = new List<WeatherPlace>();
             if (doc.RootElement.TryGetProperty("results", out var list))
@@ -300,12 +311,12 @@ public sealed partial class SettingsWindow : Window
                         r.GetProperty("latitude").GetDouble(), r.GetProperty("longitude").GetDouble()));
                 }
             _cityResults = results;
-            sender.ItemsSource = results.Count > 0 ? results.Select(p => p.Name).ToList() : new List<string> { "Sin resultados" };
+            sender.ItemsSource = results.Count > 0 ? results.Select(p => p.Name).ToList() : new List<string> { Lang.T("settings.citySearch.none") };
         }
         catch (System.Exception e) when (e is System.Net.Http.HttpRequestException or System.Threading.Tasks.TaskCanceledException
                                              or System.Text.Json.JsonException or KeyNotFoundException)
         {
-            sender.ItemsSource = new List<string> { "Sin conexión" };
+            sender.ItemsSource = new List<string> { Lang.T("common.noConnection") };
         }
     }
 
@@ -343,6 +354,13 @@ public sealed partial class SettingsWindow : Window
     private void ThemeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (!_loading && ThemeCombo.SelectedItem is ComboBoxItem { Tag: string theme }) _app.SetTheme(theme);
+    }
+
+    private void LanguageCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        // Esta ventana se recrea al cambiar de idioma: no cerrarla dentro de su propio evento
+        if (!_loading && LanguageCombo.SelectedItem is ComboBoxItem { Tag: string language })
+            DispatcherQueue.TryEnqueue(() => _app.SetLanguage(language));
     }
 
     private void LayerCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -389,25 +407,25 @@ public sealed partial class SettingsWindow : Window
         _update = null;
         UpdateBar.IsOpen = false;
         SetUpdateControlsEnabled(false);
-        UpdateRow.Description = "Buscando actualizaciones…";
+        UpdateRow.Description = Lang.T("settings.updates.checking");
         try
         {
             _update = await Updater.FindUpdateAsync(IncludeBetas, token);
             if (_closed) return;
             if (_update == null)
-                ShowUpdateStatus(InfoBarSeverity.Success, "Estás al día",
-                    $"La versión {Updater.CurrentVersion} es la más reciente del canal {(IncludeBetas ? "Betas" : "Oficiales")}.");
+                ShowUpdateStatus(InfoBarSeverity.Success, Lang.T("settings.updates.upToDate"),
+                    Lang.T("settings.updates.upToDate.message", Updater.CurrentVersion, Lang.T(IncludeBetas ? "settings.updates.betas" : "settings.updates.official")));
             else
             {
                 UpdateNotesLink.NavigateUri = new System.Uri(_update.PageUrl);
-                ShowUpdateStatus(InfoBarSeverity.Informational, $"OpenWinBox {_update.Version} está disponible",
-                    $"Tienes la versión {Updater.CurrentVersion}. Al actualizar, la app se cerrará un momento y volverá a abrirse.", "Actualizar");
+                ShowUpdateStatus(InfoBarSeverity.Informational, Lang.T("settings.updates.available", _update.Version),
+                    Lang.T("settings.updates.available.message", Updater.CurrentVersion), Lang.T("settings.updates.update"));
             }
         }
         catch (System.Exception ex) when (ex is System.Net.Http.HttpRequestException or System.OperationCanceledException or System.Text.Json.JsonException or KeyNotFoundException)
         {
             if (_closed) return;
-            ShowUpdateStatus(InfoBarSeverity.Error, "No se pudo buscar actualizaciones", "Revisa tu conexión a internet e inténtalo de nuevo.");
+            ShowUpdateStatus(InfoBarSeverity.Error, Lang.T("settings.updates.checkFailed"), Lang.T("settings.updates.checkFailed.message"));
         }
         SetUpdateControlsEnabled(true);
         UpdateRow.Description = description;
@@ -426,7 +444,7 @@ public sealed partial class SettingsWindow : Window
         _downloading = true;
         SetUpdateControlsEnabled(false);
         UpdateProgress.Value = 0;
-        ShowUpdateStatus(InfoBarSeverity.Informational, $"Descargando OpenWinBox {update.Version}…", "Puedes seguir usando la app mientras tanto.", "Cancelar");
+        ShowUpdateStatus(InfoBarSeverity.Informational, Lang.T("settings.updates.downloading", update.Version), Lang.T("settings.updates.downloading.message"), Lang.T("settings.updates.cancel"));
         string? setup = null, error = null;
         try
         {
@@ -435,17 +453,17 @@ public sealed partial class SettingsWindow : Window
             return;
         }
         catch (System.OperationCanceledException) when (token.IsCancellationRequested) { }
-        catch (InvalidDataException) { error = "El archivo descargado no coincide con el publicado, así que no se instaló. Inténtalo de nuevo."; }
-        catch (System.ComponentModel.Win32Exception) { error = "Windows no permitió abrir el instalador. Inténtalo de nuevo."; }
+        catch (InvalidDataException) { error = Lang.T("settings.updates.badHash"); }
+        catch (System.ComponentModel.Win32Exception) { error = Lang.T("settings.updates.launchFailed"); }
         catch (System.Exception ex) when (ex is System.Net.Http.HttpRequestException or System.OperationCanceledException or IOException or System.UnauthorizedAccessException)
         {
-            error = "Revisa tu conexión a internet y el espacio en disco, e inténtalo de nuevo.";
+            error = Lang.T("settings.updates.downloadFailed");
         }
         _downloading = false;
         if (_closed) return;
         SetUpdateControlsEnabled(true);
-        if (error != null) ShowUpdateStatus(InfoBarSeverity.Error, "No se pudo actualizar", error, "Reintentar");
-        else ShowUpdateStatus(InfoBarSeverity.Informational, $"OpenWinBox {update.Version} está disponible", "Descarga cancelada.", "Actualizar");
+        if (error != null) ShowUpdateStatus(InfoBarSeverity.Error, Lang.T("settings.updates.failed"), error, Lang.T("settings.updates.retry"));
+        else ShowUpdateStatus(InfoBarSeverity.Informational, Lang.T("settings.updates.available", update.Version), Lang.T("settings.updates.canceled"), Lang.T("settings.updates.update"));
     }
 
     private async void NewWidget_Click(object sender, RoutedEventArgs e)

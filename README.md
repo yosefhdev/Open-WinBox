@@ -9,7 +9,7 @@ Your folders, music, clock, weather and audio controls, right on the desktop.
 
 [![Download](https://img.shields.io/badge/Download-Windows%20installer-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![Version](https://img.shields.io/badge/version-1.0.0--beta.2-orange)
+![Version](https://img.shields.io/badge/version-1.0.0--beta.3-orange)
 ![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -76,7 +76,7 @@ Turn each one on or off separately, and click its row in Settings to see its opt
 ## How to use
 
 > [!TIP]
-> The interface is currently in **Spanish**. The labels you will see on screen are shown in *italics*.
+> The interface is available in **English** and **Spanish**. It follows your Windows language, and you can change it in *Settings → General → Language*. The labels you will see on screen are shown in *italics*.
 
 The two controls to remember are **F7**, which shows or hides all widgets, and the **tray icon**, which opens the menu with a right-click.
 
@@ -87,9 +87,9 @@ The two controls to remember are **F7**, which shows or hides all widgets, and t
 | Action | How |
 |---|---|
 | Show or hide all widgets | Press **F7**, or left-click the tray icon |
-| Open Settings | Right-click the tray icon → *Configuración…*, or launch the app again |
-| New widget | **+** on any widget → *Nuevo widget*, or *Configuración → Widgets de archivos → Nuevo widget* |
-| New tab in a widget | **+** → *Nueva pestaña en este widget* |
+| Open Settings | Right-click the tray icon → *Settings*, or launch the app again |
+| New widget | **+** on any widget → *New widget*, or *Settings → File widgets → New widget* |
+| New tab in a widget | **+** → *New tab in this widget* |
 | Add files | Drag files or shortcuts onto the widget (hold **Ctrl** to copy a shortcut instead of moving it) |
 
 </details>
@@ -100,8 +100,8 @@ The two controls to remember are **F7**, which shows or hides all widgets, and t
 
 | Action | How |
 |---|---|
-| Rename, change icon, lock, group | **⋯** on the widget → *Cambiar nombre*, *Cambiar icono…*, *Bloquear posición*, *Agrupar con…* |
-| Group two widgets | Drag a widget by its bar and hold it over another widget's bar until *Suelta para unir* appears, then release |
+| Rename, change icon, lock, group | **⋯** on the widget → *Rename*, *Change icon…*, *Lock position*, *Group with…* |
+| Group two widgets | Drag a widget by its bar and hold it over another widget's bar until *Release to merge* appears, then release |
 | Reorder or split tabs | Drag a tab sideways to reorder it, or out of the widget to make it independent |
 | Move a functional widget | Hover it and drag the handle at the top |
 
@@ -113,17 +113,17 @@ The two controls to remember are **F7**, which shows or hides all widgets, and t
 
 | Action | How |
 |---|---|
-| Turn functional widgets on or off | *Configuración → Widgets funcionales* |
-| Change the theme | *Configuración → Apariencia → Tema* |
-| Start with Windows | *Configuración → General → Lanzar al inicio*, or *Iniciar con Windows* in the tray menu |
+| Turn functional widgets on or off | *Settings → Functional widgets* |
+| Change the theme | *Settings → Appearance → Theme* |
+| Start with Windows | *Settings → General → Launch at startup*, or *Start with Windows* in the tray menu |
 
 </details>
 
 ## Updates
 
-Open *Configuración → Acerca de* and press *Buscar actualizaciones*. If there's a new version, *Actualizar* downloads it, checks its hash and installs it, keeping your settings. The app closes for a moment and opens again.
+Open *Settings → About* and press *Check for updates*. If there's a new version, *Update* downloads it, checks its hash and installs it, keeping your settings. The app closes for a moment and opens again.
 
-In *Canal de actualizaciones*, choose *Oficiales* for stable releases only, or *Betas* to also get test versions. OpenWinBox only connects to GitHub for this when you press the button.
+In *Update channel*, choose *Official* for stable releases only, or *Betas* to also get test versions. OpenWinBox only connects to GitHub for this when you press the button.
 
 ## Privacy
 
@@ -142,7 +142,7 @@ The Music and Spotify widgets read what Windows reports as playing, so they don'
 
 ## Uninstall
 
-1. Choose *Salir* in the tray menu.
+1. Choose *Exit* in the tray menu.
 2. Uninstall OpenWinBox from **Windows Settings → Apps → Installed apps**. This also removes its start-with-Windows entry.
 3. Optional: delete `%LOCALAPPDATA%\OpenWinBox` to remove your settings too.
 

@@ -2,7 +2,7 @@
     x:Class="OpenWinBox.OnboardingWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="OpenWinBox — Primeros pasos">
+    xmlns:local="using:OpenWinBox">
 
     <Window.SystemBackdrop>
         <MicaBackdrop />
@@ -26,7 +26,7 @@
         <Grid Grid.Column="1" RowDefinitions="48,*,Auto">
             <Grid ColumnDefinitions="Auto,*">
                 <Button x:Name="BackButton" Style="{StaticResource NavigationBackButtonNormalStyle}" Margin="4,0,0,0"
-                        Click="Back_Click" AutomationProperties.Name="Paso anterior" />
+                        Click="Back_Click" AutomationProperties.Name="{local:T Key=onboarding.previous}" />
                 <!-- Zona para arrastrar la ventana; los botones no pueden estar dentro de ella -->
                 <Grid x:Name="DragArea" Grid.Column="1" Background="Transparent" />
             </Grid>
@@ -39,7 +39,7 @@
 
             <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Padding="40,0,32,28">
                 <PipsPager x:Name="Pips" NumberOfPages="4" VerticalAlignment="Center"
-                           SelectedIndexChanged="Pips_SelectedIndexChanged" AutomationProperties.Name="Pasos" />
+                           SelectedIndexChanged="Pips_SelectedIndexChanged" AutomationProperties.Name="{local:T Key=onboarding.steps}" />
                 <Button x:Name="NextButton" Grid.Column="1" MinWidth="140" Style="{StaticResource AccentButtonStyle}"
                         Click="Next_Click" />
             </Grid>
