@@ -18,7 +18,6 @@ $version = ([xml](Get-Content -Raw $project)).Project.PropertyGroup.Version | Wh
 $expected = Get-PackageVersion $version
 $identity = ([xml](Get-Content -Raw $manifest)).Package.Identity
 if ($identity.Version -ne $expected) { throw "Pon Version=`"$expected`" en Package.appxmanifest (la app es $version)" }
-if ($identity.Name -eq 'OpenWinBox.Pending') { Write-Warning 'Name y Publisher del manifiesto siguen sin los valores de Partner Center: la Store rechazará este paquete' }
 
 $out = Join-Path $root 'dist\store'
 if (Test-Path $out) { Remove-Item $out -Recurse -Force }

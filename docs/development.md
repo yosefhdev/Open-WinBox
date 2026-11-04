@@ -122,12 +122,9 @@ Don't change `AppId` in `tools/installer.iss`, because that is how a new version
 
 The Store build is the same app packaged as MSIX. The Store signs it and installs the WinUI runtime. Run `tools/publish-store.ps1`. It creates `dist/store/OpenWinBox_<package version>_x64_Test/OpenWinBox_<package version>_x64.msix`.
 
-Before you run it:
+Before you run it, set `Version` in `src/OpenWinBox/Package.appxmanifest`. The script stops if it doesn't match the app version. Packages use four numbers ending in 0, and each one must be higher than the last: `1.0.0-beta.N` becomes `1.0.N.0`, and a final `X.Y.Z` becomes `X.(Y+1).Z.0`.
 
-1. Set `Version` in `src/OpenWinBox/Package.appxmanifest`. The script stops if it doesn't match the app version. Packages use four numbers ending in 0, and each one must be higher than the last: `1.0.0-beta.N` becomes `1.0.N.0`, and a final `X.Y.Z` becomes `X.(Y+1).Z.0`.
-2. For an upload, replace `Name` and `Publisher` in that file with the values under *Product identity* in Partner Center. The Store rejects the placeholders.
-
-To try it without uploading, turn on Developer Mode, unpack the `.msix` with `makeappx unpack`, and run `Add-AppxPackage -Register <folder>\AppxManifest.xml`. Remove it with `Get-AppxPackage OpenWinBox.Pending | Remove-AppxPackage`. A packaged copy reads your existing `%LOCALAPPDATA%\OpenWinBox\config.json`, so back it up first.
+To try it without uploading, turn on Developer Mode, unpack the `.msix` with `makeappx unpack`, and run `Add-AppxPackage -Register <folder>\AppxManifest.xml`. Remove it with `Get-AppxPackage yosefhdev.OpenWinBox | Remove-AppxPackage`. A packaged copy reads your existing `%LOCALAPPDATA%\OpenWinBox\config.json`, so back it up first.
 
 The app detects the package at runtime with `ShellHost.IsPackaged`, and it changes four things:
 

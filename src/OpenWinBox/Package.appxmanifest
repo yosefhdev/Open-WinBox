@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Solo para el paquete de Microsoft Store. Name y Publisher salen de Partner Center; ver docs/development.md -->
+<!-- Solo para el paquete de Microsoft Store. Name, Publisher y PublisherDisplayName salen de Partner Center -->
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
@@ -7,11 +7,11 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap desktop rescap">
 
-  <Identity Name="OpenWinBox.Pending" Publisher="CN=00000000-0000-0000-0000-000000000000" Version="1.0.3.0" ProcessorArchitecture="x64" />
+  <Identity Name="yosefhdev.OpenWinBox" Publisher="CN=9EE06219-506F-458E-9E3A-5278814A5A2E" Version="1.0.3.0" ProcessorArchitecture="x64" />
 
   <Properties>
     <DisplayName>OpenWinBox</DisplayName>
-    <PublisherDisplayName>Yosefh</PublisherDisplayName>
+    <PublisherDisplayName>yosefhdev</PublisherDisplayName>
     <Logo>Assets\Store\StoreLogo.png</Logo>
   </Properties>
 
