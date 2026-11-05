@@ -197,10 +197,10 @@ if ($null -eq $identity) {
     Add-AuditFailure "The package identity is missing."
 }
 else {
-    if ($identity.Name -ne "D1FC332A.DeskBoxWidgets") {
+    if ($identity.Name -ne "yosefhdev.OpenWinBox") {
         Add-AuditFailure "Unexpected package identity name '$($identity.Name)'."
     }
-    if ($identity.Publisher -ne "CN=3B75AA4A-2433-4F71-9CC1-B644B26F474A") {
+    if ($identity.Publisher -ne "CN=9EE06219-506F-458E-9E3A-5278814A5A2E") {
         Add-AuditFailure "Unexpected package publisher '$($identity.Publisher)'."
     }
     if ($identity.ProcessorArchitecture -ine $platformSegment) {
@@ -234,9 +234,9 @@ foreach ($missingFile in $missingRequiredFiles) {
 }
 
 $forbiddenPatterns = @(
-    '(^|/)DeskBox\.dll$',
-    '(^|/)DeskBox\.deps\.json$',
-    '(^|/)DeskBox\.runtimeconfig\.json$',
+    '(^|/)OpenWinBox\.dll$',
+    '(^|/)OpenWinBox\.deps\.json$',
+    '(^|/)OpenWinBox\.runtimeconfig\.json$',
     '(^|/)DeskBox\.Updater(?:\.|/|$)',
     '(^|/)deskbox_search_core(?:\.|$)',
     '\.pdb$',

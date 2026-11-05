@@ -418,7 +418,7 @@
     <ItemGroup>
       <PackagingOutputs
         Remove="@(PackagingOutputs)"
-        Condition="'%(PackagingOutputs.TargetPath)' == 'DeskBox.deps.json' or '%(PackagingOutputs.TargetPath)' == 'DeskBox.runtimeconfig.json'" />
+        Condition="'%(PackagingOutputs.TargetPath)' == '$(AssemblyName).deps.json' or '%(PackagingOutputs.TargetPath)' == '$(AssemblyName).runtimeconfig.json'" />
       <AppxPackagePayload Include="$(DeskBoxRustNativeDll)">
         <TargetPath>deskbox_native.dll</TargetPath>
       </AppxPackagePayload>
