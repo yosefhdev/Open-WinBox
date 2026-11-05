@@ -6,7 +6,7 @@ namespace DeskBox.Tests;
 public sealed class WidgetContentFactoryTests
 {
     [Theory]
-    [InlineData(WidgetKind.File, "DeskBox", WidgetContentStage.Implemented, true, WidgetContentAvailability.Available)]
+    [InlineData(WidgetKind.File, "OpenWinBox", WidgetContentStage.Implemented, true, WidgetContentAvailability.Available)]
     [InlineData(WidgetKind.QuickCapture, "Quick Capture", WidgetContentStage.Implemented, false, WidgetContentAvailability.Available)]
     [InlineData(WidgetKind.Weather, "Weather", WidgetContentStage.Implemented, false, WidgetContentAvailability.Available)]
     [InlineData(WidgetKind.Todo, "Todo", WidgetContentStage.Implemented, false, WidgetContentAvailability.Available)]
@@ -53,7 +53,8 @@ public sealed class WidgetContentFactoryTests
             WidgetKind.Tags,
             WidgetKind.SystemMonitor,
             WidgetKind.Search,
-            WidgetKind.Glance
+            WidgetKind.Glance,
+            WidgetKind.Audio
         ], descriptors.Select(descriptor => descriptor.WidgetKind));
     }
 
@@ -122,7 +123,8 @@ public sealed class WidgetContentFactoryTests
             WidgetKind.Music,
             WidgetKind.Weather,
             WidgetKind.Search,
-            WidgetKind.Glance
+            WidgetKind.Glance,
+            WidgetKind.Audio
         ], descriptors.Select(descriptor => descriptor.WidgetKind));
         Assert.DoesNotContain(descriptors, descriptor => descriptor.WidgetKind == WidgetKind.File);
         Assert.DoesNotContain(descriptors, descriptor => descriptor.IsPlanned);

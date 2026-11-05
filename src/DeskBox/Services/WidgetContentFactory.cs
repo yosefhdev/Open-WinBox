@@ -27,7 +27,7 @@ public sealed class WidgetContentFactory
     [
         new(
             WidgetKind.File,
-            "DeskBox",
+            "OpenWinBox",
             "\uE8A5",
             WidgetContentStage.Implemented,
             CanShowInCreateEntry: true,
@@ -134,7 +134,17 @@ public sealed class WidgetContentFactory
             IsFeatureWidget: true,
             SettingsSectionTag: "GlanceSettings",
             ChromeCategory: WidgetChromeCategory.Display,
-            DefaultChromeMode: WidgetChromeMode.Overlay)
+            DefaultChromeMode: WidgetChromeMode.Overlay),
+        new(
+            WidgetKind.Audio,
+            "Audio",
+            "E767",
+            WidgetContentStage.Implemented,
+            CanShowInCreateEntry: false,
+            WidgetContentAvailability.Available,
+            "WidgetContent.Audio.StatusLabel",
+            "WidgetContent.Audio.StatusDescription",
+            IsFeatureWidget: true)
     ];
 
     private static readonly IReadOnlyDictionary<WidgetKind, WidgetContentDescriptor> Descriptors =
@@ -276,6 +286,7 @@ public sealed class WidgetContentFactory
             new MusicWidgetContentProvider(),
             new WeatherWidgetContentProvider(),
             new GlanceWidgetContentProvider(),
+            new AudioWidgetContentProvider(),
             new SearchWidgetContentProvider(),
             new PlaceholderWidgetContentProvider(WidgetKind.Tags),
             new PlaceholderWidgetContentProvider(WidgetKind.SystemMonitor)

@@ -15,7 +15,7 @@ public sealed class CloudBackupSettingsSlice
     public string CloudBackupServerUrl { get; set; } = string.Empty;
 
     /// <summary>Remote directory for snapshots, relative to the server base.</summary>
-    public string CloudBackupRemotePath { get; set; } = "DeskBox/backups";
+    public string CloudBackupRemotePath { get; set; } = "OpenWinBox/backups";
 
     /// <summary>Account name; pairs with the vault-stored secret. Non-secret itself.</summary>
     public string CloudBackupUsername { get; set; } = string.Empty;

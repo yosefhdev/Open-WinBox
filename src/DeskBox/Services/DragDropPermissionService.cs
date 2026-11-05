@@ -159,7 +159,7 @@ public static class DragDropPermissionService
 {
     private const string AppCompatLayersKey = @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers";
     private const string UacPolicyKey = @"Software\Microsoft\Windows\CurrentVersion\Policies\System";
-    private const string AppName = "DeskBox";
+    private const string AppName = "OpenWinBox";
     private const uint TokenQuery = 0x0008;
     private const uint ProcessQueryLimitedInformation = 0x1000;
     private const int SecurityMandatoryLowRid = 0x1000;
@@ -311,7 +311,7 @@ public static class DragDropPermissionService
             issue,
             summary,
             detail,
-            FormatProcessToken("DeskBox", currentToken, localizationService),
+            FormatProcessToken("OpenWinBox", currentToken, localizationService),
             FormatProcessToken("Explorer", explorerToken, localizationService),
             FormatUacPolicy(uacPolicy, localizationService),
             FormatAppCompatStatus(appCompatEntries, localizationService),
@@ -713,7 +713,7 @@ public static class DragDropPermissionService
     private static string GetCurrentExePath()
     {
         return Environment.ProcessPath
-            ?? Path.Combine(AppContext.BaseDirectory, "DeskBox.exe");
+            ?? Path.Combine(AppContext.BaseDirectory, "OpenWinBox.exe");
     }
 
     private static bool IsStartupValueSuspicious(string? startupValue, string currentExePath)
@@ -763,19 +763,19 @@ public static class DragDropPermissionService
         // the HKCU Run value used to be absorbed here, but any same-user
         // process can rewrite it, which would make an elevated instance
         // delete arbitrary HKLM AppCompat layers; and the historical
-        // any-directory "DeskBox.exe" filename fallback matched third-party
+        // any-directory "OpenWinBox.exe" filename fallback matched third-party
         // exes with the same name. Custom install directories keep their
         // stale layers (Repair reports them as unrelated); clearing those is
         // the user's call, not a guessable side effect.
         var paths = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             currentExePath,
-            Path.Combine(AppContext.BaseDirectory, "DeskBox.exe"),
+            Path.Combine(AppContext.BaseDirectory, "OpenWinBox.exe"),
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Programs",
-                "DeskBox",
-                "DeskBox.exe")
+                "OpenWinBox",
+                "OpenWinBox.exe")
         };
 
         var entries = new List<AppCompatEntry>();
@@ -1269,13 +1269,13 @@ public static class DragDropPermissionService
             IntPtr currentProcess = DragDropPermissionNativeMethods.GetCurrentProcess();
             return CreateProcessTokenSnapshot(
                 Environment.ProcessId,
-                "DeskBox",
+                "OpenWinBox",
                 principal.IsInRole(WindowsBuiltInRole.Administrator),
                 currentProcess);
         }
         catch (Exception ex)
         {
-            return ProcessTokenSnapshot.Unknown(Environment.ProcessId, "DeskBox", ex.Message);
+            return ProcessTokenSnapshot.Unknown(Environment.ProcessId, "OpenWinBox", ex.Message);
         }
     }
 

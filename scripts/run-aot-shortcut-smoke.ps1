@@ -101,7 +101,7 @@ function Stop-ExactPreviewProcess {
         [string]$ExecutablePath
     )
 
-    @(Get-CimInstance Win32_Process -Filter "Name='DeskBox.exe'") |
+    @(Get-CimInstance Win32_Process -Filter "Name='OpenWinBox.exe'") |
         Where-Object {
             -not [string]::IsNullOrWhiteSpace($_.ExecutablePath) -and
             (Test-PathEqual -Left $_.ExecutablePath -Right $ExecutablePath)

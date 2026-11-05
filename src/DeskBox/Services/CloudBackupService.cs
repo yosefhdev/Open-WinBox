@@ -15,7 +15,7 @@ namespace DeskBox.Services;
 /// </summary>
 internal sealed class CloudBackupService
 {
-    internal const string SnapshotFilePrefix = "DeskBox-CloudBackup-";
+    internal const string SnapshotFilePrefix = "OpenWinBox-CloudBackup-";
     internal const string SnapshotFileExtension = ".zip";
 
     private readonly DeskBoxDataBackupService _backupService;

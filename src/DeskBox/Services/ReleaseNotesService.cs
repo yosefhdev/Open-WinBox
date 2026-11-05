@@ -172,9 +172,8 @@ public sealed class ReleaseNotesService
     /// </summary>
     public static readonly IReadOnlyList<string> KnownReleaseVersions =
     [
-        "1.5.9", "1.5.8", "1.5.7", "1.5.6", "1.5.5", "1.5.4", "1.5.3", "1.5.2",
-        "1.5.1", "1.5.0", "1.4.9", "1.4.8", "1.4.7", "1.4.6", "1.4.3", "1.4.2",
-        "1.4.1", "1.4.0",
+        // OpenWinBox releases only: notes resolve through this repository's GitHub tags.
+        "1.0.0-beta.4",
     ];
 
     internal static Uri GetContentSourceUri(string releaseNotesUrl)
@@ -330,7 +329,7 @@ public sealed class ReleaseNotesService
         {
             Timeout = TimeSpan.FromSeconds(10)
         };
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("DeskBox-ReleaseNotes/1.0");
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("OpenWinBox-ReleaseNotes/1.0");
         return client;
     }
 

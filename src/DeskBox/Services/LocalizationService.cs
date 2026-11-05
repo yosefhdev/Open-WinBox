@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿﻿using System.Globalization;
 using System.Reflection;
 using Microsoft.Win32;
 using System.Text.Json;
@@ -293,7 +293,7 @@ public sealed class LocalizationService
     /// Resolves the default language used when the user has not explicitly
     /// picked one in the app. Honors the language chosen at install time
     /// (the Inno Setup installer writes it to
-    /// HKCU\Software\DeskBox\InstallLanguage), falling back to the OS UI
+    /// HKCU\Software\OpenWinBox\InstallLanguage), falling back to the OS UI
     /// culture when that value is absent or unrecognized.
     /// </summary>
     private static string ResolveDefaultLanguage()
@@ -301,7 +301,7 @@ public sealed class LocalizationService
         try
         {
             var value = Registry.GetValue(
-                @"HKEY_CURRENT_USER\Software\DeskBox",
+                @"HKEY_CURRENT_USER\Software\OpenWinBox",
                 "InstallLanguage",
                 null) as string;
             if (!string.IsNullOrWhiteSpace(value)

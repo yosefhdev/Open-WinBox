@@ -22,11 +22,11 @@ public sealed class FullInstallerUpgradeContractTests : IDisposable
 
         File.WriteAllLines(
             currentManifest,
-            ["DeskBox.exe", "DeskBox.InstallManifest.txt", "KEEP.dll"]);
+            ["OpenWinBox.exe", "DeskBox.InstallManifest.txt", "KEEP.dll"]);
         File.WriteAllLines(
             previousManifest,
             [
-                "DeskBox.exe",
+                "OpenWinBox.exe",
                 "DeskBox.InstallManifest.txt",
                 "keep.dll",
                 "stale.dll",
@@ -63,7 +63,7 @@ public sealed class FullInstallerUpgradeContractTests : IDisposable
         File.WriteAllLines(
             currentManifest,
             [
-                "DeskBox.exe",
+                "OpenWinBox.exe",
                 "DeskBox.InstallManifest.txt",
                 "Microsoft.UI.Input.dll"
             ]);
@@ -92,7 +92,7 @@ public sealed class FullInstallerUpgradeContractTests : IDisposable
         string currentManifest = Path.Combine(_tempRoot, "invalid-current-manifest.txt");
         string staleRuntimeFile = WriteFile(Path.Combine(installRoot, "coreclr.dll"));
 
-        File.WriteAllLines(currentManifest, ["DeskBox.exe"]);
+        File.WriteAllLines(currentManifest, ["OpenWinBox.exe"]);
 
         CleanupResult result = await RunCleanupAsync(
             installRoot,
@@ -110,7 +110,7 @@ public sealed class FullInstallerUpgradeContractTests : IDisposable
     private string CreateInstallRoot(string name)
     {
         string installRoot = Directory.CreateDirectory(Path.Combine(_tempRoot, name)).FullName;
-        WriteFile(Path.Combine(installRoot, "DeskBox.exe"));
+        WriteFile(Path.Combine(installRoot, "OpenWinBox.exe"));
         return installRoot;
     }
 

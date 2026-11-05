@@ -70,7 +70,7 @@ internal sealed class DisplayIdentifyOverlayWindow
         };
         _window = new Window
         {
-            Title = "DeskBox Display Identify",
+            Title = "OpenWinBox Display Identify",
             Content = root
         };
 

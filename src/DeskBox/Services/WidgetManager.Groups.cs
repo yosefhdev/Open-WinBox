@@ -699,6 +699,7 @@ public sealed partial class WidgetManager
             WidgetKind.Music => "Music.Title",
             WidgetKind.Search => "Search.Title",
             WidgetKind.Glance => "Glance.Title",
+            WidgetKind.Audio => "Audio.Title",
             WidgetKind.Tags => "Tags.Title",
             WidgetKind.SystemMonitor => "SystemMonitor.Title",
             _ => null

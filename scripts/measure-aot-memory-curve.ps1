@@ -9,7 +9,7 @@
     # -Attach 模式不启动新进程，采样已运行的实验实例
 #>
 param(
-    [string]$ExePath = "D:\project\wingezi\src\DeskBox\bin\x64\Release\net10.0-windows10.0.22621.0\win-x64\publish\DeskBox.exe",
+    [string]$ExePath = "D:\project\wingezi\src\DeskBox\bin\x64\Release\net10.0-windows10.0.22621.0\win-x64\publish\OpenWinBox.exe",
     [string]$DataRoot = "$env:LOCALAPPDATA\DeskBox-AotCurve",
     [string]$CsvPath = "D:\project\wingezi\deskbox-aot-curve-samples.csv",
     [string]$Phase = "phase",

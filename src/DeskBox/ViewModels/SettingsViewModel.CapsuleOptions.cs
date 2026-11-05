@@ -243,6 +243,7 @@ public partial class SettingsViewModel
         WidgetKind.QuickCapture => _localizationService.T("WidgetTitleIcon.Label.QuickCapture"),
         WidgetKind.Todo => _localizationService.T("WidgetTitleIcon.Label.Todo"),
         WidgetKind.Music => _localizationService.T("WidgetTitleIcon.Label.Music"),
+        WidgetKind.Audio => _localizationService.T("WidgetTitleIcon.Label.Audio"),
         WidgetKind.Weather => _localizationService.T("WidgetTitleIcon.Label.Weather"),
         WidgetKind.Tags => _localizationService.T("WidgetTitleIcon.Label.Tags"),
         WidgetKind.SystemMonitor => _localizationService.T("WidgetTitleIcon.Label.SystemMonitor"),

@@ -126,6 +126,8 @@ public sealed class GlanceWidgetData
     public bool ShowWeekday { get; set; } = true;
     public bool ShowCalendar { get; set; }
     public GlanceTimeFormatMode TimeFormat { get; set; } = GlanceTimeFormatMode.FollowSystem;
+    // OpenWinBox: TimeZoneInfo id of an optional second clock; empty = off.
+    public string SecondTimeZoneId { get; set; } = string.Empty;
     public GlanceLayoutMode Layout { get; set; } = GlanceLayoutMode.Centered;
     public GlanceBackgroundSource BackgroundSource { get; set; } = GlanceBackgroundSource.Bing;
     public GlanceOnlineImageCategory OnlineImageCategory { get; set; } =

@@ -15,7 +15,7 @@ public sealed class DeskBoxDataPathService
     {
         string productionRoot = Path.GetFullPath(Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "DeskBox"));
+            "OpenWinBox"));
         RootPath = string.IsNullOrWhiteSpace(rootPath)
             ? productionRoot
             : Path.GetFullPath(rootPath.Trim());
@@ -27,14 +27,14 @@ public sealed class DeskBoxDataPathService
             ? CreateInstanceScope(RootPath)
             : ProductionInstanceScope;
         SettingsIpcPipeName =
-            $"DeskBox_Settings_Ipc_{InstanceScope}_S{System.Diagnostics.Process.GetCurrentProcess().SessionId}";
+            $"OpenWinBox_Settings_Ipc_{InstanceScope}_S{System.Diagnostics.Process.GetCurrentProcess().SessionId}";
     }
 
     public string RootPath { get; }
     public bool IsDevelopmentRoot { get; }
     public string InstanceScope { get; }
-    public string ActivationEventName => $"DeskBox_Activate_Event_{InstanceScope}";
-    public string SingleInstanceMutexName => $"DeskBox_SingleInstance_Mutex_{InstanceScope}";
+    public string ActivationEventName => $"OpenWinBox_Activate_Event_{InstanceScope}";
+    public string SingleInstanceMutexName => $"OpenWinBox_SingleInstance_Mutex_{InstanceScope}";
     /// <summary>Duplex pipe carrying settings-host IPC (batch 3b of the
     /// settings-process split); same user only, per instance scope.
     /// Named pipes live in a MACHINE-GLOBAL namespace (unlike the mutex and
@@ -63,8 +63,8 @@ public sealed class DeskBoxDataPathService
         ? $"{RootPath}-Recovery"
         : Path.Combine(
             Path.GetDirectoryName(RootPath) ?? RootPath,
-            "DeskBox-Recovery");
-    public string LogFilePath => Path.Combine(RootPath, "DeskBox.log");
+            "OpenWinBox-Recovery");
+    public string LogFilePath => Path.Combine(RootPath, "OpenWinBox.log");
 
     /// <summary>
     /// The settings-host process's own log (batch 3c-3b): same directory and

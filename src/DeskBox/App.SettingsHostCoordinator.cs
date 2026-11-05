@@ -216,7 +216,7 @@ public partial class App
         try
         {
             string exePath = Environment.ProcessPath ??
-                Path.Combine(AppContext.BaseDirectory, "DeskBox.exe");
+                Path.Combine(AppContext.BaseDirectory, "OpenWinBox.exe");
             var startInfo = new ProcessStartInfo(exePath)
             {
                 UseShellExecute = false,

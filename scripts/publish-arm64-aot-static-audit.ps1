@@ -343,10 +343,10 @@ else {
 }
 
 $requiredFiles = @(
-    "DeskBox.exe",
+    "OpenWinBox.exe",
     "DeskBox.Updater.exe",
     "DeskBox.ThumbnailProxy.exe",
-    "DeskBox.pri",
+    "OpenWinBox.pri",
     "deskbox_native.dll"
 )
 foreach ($requiredFile in $requiredFiles) {
@@ -392,7 +392,7 @@ foreach ($pdb in $pdbFiles) {
 }
 $symbolFiles = @(Get-ChildItem -LiteralPath $symbolsDir -Filter "*.pdb" -File -Recurse)
 foreach ($requiredSymbol in @(
-        "DeskBox.pdb",
+        "OpenWinBox.pdb",
         "DeskBox.Updater.pdb",
         "DeskBox.ThumbnailProxy.pdb",
         "deskbox_native.pdb")) {
@@ -408,7 +408,7 @@ $forbiddenNames = @(
     "hostfxr.dll",
     "hostpolicy.dll",
     "System.Private.CoreLib.dll",
-    "DeskBox.dll",
+    "OpenWinBox.dll",
     "DeskBox.deps.json",
     "DeskBox.runtimeconfig.json",
     "DeskBox.Updater.dll",
@@ -425,7 +425,7 @@ if (@($publishedFiles | Where-Object Extension -eq ".pdb").Count -gt 0) {
 
 $peResults = @(
     foreach ($fileName in @(
-            "DeskBox.exe",
+            "OpenWinBox.exe",
             "DeskBox.Updater.exe",
             "DeskBox.ThumbnailProxy.exe",
             "deskbox_native.dll")) {

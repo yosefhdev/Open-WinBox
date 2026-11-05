@@ -32,7 +32,7 @@ public sealed partial class FileService
             maxConcurrency: 4,
             maxQueued: 8,
             queueTimeout: TimeSpan.FromSeconds(10),
-            threadName: "DeskBox Windows File Operation",
+            threadName: "OpenWinBox Windows File Operation",
             coInitializationFlags: (int)CoInitApartmentThreaded);
 
     /// <summary>

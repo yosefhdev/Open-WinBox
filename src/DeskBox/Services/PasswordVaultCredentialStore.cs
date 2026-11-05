@@ -10,7 +10,7 @@ namespace DeskBox.Services;
 /// </summary>
 internal sealed class PasswordVaultCredentialStore : ICredentialStore
 {
-    private const string Resource = "DeskBox/CloudBackup";
+    private const string Resource = "OpenWinBox/CloudBackup";
 
     public Task<string?> GetSecretAsync(string key, CancellationToken cancellationToken = default)
     {

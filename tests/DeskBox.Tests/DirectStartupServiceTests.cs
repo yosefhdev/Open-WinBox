@@ -6,7 +6,7 @@ namespace DeskBox.Tests;
 public sealed class DirectStartupServiceTests
 {
     private const string ExecutablePath =
-        @"C:\Program Files\DeskBox\DeskBox.exe";
+        @"C:\Program Files\DeskBox\OpenWinBox.exe";
 
     [Fact]
     public void TaskXml_UsesImmediateInteractiveLeastPrivilegeContract()
@@ -233,7 +233,7 @@ public sealed class DirectStartupServiceTests
         var backend = new FakeTaskBackend();
         var run = new FakeRunEntryStore
         {
-            Value = $"\"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"), "DeskBox.exe")}\" --startup"
+            Value = $"\"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"), "OpenWinBox.exe")}\" --startup"
         };
         Assert.True(CreateService(backend, run).Enable().IsEnabled);
         Assert.NotNull(backend.Registration);

@@ -37,6 +37,7 @@ public sealed partial class GlanceWidgetViewModel : ObservableObject, IDisposabl
     private string _timeText = string.Empty;
     private string _dateText = string.Empty;
     private string _compactCalendarDateText = string.Empty;
+    private string _secondClockText = string.Empty;
     private string _weekdayText = string.Empty;
     private string _traditionalCalendarTitle = string.Empty;
     private string _statusText = string.Empty;
@@ -104,6 +105,8 @@ public sealed partial class GlanceWidgetViewModel : ObservableObject, IDisposabl
     public GlanceWidgetData Settings => _settings;
     public string TimeText { get => _timeText; private set => SetProperty(ref _timeText, value); }
     public string DateText { get => _dateText; private set => SetProperty(ref _dateText, value); }
+    public string SecondClockText { get => _secondClockText; private set { if (SetProperty(ref _secondClockText, value)) OnPropertyChanged(nameof(HasSecondClock)); } }
+    public bool HasSecondClock => _secondClockText.Length > 0;
     public string CompactCalendarDateText { get => _compactCalendarDateText; private set => SetProperty(ref _compactCalendarDateText, value); }
     public string WeekdayText { get => _weekdayText; private set => SetProperty(ref _weekdayText, value); }
     public string TraditionalCalendarTitle
@@ -769,6 +772,41 @@ public sealed partial class GlanceWidgetViewModel : ObservableObject, IDisposabl
         DateText = FormatDateText(now, culture, _settings.ShowYear);
         CompactCalendarDateText = FormatCompactCalendarDateText(now, culture);
         WeekdayText = now.ToString("dddd", culture);
+        SecondClockText = FormatSecondClockText(now, culture);
+    }
+
+    // OpenWinBox second clock: "City 14:30" for the zone chosen in settings, empty when off or the zone is gone.
+    private string FormatSecondClockText(DateTime now, CultureInfo culture)
+    {
+        if (string.IsNullOrWhiteSpace(_settings.SecondTimeZoneId))
+        {
+            return string.Empty;
+        }
+
+        try
+        {
+            var zone = TimeZoneInfo.FindSystemTimeZoneById(_settings.SecondTimeZoneId);
+            DateTime there = TimeZoneInfo.ConvertTime(now, zone);
+            return $"{CityOf(zone)} {FormatTimeText(there, _settings.TimeFormat, culture)}";
+        }
+        catch (Exception ex) when (ex is TimeZoneNotFoundException or InvalidTimeZoneException)
+        {
+            return string.Empty;
+        }
+    }
+
+    // "(UTC+09:00) Osaka, Sapporo, Tokyo" -> "Osaka"
+    internal static string CityOf(TimeZoneInfo zone)
+    {
+        string name = zone.DisplayName;
+        int start = name.IndexOf(") ", StringComparison.Ordinal);
+        if (start >= 0)
+        {
+            name = name[(start + 2)..];
+        }
+
+        int comma = name.IndexOf(',');
+        return comma > 0 ? name[..comma] : name;
     }
 
     internal static string FormatTimeText(

@@ -207,8 +207,8 @@ else {
         Add-AuditFailure "Package architecture '$($identity.ProcessorArchitecture)' does not match '$platformSegment'."
     }
 }
-if ($null -eq $application -or $application.Executable -ne "DeskBox.exe") {
-    Add-AuditFailure "The package application does not target DeskBox.exe."
+if ($null -eq $application -or $application.Executable -ne "OpenWinBox.exe") {
+    Add-AuditFailure "The package application does not target OpenWinBox.exe."
 }
 if ($null -eq $frameworkDependency -or
     [version]$frameworkDependency.MinVersion -lt [version]"2.5.1.0") {
@@ -216,7 +216,7 @@ if ($null -eq $frameworkDependency -or
 }
 
 $requiredFiles = @(
-    "DeskBox.exe",
+    "OpenWinBox.exe",
     "DeskBox.ThumbnailProxy.exe",
     "deskbox_native.dll",
     "EverythingSdk.dll",
@@ -262,7 +262,7 @@ foreach ($forbiddenFile in $forbiddenFiles) {
     Add-AuditFailure "Forbidden Store AOT payload is present: '$forbiddenFile'."
 }
 
-$deskBoxExePath = Join-Path $layoutDirectory "DeskBox.exe"
+$deskBoxExePath = Join-Path $layoutDirectory "OpenWinBox.exe"
 $thumbnailProxyPath = Join-Path $layoutDirectory "DeskBox.ThumbnailProxy.exe"
 $nativeDllPath = Join-Path $layoutDirectory "deskbox_native.dll"
 $everythingSdkPath = Join-Path $layoutDirectory "EverythingSdk.dll"
@@ -272,13 +272,13 @@ $nativeContract = $null
 if (Test-Path -LiteralPath $deskBoxExePath -PathType Leaf) {
     $deskBoxPe = Get-PeFacts -Path $deskBoxExePath
     if ($deskBoxPe.Machine -ne $expectedMachine) {
-        Add-AuditFailure "DeskBox.exe machine '$($deskBoxPe.MachineHex)' does not match $ExpectedPlatform."
+        Add-AuditFailure "OpenWinBox.exe machine '$($deskBoxPe.MachineHex)' does not match $ExpectedPlatform."
     }
     if ($deskBoxPe.HasClrHeader) {
-        Add-AuditFailure "DeskBox.exe still contains a CLR header instead of a Native AOT image."
+        Add-AuditFailure "OpenWinBox.exe still contains a CLR header instead of a Native AOT image."
     }
     if ($deskBoxPe.Length -lt 10MB) {
-        Add-AuditFailure "DeskBox.exe is unexpectedly small for the current Native AOT product image."
+        Add-AuditFailure "OpenWinBox.exe is unexpectedly small for the current Native AOT product image."
     }
 }
 
@@ -332,7 +332,7 @@ if (Test-Path -LiteralPath $nativeDllPath -PathType Leaf) {
 $publishHashMatch = $null
 if (-not [string]::IsNullOrWhiteSpace($ExpectedPublishDirectory)) {
     $resolvedPublishDirectory = [System.IO.Path]::GetFullPath($ExpectedPublishDirectory)
-    $publishedExe = Join-Path $resolvedPublishDirectory "DeskBox.exe"
+    $publishedExe = Join-Path $resolvedPublishDirectory "OpenWinBox.exe"
     $publishedThumbnailProxy = Join-Path $resolvedPublishDirectory "DeskBox.ThumbnailProxy.exe"
     $publishedNative = Join-Path $resolvedPublishDirectory "deskbox_native.dll"
     if (-not (Test-Path -LiteralPath $publishedExe -PathType Leaf) -or
@@ -371,7 +371,7 @@ if (-not [string]::IsNullOrWhiteSpace($AppxSymPath)) {
             $archive.Dispose()
         }
         foreach ($requiredSymbol in @(
-                "DeskBox.pdb",
+                "OpenWinBox.pdb",
                 "DeskBox.ThumbnailProxy.pdb",
                 "deskbox_native.pdb")) {
             if ($symbolEntries -notcontains $requiredSymbol) {

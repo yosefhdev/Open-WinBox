@@ -50,12 +50,12 @@ public sealed class CloudBackupTransportTests : IDisposable
             <?xml version="1.0"?>
             <D:multistatus xmlns:D="DAV:">
               <D:response>
-                <D:href>/dav/DeskBox/backups/</D:href>
+                <D:href>/dav/OpenWinBox/backups/</D:href>
                 <D:propstat><D:prop><D:resourcetype><D:collection/></D:resourcetype></D:prop>
                 <D:status>HTTP/1.1 200 OK</D:status></D:propstat>
               </D:response>
               <D:response>
-                <D:href>/dav/DeskBox/backups/DeskBox-CloudBackup-20260918-2100-abcdef12.zip</D:href>
+                <D:href>/dav/OpenWinBox/backups/OpenWinBox-CloudBackup-20260918-2100-abcdef12.zip</D:href>
                 <D:propstat><D:prop>
                   <D:displayname>forged-displayname.zip</D:displayname>
                   <D:getcontentlength>4096</D:getcontentlength>
@@ -64,7 +64,7 @@ public sealed class CloudBackupTransportTests : IDisposable
                 </D:prop><D:status>HTTP/1.1 200 OK</D:status></D:propstat>
               </D:response>
               <D:response>
-                <D:href>/dav/DeskBox/backups/subdir/</D:href>
+                <D:href>/dav/OpenWinBox/backups/subdir/</D:href>
                 <D:propstat><D:prop>
                   <D:resourcetype><D:collection/></D:resourcetype>
                 </D:prop><D:status>HTTP/1.1 200 OK</D:status></D:propstat>
@@ -74,13 +74,13 @@ public sealed class CloudBackupTransportTests : IDisposable
         var handler = new RecordingHandler(_ => XmlResponse(HttpStatusCode.MultiStatus, multistatus));
         var transport = new WebDavBackupTransport(Options(), handler);
 
-        IReadOnlyList<CloudBackupRemoteEntry> entries = await transport.ListAsync("DeskBox/backups");
+        IReadOnlyList<CloudBackupRemoteEntry> entries = await transport.ListAsync("OpenWinBox/backups");
 
         Assert.Equal(2, entries.Count);
         CloudBackupRemoteEntry file = entries[0];
         // Name is derived from the href's last segment — the server's
         // displayname is decoration and must never be used for addressing.
-        Assert.Equal("DeskBox-CloudBackup-20260918-2100-abcdef12.zip", file.Name);
+        Assert.Equal("OpenWinBox-CloudBackup-20260918-2100-abcdef12.zip", file.Name);
         Assert.Equal(4096, file.Length);
         Assert.False(file.IsCollection);
         Assert.NotNull(file.LastModified);
@@ -98,15 +98,15 @@ public sealed class CloudBackupTransportTests : IDisposable
         // collection href WITHOUT a trailing slash, empty resourcetype for files.
         const string multistatus =
             """
-            <?xml version="1.0" encoding="UTF-8" standalone="no"?><d:multistatus xmlns:d="DAV:" xmlns:s="http://ns.jianguoyun.com"><d:response><d:href>/dav/DeskBox/backups</d:href><d:propstat><d:prop><d:getetag/><d:getcontenttype>httpd/unix-directory</d:getcontenttype><d:displayname>backups</d:displayname><d:getcontentlength>0</d:getcontentlength><d:getlastmodified>Sat, 19 Sep 2026 13:10:00 GMT</d:getlastmodified><d:resourcetype><d:collection/></d:resourcetype></d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response><d:response><d:href>/dav/DeskBox/backups/DeskBox-CloudBackup-20260920T162455Z-48221e43.zip</d:href><d:propstat><d:prop><d:getetag>rErap3U7trvdPsbTKxpZxg</d:getetag><d:getcontenttype>application/zip</d:getcontenttype><d:displayname>DeskBox-CloudBackup-20260920T162455Z-48221e43.zip</d:displayname><d:getcontentlength>18282</d:getcontentlength><d:getlastmodified>Sun, 20 Sep 2026 16:24:54 GMT</d:getlastmodified><d:resourcetype/></d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response></d:multistatus>
+            <?xml version="1.0" encoding="UTF-8" standalone="no"?><d:multistatus xmlns:d="DAV:" xmlns:s="http://ns.jianguoyun.com"><d:response><d:href>/dav/OpenWinBox/backups</d:href><d:propstat><d:prop><d:getetag/><d:getcontenttype>httpd/unix-directory</d:getcontenttype><d:displayname>backups</d:displayname><d:getcontentlength>0</d:getcontentlength><d:getlastmodified>Sat, 19 Sep 2026 13:10:00 GMT</d:getlastmodified><d:resourcetype><d:collection/></d:resourcetype></d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response><d:response><d:href>/dav/OpenWinBox/backups/OpenWinBox-CloudBackup-20260920T162455Z-48221e43.zip</d:href><d:propstat><d:prop><d:getetag>rErap3U7trvdPsbTKxpZxg</d:getetag><d:getcontenttype>application/zip</d:getcontenttype><d:displayname>OpenWinBox-CloudBackup-20260920T162455Z-48221e43.zip</d:displayname><d:getcontentlength>18282</d:getcontentlength><d:getlastmodified>Sun, 20 Sep 2026 16:24:54 GMT</d:getlastmodified><d:resourcetype/></d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response></d:multistatus>
             """;
         var handler = new RecordingHandler(_ => XmlResponse(HttpStatusCode.MultiStatus, multistatus));
         var transport = new WebDavBackupTransport(Options(), handler);
 
-        IReadOnlyList<CloudBackupRemoteEntry> entries = await transport.ListAsync("DeskBox/backups");
+        IReadOnlyList<CloudBackupRemoteEntry> entries = await transport.ListAsync("OpenWinBox/backups");
 
         CloudBackupRemoteEntry file = Assert.Single(entries);
-        Assert.Equal("DeskBox-CloudBackup-20260920T162455Z-48221e43.zip", file.Name);
+        Assert.Equal("OpenWinBox-CloudBackup-20260920T162455Z-48221e43.zip", file.Name);
         Assert.Equal(18282, file.Length);
         Assert.False(file.IsCollection);
         Assert.Equal(new DateTimeOffset(2026, 9, 20, 16, 24, 54, TimeSpan.Zero), file.LastModified);
@@ -121,12 +121,12 @@ public sealed class CloudBackupTransportTests : IDisposable
                 : new HttpResponseMessage(HttpStatusCode.MethodNotAllowed));
         var transport = new WebDavBackupTransport(Options(), handler);
 
-        await transport.EnsureDirectoryAsync("DeskBox/backups");
+        await transport.EnsureDirectoryAsync("OpenWinBox/backups");
 
         Assert.Equal(2, handler.Requests.Count);
         Assert.All(handler.Requests, r => Assert.Equal("MKCOL", r.Method));
-        Assert.Equal("https://dav.example.com/dav/DeskBox", handler.Requests[0].Uri);
-        Assert.Equal("https://dav.example.com/dav/DeskBox/backups", handler.Requests[1].Uri);
+        Assert.Equal("https://dav.example.com/dav/OpenWinBox", handler.Requests[0].Uri);
+        Assert.Equal("https://dav.example.com/dav/OpenWinBox/backups", handler.Requests[1].Uri);
     }
 
     [Fact]
@@ -136,11 +136,11 @@ public sealed class CloudBackupTransportTests : IDisposable
         var transport = new WebDavBackupTransport(Options(), handler);
 
         byte[] payload = Encoding.UTF8.GetBytes("zip-bytes");
-        await transport.UploadAsync("DeskBox/backups/my file.zip", new MemoryStream(payload));
+        await transport.UploadAsync("OpenWinBox/backups/my file.zip", new MemoryStream(payload));
 
         RecordingHandler.Captured request = Assert.Single(handler.Requests);
         Assert.Equal("PUT", request.Method);
-        Assert.Equal("https://dav.example.com/dav/DeskBox/backups/my%20file.zip", request.Uri);
+        Assert.Equal("https://dav.example.com/dav/OpenWinBox/backups/my%20file.zip", request.Uri);
         Assert.Equal(payload, request.ContentBytes);
     }
 
@@ -156,7 +156,7 @@ public sealed class CloudBackupTransportTests : IDisposable
         var transport = new WebDavBackupTransport(Options(), handler);
 
         using var destination = new MemoryStream();
-        await transport.DownloadAsync("DeskBox/backups/a.zip", destination);
+        await transport.DownloadAsync("OpenWinBox/backups/a.zip", destination);
 
         Assert.Equal(payload, destination.ToArray());
         Assert.Equal("GET", Assert.Single(handler.Requests).Method);
@@ -168,7 +168,7 @@ public sealed class CloudBackupTransportTests : IDisposable
         var handler = new RecordingHandler(_ => new HttpResponseMessage(HttpStatusCode.NotFound));
         var transport = new WebDavBackupTransport(Options(), handler);
 
-        await transport.DeleteAsync("DeskBox/backups/gone.zip");
+        await transport.DeleteAsync("OpenWinBox/backups/gone.zip");
         Assert.Equal("DELETE", Assert.Single(handler.Requests).Method);
     }
 
@@ -179,7 +179,7 @@ public sealed class CloudBackupTransportTests : IDisposable
         var transport = new WebDavBackupTransport(Options(), handler);
 
         CloudBackupTransportException ex = await Assert.ThrowsAsync<CloudBackupTransportException>(
-            () => transport.ListAsync("DeskBox/backups"));
+            () => transport.ListAsync("OpenWinBox/backups"));
 
         Assert.Equal(HttpStatusCode.Unauthorized, ex.StatusCode);
         Assert.DoesNotContain("s3cret", ex.Message);
@@ -220,7 +220,7 @@ public sealed class CloudBackupTransportTests : IDisposable
         var transport = new FakeCloudBackupTransport();
         for (int i = 1; i <= 6; i++)
         {
-            transport.Files[$"DeskBox/backups/DeskBox-CloudBackup-2026010{i}-000000-deadbeef.zip"] =
+            transport.Files[$"OpenWinBox/backups/OpenWinBox-CloudBackup-2026010{i}-000000-deadbeef.zip"] =
                 [0x50, 0x4B];
         }
 
@@ -231,7 +231,7 @@ public sealed class CloudBackupTransportTests : IDisposable
 
         Assert.Equal(3, transport.Files.Count);
         Assert.All(transport.Files.Keys,
-            k => Assert.StartsWith("DeskBox/backups/DeskBox-CloudBackup-", k));
+            k => Assert.StartsWith("OpenWinBox/backups/OpenWinBox-CloudBackup-", k));
         // Newest three survive: the fresh upload plus the two most recent
         // preexisting snapshots by name order.
         Assert.Contains(transport.Files.Keys,
@@ -382,7 +382,7 @@ public sealed class CloudBackupTransportTests : IDisposable
         var transport = new FakeCloudBackupTransport();
         // A hostile/broken server can list names that pass the loose prefix
         // check but would traverse out of the backup directory on DELETE.
-        transport.Files["DeskBox/backups/DeskBox-CloudBackup-../../other.zip"] = [0x1];
+        transport.Files["OpenWinBox/backups/OpenWinBox-CloudBackup-../../other.zip"] = [0x1];
 
         (CloudBackupService service, _) = CreateService(transport);
         service.UpdateOptions(ConfiguredOptions(retention: 1));
@@ -394,7 +394,7 @@ public sealed class CloudBackupTransportTests : IDisposable
         // is a real snapshot.
         Assert.Equal(2, transport.Files.Count);
         Assert.True(transport.Files.ContainsKey(
-            "DeskBox/backups/DeskBox-CloudBackup-../../other.zip"));
+            "OpenWinBox/backups/OpenWinBox-CloudBackup-../../other.zip"));
     }
 
     [Fact]
@@ -431,7 +431,7 @@ public sealed class CloudBackupTransportTests : IDisposable
         CloudBackupRunResult result = await service.RunBackupNowAsync();
 
         string fileName = result.RemoteFilePath!.Split('/').Last();
-        Assert.Matches(@"^DeskBox-CloudBackup-\d{8}T\d{6}Z-.{8}\.zip$", fileName);
+        Assert.Matches(@"^OpenWinBox-CloudBackup-\d{8}T\d{6}Z-.{8}\.zip$", fileName);
     }
 
     [Fact]
@@ -592,11 +592,11 @@ public sealed class CloudBackupTransportTests : IDisposable
     public async Task DeleteRemoteSnapshot_RemovesFile()
     {
         var transport = new FakeCloudBackupTransport();
-        transport.Files["DeskBox/backups/DeskBox-CloudBackup-20260910T110000Z-abcd1234.zip"] = [1, 2, 3];
+        transport.Files["OpenWinBox/backups/OpenWinBox-CloudBackup-20260910T110000Z-abcd1234.zip"] = [1, 2, 3];
         (CloudBackupService service, _) = CreateService(transport);
         service.UpdateOptions(ConfiguredOptions());
 
-        await service.DeleteRemoteSnapshotAsync("DeskBox-CloudBackup-20260910T110000Z-abcd1234.zip");
+        await service.DeleteRemoteSnapshotAsync("OpenWinBox-CloudBackup-20260910T110000Z-abcd1234.zip");
 
         Assert.Empty(transport.Files);
     }
@@ -682,15 +682,15 @@ public sealed class CloudBackupTransportTests : IDisposable
         // list must order by the embedded timestamp instead: here the
         // legacy file (12:00) is NEWER than the UTC file (11:00).
         var transport = new FakeCloudBackupTransport();
-        transport.Files["DeskBox/backups/DeskBox-CloudBackup-20260910T110000Z-abcd1234.zip"] = [1];
-        transport.Files["DeskBox/backups/DeskBox-CloudBackup-20260910-120000.zip"] = [1];
+        transport.Files["OpenWinBox/backups/OpenWinBox-CloudBackup-20260910T110000Z-abcd1234.zip"] = [1];
+        transport.Files["OpenWinBox/backups/OpenWinBox-CloudBackup-20260910-120000.zip"] = [1];
         (CloudBackupService service, _) = CreateService(transport);
         service.UpdateOptions(ConfiguredOptions());
 
         IReadOnlyList<CloudBackupRemoteEntry> list = await service.ListRemoteSnapshotsAsync();
 
         Assert.Equal(2, list.Count);
-        Assert.Equal("DeskBox-CloudBackup-20260910-120000.zip", list[0].Name);
+        Assert.Equal("OpenWinBox-CloudBackup-20260910-120000.zip", list[0].Name);
     }
 
     [Fact]
@@ -875,7 +875,7 @@ public sealed class CloudBackupTransportTests : IDisposable
     public async Task RestoreEndpoints_EndpointWithoutScope_ListAndDownload()
     {
         var transport = new FakeCloudBackupTransport();
-        transport.Files["DeskBox/backups/DeskBox-CloudBackup-20260101-000000-aaaabbbb.zip"] = [0x1, 0x2];
+        transport.Files["OpenWinBox/backups/OpenWinBox-CloudBackup-20260101-000000-aaaabbbb.zip"] = [0x1, 0x2];
 
         (CloudBackupService service, _) = CreateService(transport);
         service.UpdateOptions(ConfiguredOptions(scope: CloudBackupDomain.None));
@@ -915,10 +915,10 @@ public sealed class CloudBackupTransportTests : IDisposable
     public async Task ListRemoteSnapshots_ReturnsOnlySnapshotZips_NewestFirst()
     {
         var transport = new FakeCloudBackupTransport();
-        transport.Files["DeskBox/backups/DeskBox-CloudBackup-20260101-000000-aaaabbbb.zip"] = [0x1];
-        transport.Files["DeskBox/backups/DeskBox-CloudBackup-20260102-000000-aaaabbbb.zip"] = [0x1];
-        transport.Files["DeskBox/backups/unrelated.txt"] = [0x1];
-        transport.Files["DeskBox/backups/DeskBox-Backup-20260101-0000.zip"] = [0x1];
+        transport.Files["OpenWinBox/backups/OpenWinBox-CloudBackup-20260101-000000-aaaabbbb.zip"] = [0x1];
+        transport.Files["OpenWinBox/backups/OpenWinBox-CloudBackup-20260102-000000-aaaabbbb.zip"] = [0x1];
+        transport.Files["OpenWinBox/backups/unrelated.txt"] = [0x1];
+        transport.Files["OpenWinBox/backups/DeskBox-Backup-20260101-0000.zip"] = [0x1];
 
         (CloudBackupService service, _) = CreateService(transport);
         service.UpdateOptions(ConfiguredOptions());
@@ -957,11 +957,11 @@ public sealed class CloudBackupTransportTests : IDisposable
     [Fact]
     public async Task SnapshotTarget_RejectsStaleRow_AndFrozenServiceCallUsesOriginalEndpoint()
     {
-        const string name = "DeskBox-CloudBackup-20260910T110000Z-abcd1234.zip";
+        const string name = "OpenWinBox-CloudBackup-20260910T110000Z-abcd1234.zip";
         var a = new FakeCloudBackupTransport();
         var b = new FakeCloudBackupTransport();
-        a.Files[$"DeskBox/backups/{name}"] = [1];
-        b.Files[$"DeskBox/backups/{name}"] = [2];
+        a.Files[$"OpenWinBox/backups/{name}"] = [1];
+        b.Files[$"OpenWinBox/backups/{name}"] = [2];
         CloudBackupOptions optionsA = ConfiguredOptions() with { ServerUrl = "https://a.example/dav" };
         CloudBackupOptions optionsB = optionsA with { ServerUrl = "https://b.example/dav" };
         var backup = new DeskBoxDataBackupService(_appDataRoot);
@@ -984,19 +984,19 @@ public sealed class CloudBackupTransportTests : IDisposable
         Assert.False(actions.IsCurrentEndpoint(optionsA.Endpoint));
         await Assert.ThrowsAsync<OperationCanceledException>(async () =>
             await actions.DeleteSnapshotAsync(optionsA.Endpoint, name));
-        Assert.True(b.Files.ContainsKey($"DeskBox/backups/{name}"));
+        Assert.True(b.Files.ContainsKey($"OpenWinBox/backups/{name}"));
 
         await service.DeleteRemoteSnapshotAsync(optionsA, name);
-        Assert.False(a.Files.ContainsKey($"DeskBox/backups/{name}"));
-        Assert.True(b.Files.ContainsKey($"DeskBox/backups/{name}"));
+        Assert.False(a.Files.ContainsKey($"OpenWinBox/backups/{name}"));
+        Assert.True(b.Files.ContainsKey($"OpenWinBox/backups/{name}"));
     }
 
     [Fact]
     public async Task RemoteSnapshotList_RoutesThroughRestoreActions_WithEndpointFreezeAndStop()
     {
-        const string name = "DeskBox-CloudBackup-20260910T110000Z-abcd1234.zip";
+        const string name = "OpenWinBox-CloudBackup-20260910T110000Z-abcd1234.zip";
         var transport = new FakeCloudBackupTransport();
-        transport.Files[$"DeskBox/backups/{name}"] = [1, 2, 3];
+        transport.Files[$"OpenWinBox/backups/{name}"] = [1, 2, 3];
         CloudBackupOptions options = ConfiguredOptions();
         var backup = new DeskBoxDataBackupService(_appDataRoot);
         (CloudBackupService service, SettingsService settings) = CreateService(transport);
@@ -1030,7 +1030,7 @@ public sealed class CloudBackupTransportTests : IDisposable
     [Fact]
     public async Task RestoreActionsStop_CancelsAndDrainsDownload_ThenRemovesTemporaryFiles()
     {
-        const string name = "DeskBox-CloudBackup-20260910T110000Z-abcd1234.zip";
+        const string name = "OpenWinBox-CloudBackup-20260910T110000Z-abcd1234.zip";
         var entered = new TaskCompletionSource<CancellationToken>(
             TaskCreationOptions.RunContinuationsAsynchronously);
         var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -1043,7 +1043,7 @@ public sealed class CloudBackupTransportTests : IDisposable
                 token.ThrowIfCancellationRequested();
             }
         };
-        transport.Files[$"DeskBox/backups/{name}"] = [1];
+        transport.Files[$"OpenWinBox/backups/{name}"] = [1];
         (CloudBackupService service, SettingsService settings) = CreateService(transport);
         CloudBackupOptions options = ConfiguredOptions();
         settings.Settings.CloudBackup.CloudBackupProvider = options.Provider;
@@ -1155,7 +1155,7 @@ public sealed class CloudBackupTransportTests : IDisposable
         {
             ListRequested = () => { if (++listings == 2) cancellation.Cancel(); }
         };
-        transport.Files["DeskBox/backups/DeskBox-CloudBackup-20000101T000000Z-node.zip"] = [1];
+        transport.Files["OpenWinBox/backups/OpenWinBox-CloudBackup-20000101T000000Z-node.zip"] = [1];
         (CloudBackupService service, SettingsService settings) = CreateService(transport);
         service.UpdateOptions(ConfiguredOptions(retention: 1));
         CloudBackupRunResult result = await service.RunBackupNowAsync(cancellation.Token);
@@ -1201,7 +1201,7 @@ public sealed class CloudBackupTransportTests : IDisposable
             CloudBackupDomain.TodoData | CloudBackupDomain.WidgetStyle,
             options.Scope);
         Assert.Equal(5, options.RetentionCount);
-        Assert.Equal("DeskBox/backups", options.RemotePath);
+        Assert.Equal("OpenWinBox/backups", options.RemotePath);
     }
 
     [Fact]
@@ -1290,7 +1290,7 @@ public sealed class CloudBackupTransportTests : IDisposable
         new(
             Provider: provider,
             ServerUrl: "https://dav.example.com/",
-            RemotePath: "DeskBox/backups",
+            RemotePath: "OpenWinBox/backups",
             Username: username,
             Scope: scope,
             RetentionCount: retention,

@@ -288,7 +288,10 @@ public enum WidgetKind
     Productivity,
 
     /// <summary>At-a-glance background, time and date widget.</summary>
-    Glance
+    Glance,
+
+    /// <summary>OpenWinBox: output/input device switch, volume and per-app mixer.</summary>
+    Audio
 }
 
 /// <summary>

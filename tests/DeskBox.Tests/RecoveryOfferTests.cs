@@ -108,12 +108,12 @@ public sealed class RecoveryOfferTests : IDisposable
     public async Task GetLatestValidRecoverySnapshotAsync_PicksNewestValidOverNewerJunk()
     {
         string junk = WriteSnapshot(
-            "DeskBox-Auto-20261021-090000.zip",
+            "OpenWinBox-Auto-20261021-090000.zip",
             mtimeUtc: DateTimeOffset.UtcNow.ToUniversalTime() - TimeSpan.FromHours(1),
             settingsJson: SettingsJson(hasResolved: false),
             layoutWidgets: []);
         string valid = WriteSnapshot(
-            "DeskBox-Auto-20261020-221100.zip",
+            "OpenWinBox-Auto-20261020-221100.zip",
             mtimeUtc: DateTimeOffset.UtcNow.ToUniversalTime() - TimeSpan.FromDays(1),
             settingsJson: SettingsJson(hasResolved: true),
             layoutWidgets: ["w1", "w2"]);
@@ -132,7 +132,7 @@ public sealed class RecoveryOfferTests : IDisposable
     public async Task GetLatestValidRecoverySnapshotAsync_ExcludesArchivesNewerThanProcessStart()
     {
         WriteSnapshot(
-            "DeskBox-Auto-20261021-090500.zip",
+            "OpenWinBox-Auto-20261021-090500.zip",
             mtimeUtc: DateTimeOffset.UtcNow.ToUniversalTime() + TimeSpan.FromMinutes(5),
             settingsJson: SettingsJson(hasResolved: true),
             layoutWidgets: ["w1"]);
@@ -149,7 +149,7 @@ public sealed class RecoveryOfferTests : IDisposable
     public async Task GetLatestValidRecoverySnapshotAsync_RejectsFutureSchema()
     {
         WriteSnapshot(
-            "DeskBox-Auto-20261020-221100.zip",
+            "OpenWinBox-Auto-20261020-221100.zip",
             mtimeUtc: DateTimeOffset.UtcNow.ToUniversalTime() - TimeSpan.FromDays(1),
             settingsJson: SettingsJson(hasResolved: true, schemaVersion: SettingsMigrationPipeline.CurrentSchemaVersion + 5),
             layoutWidgets: ["w1"]);
@@ -166,7 +166,7 @@ public sealed class RecoveryOfferTests : IDisposable
         // any serialized era (the shape is pinned by hand, not by the live
         // serializer, so facade evolution cannot silently change it).
         WriteSnapshot(
-            "DeskBox-Auto-20260101-000000.zip",
+            "OpenWinBox-Auto-20260101-000000.zip",
             mtimeUtc: DateTimeOffset.UtcNow.ToUniversalTime() - TimeSpan.FromDays(30),
             settingsJson: SettingsJson(
                 hasResolved: true,
@@ -191,7 +191,7 @@ public sealed class RecoveryOfferTests : IDisposable
         // refused up front instead of being proposed and failing at
         // restore time on every attempt.
         WriteSnapshot(
-            "DeskBox-Auto-20260101-000001.zip",
+            "OpenWinBox-Auto-20260101-000001.zip",
             mtimeUtc: DateTimeOffset.UtcNow.ToUniversalTime() - TimeSpan.FromDays(30),
             settingsJson: SettingsJson(hasResolved: true),
             layoutWidgets: ["w1"],
@@ -216,7 +216,7 @@ public sealed class RecoveryOfferTests : IDisposable
         await File.WriteAllTextAsync(Path.Combine(data, "settings.json"), "{}");
         var store = new RecoveryOfferStore(data);
         await store.WriteAsync(new RecoveryOfferMarker(
-            "C:/recovery/DeskBox-Auto-1.zip",
+            "C:/recovery/OpenWinBox-Auto-1.zip",
             DateTimeOffset.UtcNow,
             "1.5.9",
             2,
@@ -245,7 +245,7 @@ public sealed class RecoveryOfferTests : IDisposable
         Assert.Null(store.TryRead());
 
         var marker = new RecoveryOfferMarker(
-            "C:/recovery/DeskBox-Auto-1.zip",
+            "C:/recovery/OpenWinBox-Auto-1.zip",
             new DateTimeOffset(2026, 10, 19, 22, 11, 0, TimeSpan.Zero),
             "1.5.9",
             3,
@@ -435,7 +435,7 @@ public sealed class RecoveryOfferTests : IDisposable
         await File.WriteAllTextAsync(Path.Combine(data, "settings.json"), "{}");
         var store = new RecoveryOfferStore(data);
         await store.WriteAsync(new RecoveryOfferMarker(
-            "C:/recovery/DeskBox-Auto-1.zip",
+            "C:/recovery/OpenWinBox-Auto-1.zip",
             DateTimeOffset.UtcNow,
             "1.5.9",
             2,
@@ -476,24 +476,24 @@ public sealed class RecoveryOfferTests : IDisposable
         // Pre-wipe pool: the pinned newest plus three older archives, mtimes
         // a day apart so ordering never ties with the forced storm (= now).
         string pinned = WriteSnapshot(
-            "DeskBox-Auto-20260101-000000.zip",
+            "OpenWinBox-Auto-20260101-000000.zip",
             mtimeUtc: DateTimeOffset.UtcNow.ToUniversalTime() - TimeSpan.FromDays(4),
             settingsJson: SettingsJson(hasResolved: true),
             layoutWidgets: ["w1", "w2"]);
         string[] older =
         [
             WriteSnapshot(
-                "DeskBox-Auto-20251229-000000.zip",
+                "OpenWinBox-Auto-20251229-000000.zip",
                 mtimeUtc: DateTimeOffset.UtcNow.ToUniversalTime() - TimeSpan.FromDays(10),
                 settingsJson: SettingsJson(hasResolved: true),
                 layoutWidgets: ["w1"]),
             WriteSnapshot(
-                "DeskBox-Auto-20251230-000000.zip",
+                "OpenWinBox-Auto-20251230-000000.zip",
                 mtimeUtc: DateTimeOffset.UtcNow.ToUniversalTime() - TimeSpan.FromDays(8),
                 settingsJson: SettingsJson(hasResolved: true),
                 layoutWidgets: ["w1"]),
             WriteSnapshot(
-                "DeskBox-Auto-20251231-000000.zip",
+                "OpenWinBox-Auto-20251231-000000.zip",
                 mtimeUtc: DateTimeOffset.UtcNow.ToUniversalTime() - TimeSpan.FromDays(6),
                 settingsJson: SettingsJson(hasResolved: true),
                 layoutWidgets: ["w1"])
@@ -524,8 +524,8 @@ public sealed class RecoveryOfferTests : IDisposable
         string directory = Path.GetDirectoryName(pinned)!;
         Assert.Equal(
             8,
-            Directory.EnumerateFiles(directory, "DeskBox-Auto-*.zip").Count());
-        Assert.DoesNotContain(older[0], Directory.EnumerateFiles(directory, "DeskBox-Auto-*.zip"));
+            Directory.EnumerateFiles(directory, "OpenWinBox-Auto-*.zip").Count());
+        Assert.DoesNotContain(older[0], Directory.EnumerateFiles(directory, "OpenWinBox-Auto-*.zip"));
 
         // The offer itself still resolves to the pinned archive: the forced
         // snapshots of the fresh-default profile fail the content gates.
@@ -583,7 +583,7 @@ public sealed class RecoveryOfferTests : IDisposable
     {
         string directory = Path.Combine(
             Path.GetDirectoryName(_appDataRoot)!,
-            "DeskBox-Recovery",
+            "OpenWinBox-Recovery",
             "automatic");
         Directory.CreateDirectory(directory);
         string path = Path.Combine(directory, fileName);

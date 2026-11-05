@@ -189,6 +189,16 @@
                     </toolkit:SettingsCard>
                     <toolkit:SettingsCard
                         HorizontalContentAlignment="Right"
+                        svc:Localized.DescriptionKey="Glance.SecondClock.Description"
+                        svc:Localized.HeaderKey="Glance.SecondClock.Title">
+                        <ComboBox svc:Localized.AutomationNameKey="Glance.SecondClock.Title"
+                            x:Name="SecondTimeZoneComboBox"
+                            Width="220"
+                            MaxDropDownHeight="360"
+                            SelectionChanged="SecondTimeZoneComboBox_SelectionChanged" />
+                    </toolkit:SettingsCard>
+                    <toolkit:SettingsCard
+                        HorizontalContentAlignment="Right"
                         svc:Localized.HeaderKey="Glance.Typography.Title">
                         <Slider svc:Localized.AutomationNameKey="Glance.Typography.Title"
                             x:Name="TimeScaleSlider"

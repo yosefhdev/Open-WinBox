@@ -29,8 +29,8 @@ function Resolve-SafeInstallRoot {
         throw "Refusing to clean a volume root: '$resolved'."
     }
 
-    if (-not (Test-Path -LiteralPath (Join-Path $normalized "DeskBox.exe") -PathType Leaf)) {
-        throw "The selected install root does not contain DeskBox.exe: '$normalized'."
+    if (-not (Test-Path -LiteralPath (Join-Path $normalized "OpenWinBox.exe") -PathType Leaf)) {
+        throw "The selected install root does not contain OpenWinBox.exe: '$normalized'."
     }
 
     return $normalized
@@ -154,7 +154,7 @@ foreach ($entry in Read-ManifestEntries -Path $currentManifest) {
     }
 }
 
-foreach ($requiredEntry in @('DeskBox.exe', 'DeskBox.InstallManifest.txt')) {
+foreach ($requiredEntry in @('OpenWinBox.exe', 'DeskBox.InstallManifest.txt')) {
     if (-not $currentEntries.Contains($requiredEntry)) {
         throw "The current DeskBox install manifest is invalid because '$requiredEntry' is missing."
     }

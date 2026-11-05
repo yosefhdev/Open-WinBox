@@ -12,6 +12,8 @@ namespace DeskBox.ViewModels;
     nameof(CompactCalendarDateText),
     nameof(CompactTimeFontSize),
     nameof(DateText),
+    nameof(HasSecondClock),
+    nameof(SecondClockText),
     nameof(HasPhotoInfo),
     nameof(IsCalendarLayout),
     nameof(IsCenteredLayout),

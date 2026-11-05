@@ -15,9 +15,9 @@ namespace DeskBox.Tests;
 public sealed class BackupSettingsSurfaceTests
 {
     private static readonly BackupEndpoint DavA = new(
-        "webdav", "https://a.example/dav", "DeskBox/backups", "simon");
+        "webdav", "https://a.example/dav", "OpenWinBox/backups", "simon");
     private static readonly BackupEndpoint DavB = new(
-        "webdav", "https://b.example/dav", "DeskBox/backups", "simon");
+        "webdav", "https://b.example/dav", "OpenWinBox/backups", "simon");
 
     private static BackupSettingsViewModel Create(
         FakeBackupSettings fake,
@@ -37,7 +37,7 @@ public sealed class BackupSettingsSurfaceTests
             LocalDirectory: @"D:\custom", EffectiveLocalDirectory: @"D:\custom",
             LocalOpenDirectory: @"D:\custom", LocalDirectoryFallback: false,
             CloudProvider: "webdav", CloudServerUrl: "https://a.example/dav",
-            CloudRemotePath: "DeskBox/backups", CloudUsername: "simon",
+            CloudRemotePath: "OpenWinBox/backups", CloudUsername: "simon",
             CloudTodoEnabled: true, CloudQuickCaptureEnabled: false, CloudWidgetStyleEnabled: true,
             CloudIntervalMinutes: 360, CloudRetentionCount: 10,
             CloudLastSuccessUtcTicks: 0, CloudLastFailureUtcTicks: 0, CloudLastUnverifiedUtcTicks: 0,
@@ -53,7 +53,7 @@ public sealed class BackupSettingsSurfaceTests
         Assert.True(editor.ShowWebDavFields);
         Assert.Equal("https://a.example/dav", editor.ServerUrl);
         Assert.False(editor.ShowHttpWarning);
-        Assert.Equal("DeskBox/backups", editor.RemotePath);
+        Assert.Equal("OpenWinBox/backups", editor.RemotePath);
         Assert.Equal("simon", editor.Username);
         Assert.True(editor.IncludeTodoData);
         Assert.False(editor.IncludeQuickCaptureData);
@@ -68,7 +68,7 @@ public sealed class BackupSettingsSurfaceTests
     {
         var fake = new FakeBackupSettings(new BackupSettingsSnapshot(
             true, 1440, 7, string.Empty, @"C:\backup", @"C:\backup", true,
-            "none", string.Empty, "DeskBox/backups", string.Empty,
+            "none", string.Empty, "OpenWinBox/backups", string.Empty,
             false, false, false, 1440, 5, 0, 0, 0,
             new("none", "", "", ""), false));
         using var editor = Create(fake);

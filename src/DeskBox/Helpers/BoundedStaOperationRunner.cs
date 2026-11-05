@@ -76,7 +76,7 @@ internal sealed class BoundedStaOperationRunner
         int maxConcurrency,
         int maxQueued,
         TimeSpan queueTimeout,
-        string threadName = "DeskBox File Open",
+        string threadName = "OpenWinBox File Open",
         int coInitializationFlags = DefaultCoInitializationFlags)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(maxConcurrency, 1);

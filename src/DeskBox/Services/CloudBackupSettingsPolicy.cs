@@ -133,14 +133,14 @@ internal static class CloudBackupSettingsPolicy
         string trimmed = remotePath?.Trim().Trim('/') ?? string.Empty;
         if (trimmed.Length == 0)
         {
-            return "DeskBox/backups";
+            return "OpenWinBox/backups";
         }
 
         // The path is joined verbatim into request URIs — a ".." segment
         // would escape the configured folder on the user's own server.
         return trimmed.Split('/', StringSplitOptions.RemoveEmptyEntries)
             .Any(segment => segment is ".." or ".")
-            ? "DeskBox/backups"
+            ? "OpenWinBox/backups"
             : trimmed;
     }
 }

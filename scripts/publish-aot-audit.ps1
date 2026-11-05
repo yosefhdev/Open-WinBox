@@ -366,10 +366,10 @@ foreach ($pdb in $pdbFiles) {
 }
 
 $requiredFiles = @(
-    "DeskBox.exe",
+    "OpenWinBox.exe",
     "DeskBox.Updater.exe",
     "DeskBox.ThumbnailProxy.exe",
-    "DeskBox.pri"
+    "OpenWinBox.pri"
 )
 if ($rustNativeEnabled) {
     $requiredFiles += "deskbox_native.dll"
@@ -419,7 +419,7 @@ $forbiddenFiles = @(
     "hostfxr.dll",
     "hostpolicy.dll",
     "System.Private.CoreLib.dll",
-    "DeskBox.dll",
+    "OpenWinBox.dll",
     "DeskBox.deps.json",
     "DeskBox.runtimeconfig.json",
     "DeskBox.Updater.dll",
@@ -441,7 +441,7 @@ if ($publishedPdbFiles.Count -gt 0) {
 
 $symbolFiles = @(Get-ChildItem -LiteralPath $symbolsDir -Filter "*.pdb" -File -Recurse)
 $requiredSymbolFiles = @(
-    "DeskBox.pdb",
+    "OpenWinBox.pdb",
     "DeskBox.Updater.pdb",
     "DeskBox.ThumbnailProxy.pdb"
 )
@@ -456,7 +456,7 @@ foreach ($requiredSymbolFile in $requiredSymbolFiles) {
 }
 
 $peFiles = @(
-    (Join-Path $publishDir "DeskBox.exe"),
+    (Join-Path $publishDir "OpenWinBox.exe"),
     (Join-Path $publishDir "DeskBox.Updater.exe"),
     (Join-Path $publishDir "DeskBox.ThumbnailProxy.exe")
 )

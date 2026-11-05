@@ -5,8 +5,8 @@ namespace DeskBox.Tests;
 
 public sealed class BackupSettingsViewModelTests
 {
-    private static readonly BackupEndpoint A = new("webdav", "https://a.example/dav", "DeskBox/backups", "simon");
-    private static readonly BackupEndpoint B = new("webdav", "https://b.example/dav", "DeskBox/backups", "simon");
+    private static readonly BackupEndpoint A = new("webdav", "https://a.example/dav", "OpenWinBox/backups", "simon");
+    private static readonly BackupEndpoint B = new("webdav", "https://b.example/dav", "OpenWinBox/backups", "simon");
 
     [Fact]
     public async Task EndpointEdit_CancelsAndRejectsLateCredentialAndListResults()

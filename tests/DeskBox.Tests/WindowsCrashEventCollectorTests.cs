@@ -6,11 +6,11 @@ namespace DeskBox.Tests;
 public sealed class WindowsCrashEventCollectorTests
 {
     [Theory]
-    [InlineData("C:\\Users\\someone\\AppData\\Local\\DeskBox\\DeskBox.exe")]
+    [InlineData("C:\\Users\\someone\\AppData\\Local\\DeskBox\\OpenWinBox.exe")]
     [InlineData("C:\\Windows\\explorer.exe")]
-    [InlineData("DeskBox.exe")]
+    [InlineData("OpenWinBox.exe")]
     [InlineData("EXPLORER.EXE")]
-    [InlineData("\"C:\\Program Files\\DeskBox\\DeskBox.exe\"")]
+    [InlineData("\"C:\\Program Files\\DeskBox\\OpenWinBox.exe\"")]
     public void FilterPolicy_IncludesMonitoredImages(string value)
     {
         Assert.True(WindowsCrashEventFilterPolicy.ShouldInclude(
@@ -41,8 +41,8 @@ public sealed class WindowsCrashEventCollectorTests
                   <TimeCreated SystemTime="2026-10-13T13:51:30.500000000Z"/>
                 </System>
                 <EventData>
-                  <Data Name="AppName">DeskBox.exe</Data>
-                  <Data Name="AppPath">C:\Users\someone\AppData\Local\DeskBox\DeskBox.exe</Data>
+                  <Data Name="AppName">OpenWinBox.exe</Data>
+                  <Data Name="AppPath">C:\Users\someone\AppData\Local\DeskBox\OpenWinBox.exe</Data>
                   <Data Name="ExceptionCode">0xc0000409</Data>
                   <Data Name="FaultingModule">deskbox_native.dll</Data>
                 </EventData>
@@ -82,7 +82,7 @@ public sealed class WindowsCrashEventCollectorTests
         Assert.Equal(
             new DateTimeOffset(2026, 10, 13, 13, 51, 30, 500, TimeSpan.Zero),
             deskBox.TimeCreatedUtc);
-        Assert.Equal("<PATH>\\DeskBox.exe", deskBox.Properties["AppPath"]);
+        Assert.Equal("<PATH>\\OpenWinBox.exe", deskBox.Properties["AppPath"]);
         Assert.Equal("0xc0000409", deskBox.Properties["ExceptionCode"]);
 
         WindowsCrashEventEntry explorer = events[1];
@@ -115,8 +115,8 @@ public sealed class WindowsCrashEventCollectorTests
                   <TimeCreated SystemTime="2026-10-13T21:51:32.000000000Z"/>
                 </System>
                 <EventData>
-                  <Data Name="AppPath">C:\Users\someone\AppData\Local\DeskBox\DeskBox.exe</Data>
-                  <Data Name="AppName">DeskBox.exe</Data>
+                  <Data Name="AppPath">C:\Users\someone\AppData\Local\DeskBox\OpenWinBox.exe</Data>
+                  <Data Name="AppName">OpenWinBox.exe</Data>
                 </EventData>
               </Event>
             </Events>
@@ -128,7 +128,7 @@ public sealed class WindowsCrashEventCollectorTests
 
         Assert.Equal("ok", report.Status);
         WindowsCrashEventEntry entry = Assert.Single(report.Events);
-        Assert.Equal("DeskBox.exe", entry.Properties["AppName"]);
+        Assert.Equal("OpenWinBox.exe", entry.Properties["AppName"]);
     }
 
     [Fact]

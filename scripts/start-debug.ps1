@@ -63,7 +63,7 @@ if ($Configuration -eq "Debug" -and
 }
 
 if (-not $NoStop.IsPresent) {
-    Get-CimInstance Win32_Process -Filter "Name='DeskBox.exe'" |
+    Get-CimInstance Win32_Process -Filter "Name='OpenWinBox.exe'" |
         Where-Object {
             $_.ExecutablePath -and
             $_.ExecutablePath.StartsWith($repoRootPath, [System.StringComparison]::OrdinalIgnoreCase)
@@ -86,10 +86,10 @@ if ($Build.IsPresent) {
 }
 
 $outputDir = Join-Path $repoRoot "src\DeskBox\bin\$Platform\$Configuration\$targetFramework\$RuntimeIdentifier"
-$exe = Join-Path $outputDir "DeskBox.exe"
+$exe = Join-Path $outputDir "OpenWinBox.exe"
 
 if (-not (Test-Path -LiteralPath $exe)) {
-    throw "DeskBox.exe was not found at $exe. Run this script with -Build first."
+    throw "OpenWinBox.exe was not found at $exe. Run this script with -Build first."
 }
 
 $previousDataRoot = [Environment]::GetEnvironmentVariable("DESKBOX_DEV_DATA_ROOT", "Process")

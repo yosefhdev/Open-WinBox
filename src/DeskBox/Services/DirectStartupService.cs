@@ -6,7 +6,7 @@ namespace DeskBox.Services;
 
 public sealed partial class DirectStartupService : IStartupService
 {
-    private const string AppName = "DeskBox";
+    private const string AppName = "OpenWinBox";
     private readonly object _registrationLock = new();
     private readonly IDirectStartupTaskBackend _taskBackend;
     private readonly IDirectStartupRunEntryStore _runEntryStore;
@@ -596,7 +596,7 @@ internal sealed class RegistryStartupRunEntryStore : IDirectStartupRunEntryStore
 
     internal RegistryStartupRunEntryStore(
         string registryKeyPath = RegistryKeyPath,
-        string valueName = "DeskBox")
+        string valueName = "OpenWinBox")
     {
         _registryKeyPath = registryKeyPath;
         _valueName = valueName;

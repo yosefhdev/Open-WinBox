@@ -1976,7 +1976,7 @@ public sealed class NativeDropTarget : IDisposable
 
         string temporaryDirectory = Path.Combine(
             Path.GetTempPath(),
-            "DeskBox",
+            "OpenWinBox",
             "VirtualDrops",
             Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(temporaryDirectory);
@@ -2110,7 +2110,7 @@ public sealed class NativeDropTarget : IDisposable
 
         string temporaryDirectory = Path.Combine(
             Path.GetTempPath(),
-            "DeskBox",
+            "OpenWinBox",
             "VirtualDrops",
             Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(temporaryDirectory);

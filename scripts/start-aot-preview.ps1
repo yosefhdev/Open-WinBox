@@ -141,7 +141,7 @@ function Get-AotPreviewProcesses {
 
     $normalizedExecutablePath = [System.IO.Path]::GetFullPath($ExecutablePath)
     return @(
-        Get-CimInstance Win32_Process -Filter "Name='DeskBox.exe'" |
+        Get-CimInstance Win32_Process -Filter "Name='OpenWinBox.exe'" |
             Where-Object {
                 if ([string]::IsNullOrWhiteSpace($_.ExecutablePath)) {
                     return $false
@@ -195,7 +195,7 @@ if (-not (Test-Path -LiteralPath $expectedPublishDirectory -PathType Container))
     throw "Audited Native AOT publish directory was not found: '$expectedPublishDirectory'."
 }
 
-$exe = Join-Path $expectedPublishDirectory "DeskBox.exe"
+$exe = Join-Path $expectedPublishDirectory "OpenWinBox.exe"
 $rustDll = Join-Path $expectedPublishDirectory "deskbox_native.dll"
 foreach ($requiredFile in @($exe, $rustDll)) {
     if (-not (Test-Path -LiteralPath $requiredFile -PathType Leaf)) {
@@ -203,16 +203,16 @@ foreach ($requiredFile in @($exe, $rustDll)) {
     }
 }
 
-$exeImages = @($summary.peImages | Where-Object { [string]$_.file -ceq "DeskBox.exe" })
+$exeImages = @($summary.peImages | Where-Object { [string]$_.file -ceq "OpenWinBox.exe" })
 if ($exeImages.Count -ne 1) {
-    throw "Native AOT audit summary must contain exactly one DeskBox.exe PE record."
+    throw "Native AOT audit summary must contain exactly one OpenWinBox.exe PE record."
 }
 $exeSha256 = (Get-FileHash -LiteralPath $exe -Algorithm SHA256).Hash
 if (-not [string]::Equals(
         $exeSha256,
         [string]$exeImages[0].sha256,
         [System.StringComparison]::OrdinalIgnoreCase)) {
-    throw "DeskBox.exe no longer matches the audited SHA256. Run the AOT audit again."
+    throw "OpenWinBox.exe no longer matches the audited SHA256. Run the AOT audit again."
 }
 
 if (-not [bool]$summary.rustNative.enabled -or

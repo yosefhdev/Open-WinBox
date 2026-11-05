@@ -28,9 +28,7 @@ public sealed class ReleaseNotesKnownVersionsTests
     [Fact]
     public void KnownReleaseVersions_CoverCurrentAndPreviousRelease()
     {
-        Assert.Contains("1.5.9", ReleaseNotesService.KnownReleaseVersions);
-        Assert.Contains("1.5.8", ReleaseNotesService.KnownReleaseVersions);
-        Assert.Contains("1.4.0", ReleaseNotesService.KnownReleaseVersions);
+        Assert.Contains("1.0.0-beta.4", ReleaseNotesService.KnownReleaseVersions);
     }
 
     [Fact]

@@ -328,6 +328,12 @@ public sealed partial class GlanceWidgetSettingsSection : UserControl
             (Localization.T("Glance.Typography.FollowSystem"), GlanceTimeFormatMode.FollowSystem),
             (Localization.T("Glance.Typography.Hour24"), GlanceTimeFormatMode.Hour24),
             (Localization.T("Glance.Typography.Hour12"), GlanceTimeFormatMode.Hour12));
+        (string Label, object Value)[] zones =
+        [
+            (Localization.T("Glance.SecondClock.Off"), string.Empty),
+            .. TimeZoneInfo.GetSystemTimeZones().Select(zone => (zone.DisplayName, (object)zone.Id))
+        ];
+        SetOptions(SecondTimeZoneComboBox, zones);
     }
 
     private void EnsureOptionsPopulated()
@@ -345,7 +351,8 @@ public sealed partial class GlanceWidgetSettingsSection : UserControl
             CalendarMaterialComboBox.Items.Count > 0 &&
             TraditionalCalendarComboBox.Items.Count > 0 &&
             FontComboBox.Items.Count > 0 &&
-            TimeFormatComboBox.Items.Count > 0;
+            TimeFormatComboBox.Items.Count > 0 &&
+            SecondTimeZoneComboBox.Items.Count > 0;
         if (optionsArePopulated &&
             string.Equals(
                 _optionsLocalizationSignature,
@@ -488,6 +495,7 @@ public sealed partial class GlanceWidgetSettingsSection : UserControl
             SelectOption(TraditionalCalendarComboBox, _settings.TraditionalCalendarMode);
             SelectOption(FontComboBox, _settings.TimeFontFamily ?? string.Empty);
             SelectOption(TimeFormatComboBox, _settings.TimeFormat);
+            SelectOption(SecondTimeZoneComboBox, _settings.SecondTimeZoneId ?? string.Empty);
             RandomOrderToggle.IsOn = _settings.RandomOrder;
             TimeScaleSlider.Value = _settings.TimeScale;
             BackgroundImageTransparencySlider.Value = _settings.BackgroundImageTransparency;
@@ -982,6 +990,16 @@ public sealed partial class GlanceWidgetSettingsSection : UserControl
             })
         {
             await SaveAsync(settings => settings.TimeFormat = timeFormat);
+        }
+    }
+
+    private async void SecondTimeZoneComboBox_SelectionChanged(
+        object sender,
+        SelectionChangedEventArgs e)
+    {
+        if (SecondTimeZoneComboBox.SelectedItem is SelectionItem { Value: string zoneId })
+        {
+            await SaveAsync(settings => settings.SecondTimeZoneId = zoneId);
         }
     }
 

@@ -246,7 +246,7 @@ public static class ExplorerQuickAccessHelper
         })
         {
             IsBackground = true,
-            Name = $"DeskBox QuickAccess {operationName}"
+            Name = $"OpenWinBox QuickAccess {operationName}"
         };
 
         thread.SetApartmentState(ApartmentState.STA);

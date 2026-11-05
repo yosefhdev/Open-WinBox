@@ -92,7 +92,7 @@ public sealed partial class DeskBoxDataBackupService
         _rootPath = Path.GetFullPath(rootPath);
         _recoveryRootPath = Path.GetFullPath(
             string.IsNullOrWhiteSpace(recoveryRootPath)
-                ? Path.Combine(Path.GetDirectoryName(_rootPath) ?? _rootPath, "DeskBox-Recovery")
+                ? Path.Combine(Path.GetDirectoryName(_rootPath) ?? _rootPath, "OpenWinBox-Recovery")
                 : recoveryRootPath);
     }
 
@@ -299,7 +299,7 @@ public sealed partial class DeskBoxDataBackupService
             AutomaticSnapshotTarget target = ResolveAutomaticSnapshotTarget(probeWriteAccess: true);
             Directory.CreateDirectory(target.Directory);
             string? latestSnapshot = Directory
-                .EnumerateFiles(target.Directory, "DeskBox-Auto-*.zip")
+                .EnumerateFiles(target.Directory, "OpenWinBox-Auto-*.zip")
                 .OrderByDescending(File.GetLastWriteTimeUtc)
                 .FirstOrDefault();
             if (!force && latestSnapshot is not null &&
@@ -311,7 +311,7 @@ public sealed partial class DeskBoxDataBackupService
 
             string snapshotPath = GetAvailableArchivePath(
                 target.Directory,
-                $"DeskBox-Auto-{DateTime.Now:yyyyMMdd-HHmmss}.zip");
+                $"OpenWinBox-Auto-{DateTime.Now:yyyyMMdd-HHmmss}.zip");
             await CreateArchiveCoreAsync(snapshotPath, "automatic", cancellationToken);
             // Deep review R15 (F7 audit): the archive is durable at this
             // point — a retention-prune or directory enumeration throwing
@@ -383,7 +383,7 @@ public sealed partial class DeskBoxDataBackupService
             Directory.CreateDirectory(destinationDirectory);
             string backupPath = GetAvailableArchivePath(
                 destinationDirectory,
-                $"DeskBox-Backup-{DateTime.Now:yyyyMMdd-HHmmss}.zip");
+                $"OpenWinBox-Backup-{DateTime.Now:yyyyMMdd-HHmmss}.zip");
             await CreateArchiveCoreAsync(backupPath, "manual", cancellationToken);
             App.Log($"[DataBackup] Exported backup '{backupPath}'.");
             return backupPath;
@@ -444,7 +444,7 @@ public sealed partial class DeskBoxDataBackupService
 
             string backupPath = GetAvailableArchivePath(
                 destinationDirectory,
-                $"DeskBox-CloudBackup-{DateTime.Now:yyyyMMdd-HHmmss}.zip");
+                $"OpenWinBox-CloudBackup-{DateTime.Now:yyyyMMdd-HHmmss}.zip");
             // The manifest must only claim domains that actually shipped —
             // WidgetStyle without a produced document does not count.
             CloudBackupDomain shippedScope = rootEntries is null
@@ -2586,7 +2586,7 @@ public sealed partial class DeskBoxDataBackupService
             }
 
             foreach (string path in Directory
-                         .EnumerateFiles(AutomaticSnapshotDirectory, "DeskBox-Auto-*.zip")
+                         .EnumerateFiles(AutomaticSnapshotDirectory, "OpenWinBox-Auto-*.zip")
                          .OrderByDescending(File.GetLastWriteTimeUtc))
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -2693,7 +2693,7 @@ public sealed partial class DeskBoxDataBackupService
                      .Distinct(StringComparer.OrdinalIgnoreCase)
                      .Where(Directory.Exists))
         {
-            foreach (string path in Directory.EnumerateFiles(directory, "DeskBox-Auto-*.zip"))
+            foreach (string path in Directory.EnumerateFiles(directory, "OpenWinBox-Auto-*.zip"))
             {
                 yield return path;
             }
@@ -3083,7 +3083,7 @@ public sealed partial class DeskBoxDataBackupService
 
         int kept = 0;
         foreach (string candidatePath in Directory
-                     .EnumerateFiles(directory, "DeskBox-Auto-*.zip")
+                     .EnumerateFiles(directory, "OpenWinBox-Auto-*.zip")
                      .OrderByDescending(File.GetLastWriteTimeUtc))
         {
             if (pinnedPath is not null &&
@@ -3126,7 +3126,7 @@ public sealed partial class DeskBoxDataBackupService
         Directory.CreateDirectory(PreRestoreBackupDirectory);
         string preRestorePath = GetAvailableArchivePath(
             PreRestoreBackupDirectory,
-            $"DeskBox-PreRestore-{DateTime.Now:yyyyMMdd-HHmmss}.zip");
+            $"OpenWinBox-PreRestore-{DateTime.Now:yyyyMMdd-HHmmss}.zip");
         await WritePendingRestoreMarkerAtomicallyAsync(
             PendingRestoreMarkerPath,
             marker with { SafetyBackupPath = preRestorePath },
@@ -3147,7 +3147,7 @@ public sealed partial class DeskBoxDataBackupService
     {
         int kept = 0;
         foreach (string candidatePath in Directory
-                     .EnumerateFiles(PreRestoreBackupDirectory, "DeskBox-PreRestore-*.zip")
+                     .EnumerateFiles(PreRestoreBackupDirectory, "OpenWinBox-PreRestore-*.zip")
                      .OrderByDescending(File.GetLastWriteTimeUtc))
         {
             if (pinnedPath is not null &&

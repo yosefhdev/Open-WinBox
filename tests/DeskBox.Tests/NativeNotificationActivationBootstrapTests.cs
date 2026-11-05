@@ -57,6 +57,6 @@ public sealed class NativeNotificationActivationBootstrapTests
     [InlineData("--open-settings", false)]
     public void NotificationLaunchIsDistinguishedFromBareAndStartupLaunches(string argument, bool expected)
     {
-        Assert.Equal(expected, NativeNotificationActivationBootstrap.IsNotificationLaunch(["DeskBox.exe", argument]));
+        Assert.Equal(expected, NativeNotificationActivationBootstrap.IsNotificationLaunch(["OpenWinBox.exe", argument]));
     }
 }

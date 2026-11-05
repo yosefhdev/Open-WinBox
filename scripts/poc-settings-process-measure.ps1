@@ -1,11 +1,11 @@
 # Phase 0 PoC measurement for the settings-process split (1.6.0 batch 1).
-# Spawns DeskBox.exe --settings-poc, times spawn-to-first-activation, samples
+# Spawns OpenWinBox.exe --settings-poc, times spawn-to-first-activation, samples
 # the process memory, closes the window (validating close-exits-process), and
 # optionally measures the in-proc comparison: how much memory the current
 # single-process settings window adds to the main instance.
 #
 # Usage:
-#   pwsh scripts/poc-settings-process-measure.ps1 -ExePath <DeskBox.exe> [-Iterations 3] [-IncludeInProc]
+#   pwsh scripts/poc-settings-process-measure.ps1 -ExePath <OpenWinBox.exe> [-Iterations 3] [-IncludeInProc]
 # Requires: the main DeskBox instance already running (for the in-proc part),
 # PowerShell 7 (pwsh) for DateTimeOffset parsing convenience.
 

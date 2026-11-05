@@ -202,6 +202,7 @@ internal static class SettingsSearchCatalog
         new("GlanceSettings", "Glance.Cache.Title", null),
         new("GlanceSettings", "Glance.Typography.Font", null),
         new("GlanceSettings", "Glance.Typography.TimeFormat", "Settings.Glance.TimeFormat.Description"),
+        new("GlanceSettings", "Glance.SecondClock.Title", "Glance.SecondClock.Description"),
         new("GlanceSettings", "Glance.Typography.Title", null),
         new("GlanceSettings", "Glance.Display.Title", "Glance.Display.Description"),
         new("GlanceSettings", "Glance.Layout.Title", null),

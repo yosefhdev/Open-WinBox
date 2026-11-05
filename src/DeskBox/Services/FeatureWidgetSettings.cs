@@ -150,6 +150,7 @@ public static class FeatureWidgetSettings
             WidgetKind.Weather => HasLiveWidget(settings, WidgetKind.Weather),
             WidgetKind.Search => HasLiveWidget(settings, WidgetKind.Search),
             WidgetKind.Glance => HasLiveWidget(settings, WidgetKind.Glance),
+            WidgetKind.Audio => HasLiveWidget(settings, WidgetKind.Audio),
             _ => false
         };
     }

@@ -34,7 +34,7 @@ internal static class ManagedStoragePathService
     public static string GetRecommendedPath()
     {
         string userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        return Path.Combine(userProfilePath, "DeskBox");
+        return Path.Combine(userProfilePath, "OpenWinBox");
     }
 
     /// <summary>
@@ -148,7 +148,7 @@ internal static class ManagedStoragePathService
             ? null
             : Path.Combine(
                 suitableNonSystemDrive.Value.RootPath,
-                "DeskBox",
+                "OpenWinBox",
                 BuildAccountSubfolder(userProfilePath, Environment.UserName));
 
         return new ManagedStoragePathAssessment(

@@ -114,3 +114,7 @@ store-listing/
 
 # Agent scratch workspace (review/fix iteration artifacts)
 .scratch/
+
+# OpenWinBox: local release output and private plans
+dist/
+docs/plans/

@@ -1,10 +1,10 @@
 [Code]
 const
-  DeskBoxProductAppId = '{5E052824-3456-427E-9759-3BCAE078A1D3}';
-  DeskBoxLegacyExeName = 'DeskBox.exe';
-  DeskBoxUninstallKey = 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{5E052824-3456-427E-9759-3BCAE078A1D3}_is1';
-  DeskBoxWowUninstallKey = 'Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{5E052824-3456-427E-9759-3BCAE078A1D3}_is1';
-  DeskBoxInstallStateKey = 'Software\DeskBox\DirectInstall';
+  DeskBoxProductAppId = '{618EE302-671B-4DE0-A4A9-F5A1A315E63A}';
+  DeskBoxLegacyExeName = 'OpenWinBox.exe';
+  DeskBoxUninstallKey = 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{618EE302-671B-4DE0-A4A9-F5A1A315E63A}_is1';
+  DeskBoxWowUninstallKey = 'Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{618EE302-671B-4DE0-A4A9-F5A1A315E63A}_is1';
+  DeskBoxInstallStateKey = 'Software\OpenWinBox\DirectInstall';
 
 var
   DirectInstallUpgrade: Boolean;
@@ -177,10 +177,10 @@ begin
   AddRegistryInstallCandidate(HKEY_CURRENT_USER, DeskBoxInstallStateKey, 'HKCU DeskBox install state');
   AddRegistryInstallCandidate(HKEY_LOCAL_MACHINE, DeskBoxInstallStateKey, 'HKLM DeskBox install state');
 
-  AddInstallCandidate(ExpandConstant('{localappdata}\Programs\DeskBox'), 'current default path', True);
-  AddInstallCandidate(ExpandConstant('{localappdata}\DeskBox'), 'legacy user path', True);
-  AddInstallCandidate(ExpandConstant('{commonpf}\DeskBox'), 'default Program Files path', True);
-  AddInstallCandidate(ExpandConstant('{commonpf32}\DeskBox'), 'default Program Files (x86) path', True);
+  AddInstallCandidate(ExpandConstant('{localappdata}\Programs\OpenWinBox'), 'current default path', True);
+  AddInstallCandidate(ExpandConstant('{localappdata}\OpenWinBox'), 'legacy user path', True);
+  AddInstallCandidate(ExpandConstant('{commonpf}\OpenWinBox'), 'default Program Files path', True);
+  AddInstallCandidate(ExpandConstant('{commonpf32}\OpenWinBox'), 'default Program Files (x86) path', True);
 
   AddShortcutInstallCandidate(ExpandConstant('{userprograms}\DeskBox.lnk'));
   AddShortcutInstallCandidate(ExpandConstant('{commonprograms}\DeskBox.lnk'));
@@ -224,7 +224,7 @@ begin
   if DirectInstallUpgrade and (ExistingInstallPath <> '') then
     Result := ExistingInstallPath
   else
-    Result := ExpandConstant('{autopf}\DeskBox');
+    Result := ExpandConstant('{autopf}\OpenWinBox');
 end;
 
 function GetInstallScopeName(Param: string): string;
@@ -367,7 +367,7 @@ begin
        (ExistingMachine = DESKBOX_PE_MACHINE_ARM64) then
     begin
       MessageText := FmtMessage(ExpandConstant('{cm:ArchitectureMismatchBody}'), [ExistingInstallPath]);
-      Log('DeskBox installation blocked: the existing DeskBox.exe is the native ARM64 build; this installer is x64.');
+      Log('DeskBox installation blocked: the existing OpenWinBox.exe is the native ARM64 build; this installer is x64.');
       if not ShouldSuppressDirectInstallMessages then
         MsgBox(MessageText, mbError, MB_OK);
       DirectInstallUpgrade := False;
@@ -411,7 +411,7 @@ begin
   CommandLine :=
     '$target = [System.IO.Path]::GetFullPath(''' + EscapePowerShellString(InstallPath) + ''').TrimEnd(''\''); ' +
     'Get-CimInstance Win32_Process | ' +
-    'Where-Object { (@(''DeskBox.exe'', ''DeskBox.ThumbnailProxy.exe'') -icontains $_.Name) -and $_.ExecutablePath -and ' +
+    'Where-Object { (@(''OpenWinBox.exe'', ''DeskBox.ThumbnailProxy.exe'') -icontains $_.Name) -and $_.ExecutablePath -and ' +
     '([System.IO.Path]::GetDirectoryName($_.ExecutablePath)).TrimEnd(''\'') -ieq $target } | ' +
     'ForEach-Object { Stop-Process -Id $_.ProcessId -Force }';
   Parameters := '-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "' + CommandLine + '"';

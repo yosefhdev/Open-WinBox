@@ -406,7 +406,7 @@ public sealed class CallbackDeferralContractTests : IDisposable
         // real test rather than a text pin.
         string ownedRoot = Path.Combine(
             Path.GetTempPath(),
-            "DeskBox",
+            "OpenWinBox",
             "VirtualDrops",
             $"test-{Guid.NewGuid():N}");
         string ownedDir = Path.Combine(ownedRoot, "inner");

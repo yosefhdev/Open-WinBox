@@ -234,7 +234,7 @@ public sealed class SettingsSliceContractBaselineTests
         Assert.Null(s.SearchPopupCustomHeight);
         Assert.Equal("none", s.CloudBackupProvider);
         Assert.Equal("", s.CloudBackupServerUrl);
-        Assert.Equal("DeskBox/backups", s.CloudBackupRemotePath);
+        Assert.Equal("OpenWinBox/backups", s.CloudBackupRemotePath);
         Assert.Equal("", s.CloudBackupUsername);
         Assert.False(s.CloudBackupTodoDataEnabled);
         Assert.False(s.CloudBackupQuickCaptureDataEnabled);

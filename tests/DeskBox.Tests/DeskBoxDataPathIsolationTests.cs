@@ -10,10 +10,10 @@ public sealed class DeskBoxDataPathIsolationTests
         var service = new DeskBoxDataPathService();
 
         Assert.False(service.IsDevelopmentRoot);
-        Assert.Equal("DeskBox_Activate_Event_7F3A9B2E", service.ActivationEventName);
-        Assert.Equal("DeskBox_SingleInstance_Mutex_7F3A9B2E", service.SingleInstanceMutexName);
+        Assert.Equal("OpenWinBox_Activate_Event_7F3A9B2E", service.ActivationEventName);
+        Assert.Equal("OpenWinBox_SingleInstance_Mutex_7F3A9B2E", service.SingleInstanceMutexName);
         Assert.Equal(
-            Path.Combine(Path.GetDirectoryName(service.RootPath)!, "DeskBox-Recovery"),
+            Path.Combine(Path.GetDirectoryName(service.RootPath)!, "OpenWinBox-Recovery"),
             service.RecoveryDirectory);
     }
 
@@ -31,7 +31,7 @@ public sealed class DeskBoxDataPathIsolationTests
         Assert.StartsWith(first.RootPath, first.DataDirectory, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(first.SingleInstanceMutexName, same.SingleInstanceMutexName);
         Assert.NotEqual(first.SingleInstanceMutexName, second.SingleInstanceMutexName);
-        Assert.NotEqual("DeskBox_SingleInstance_Mutex_7F3A9B2E", first.SingleInstanceMutexName);
+        Assert.NotEqual("OpenWinBox_SingleInstance_Mutex_7F3A9B2E", first.SingleInstanceMutexName);
     }
 
     [Fact]

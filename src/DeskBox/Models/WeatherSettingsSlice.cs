@@ -52,7 +52,7 @@ public sealed class WeatherSettingsSlice
     public string WeatherSkin { get; set; } = "Standard";
 
     /// <summary>
-    /// Weather icon style. Valid values: <c>"Fluent"</c>, <c>"DeskBox"</c>,
+    /// Weather icon style. Valid values: <c>"Fluent"</c>, <c>"OpenWinBox"</c>,
     /// <c>"Flat"</c>, <c>"Line"</c>. Persisted values outside this set
     /// (including the retired <c>"Emoji"</c>) normalize to the default.
     /// </summary>

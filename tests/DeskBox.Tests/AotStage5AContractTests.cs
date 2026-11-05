@@ -65,7 +65,7 @@ public sealed class AotStage5AContractTests
         Assert.Contains("expectedPublishDirectory", launcher, StringComparison.Ordinal);
         Assert.Contains("peImages", launcher, StringComparison.Ordinal);
         Assert.Contains("Get-FileHash", launcher, StringComparison.Ordinal);
-        Assert.Contains("DeskBox.exe", launcher, StringComparison.Ordinal);
+        Assert.Contains("OpenWinBox.exe", launcher, StringComparison.Ordinal);
         Assert.Contains("deskbox_native.dll", launcher, StringComparison.Ordinal);
         Assert.Contains("rustNative.publishSha256", launcher, StringComparison.Ordinal);
         Assert.Contains("rustNative.publishMatchesStaging", launcher, StringComparison.Ordinal);

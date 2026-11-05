@@ -230,7 +230,7 @@ public sealed class AotPublishContractTests
         Assert.Contains("dotnetSdkVersion", script, StringComparison.Ordinal);
         Assert.Contains("--artifacts-path", script, StringComparison.Ordinal);
         Assert.Contains("buildArtifactsDirectory", script, StringComparison.Ordinal);
-        Assert.Contains("DeskBox.pdb", script, StringComparison.Ordinal);
+        Assert.Contains("OpenWinBox.pdb", script, StringComparison.Ordinal);
         Assert.Contains("DeskBox.Updater.pdb", script, StringComparison.Ordinal);
     }
 

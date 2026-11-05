@@ -1,10 +1,10 @@
 ﻿[Code]
 const
-  DeskBoxProcessName = 'DeskBox.exe';
+  DeskBoxProcessName = 'OpenWinBox.exe';
   DeskBoxDataSettingsPath = '{localappdata}\DeskBox\data\settings.json';
-  DeskBoxDefaultManagedStorageRootPath = '{%USERPROFILE}\DeskBox';
-  DeskBoxAppDataRootPath = '{localappdata}\DeskBox';
-  DeskBoxRecoveryRootPath = '{localappdata}\DeskBox-Recovery';
+  DeskBoxDefaultManagedStorageRootPath = '{%USERPROFILE}\OpenWinBox';
+  DeskBoxAppDataRootPath = '{localappdata}\OpenWinBox';
+  DeskBoxRecoveryRootPath = '{localappdata}\OpenWinBox-Recovery';
   // Identity Name of the Microsoft Store (MSIX) package declared in
   // src\DeskBox\Package.appxmanifest. The Store edition keeps its data inside
   // its own MSIX LocalCache, separate from the two data roots above, so this
@@ -12,16 +12,16 @@ const
   // (or its state cannot be verified) those roots are still kept as a
   // conservative safety measure.
   DeskBoxStorePackageIdentityName = 'D1FC332A.DeskBoxWidgets';
-  DeskBoxTemporaryRootPath = '{%TEMP}\DeskBox';
-  DeskBoxProductRegistryKey = 'Software\DeskBox';
+  DeskBoxTemporaryRootPath = '{%TEMP}\OpenWinBox';
+  DeskBoxProductRegistryKey = 'Software\OpenWinBox';
   DeskBoxStartupRunKey = 'Software\Microsoft\Windows\CurrentVersion\Run';
-  DeskBoxStartupTaskNamePrefix = 'DeskBox User Startup';
-  DeskBoxAppUserModelId = 'DeskBox.DeskBox';
+  DeskBoxStartupTaskNamePrefix = 'OpenWinBox User Startup';
+  DeskBoxAppUserModelId = 'DeskBox.OpenWinBox';
   DeskBoxAppUserModelIdRegistryKey = 'Software\Classes\AppUserModelId';
   DeskBoxNotificationSettingsRegistryKey = 'Software\Microsoft\Windows\CurrentVersion\Notifications\Settings';
   DeskBoxClassesClsidRegistryKey = 'Software\Classes\CLSID';
   DeskBoxPurgeUserDataParameter = '/PURGEUSERDATA';
-  DeskBoxManagedStorageShortcutFileName = 'DeskBox Files.lnk';
+  DeskBoxManagedStorageShortcutFileName = 'OpenWinBox Files.lnk';
   DeskBoxManagedStorageShortcutDescription = 'DeskBox managed storage';
   // Three states of the Microsoft Store edition probe: not registered for the
   // current user, registered for the current user, or unverifiable. Unknown
@@ -193,7 +193,7 @@ begin
     if Number = 1 then
       CandidateName := DeskBoxManagedStorageShortcutFileName
     else
-      CandidateName := 'DeskBox Files (' + IntToStr(Number) + ').lnk';
+      CandidateName := 'OpenWinBox Files (' + IntToStr(Number) + ').lnk';
 
     CandidatePath := AddBackslash(ExpandConstant('{userdesktop}')) + CandidateName;
     if ShortcutTargetsManagedStorage(CandidatePath, FolderPath) then
@@ -226,7 +226,7 @@ begin
     if Number = 1 then
       CandidateName := DeskBoxManagedStorageShortcutFileName
     else
-      CandidateName := 'DeskBox Files (' + IntToStr(Number) + ').lnk';
+      CandidateName := 'OpenWinBox Files (' + IntToStr(Number) + ').lnk';
 
     CandidatePath := AddBackslash(ExpandConstant('{userdesktop}')) + CandidateName;
     if (not FileExists(CandidatePath)) and (not DirExists(CandidatePath)) then
@@ -656,19 +656,19 @@ var
   StartupExecutablePath: string;
   StartupShortcutPath: string;
 begin
-  if RegQueryStringValue(HKEY_CURRENT_USER, DeskBoxStartupRunKey, 'DeskBox', Value) then
+  if RegQueryStringValue(HKEY_CURRENT_USER, DeskBoxStartupRunKey, 'OpenWinBox', Value) then
   begin
     StartupExecutablePath := ExtractExecutablePath(Value);
     if SameInstallPath(ExtractFileDir(StartupExecutablePath), ExpandConstant('{app}')) and
        (CompareText(ExtractFileName(StartupExecutablePath), DeskBoxProcessName) = 0) and
-       RegDeleteValue(HKEY_CURRENT_USER, DeskBoxStartupRunKey, 'DeskBox') then
+       RegDeleteValue(HKEY_CURRENT_USER, DeskBoxStartupRunKey, 'OpenWinBox') then
       Log('DeskBox uninstall removed startup registry entry.')
     else
       Log('DeskBox uninstall preserved startup registry entry owned by another DeskBox installation.')
   end;
 
   // Also remove the legacy startup folder shortcut.
-  StartupShortcutPath := ExpandConstant('{userstartup}\DeskBox.lnk');
+  StartupShortcutPath := ExpandConstant('{userstartup}\OpenWinBox.lnk');
   if ShortcutTargetsCurrentInstall(StartupShortcutPath) then
   begin
     if DeleteFile(StartupShortcutPath) then
@@ -739,7 +739,7 @@ procedure RemoveTaskbarPinnedShortcut;
 var
   Path: string;
 begin
-  Path := ExpandConstant('{userappdata}\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\DeskBox.lnk');
+  Path := ExpandConstant('{userappdata}\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\OpenWinBox.lnk');
   if ShortcutTargetsCurrentInstall(Path) then
   begin
     if DeleteFile(Path) then
@@ -754,7 +754,7 @@ var
   ExePath: string;
   Value: string;
 begin
-  ExePath := ExpandConstant('{app}\DeskBox.exe');
+  ExePath := ExpandConstant('{app}\OpenWinBox.exe');
   if RegQueryStringValue(HKEY_CURRENT_USER, DeskBoxAppCompatLayersKey, ExePath, Value) then
   begin
     if RegDeleteValue(HKEY_CURRENT_USER, DeskBoxAppCompatLayersKey, ExePath) then
@@ -809,7 +809,7 @@ begin
   if not DeleteExpectedDirectory(
       TemporaryPath,
       ExpandConstant(DeskBoxTemporaryRootPath),
-      'DeskBox') then
+      'OpenWinBox') then
     AppendFailedCleanupPath(FailedPaths, TemporaryPath);
 
   if PurgeDeskBoxAppData then
@@ -819,12 +819,12 @@ begin
     if not DeleteExpectedDirectory(
         AppDataPath,
         ExpandConstant(DeskBoxAppDataRootPath),
-        'DeskBox') then
+        'OpenWinBox') then
       AppendFailedCleanupPath(FailedPaths, AppDataPath);
     if not DeleteExpectedDirectory(
         RecoveryPath,
         ExpandConstant(DeskBoxRecoveryRootPath),
-        'DeskBox-Recovery') then
+        'OpenWinBox-Recovery') then
       AppendFailedCleanupPath(FailedPaths, RecoveryPath);
 
     // The product registry key carries the installer language and install
@@ -884,7 +884,7 @@ begin
     NotificationRegistrationTargetsCurrentInstall(ActivatorId);
   if IconPath = '' then
     IconPath := ExpandConstant(
-      '{localappdata}\Microsoft\WindowsAppSDK\DeskBox.DeskBox.png');
+      '{localappdata}\Microsoft\WindowsAppSDK\OpenWinBox.OpenWinBox.png');
 
   PathAppUserModelId := ExpandConstant('{app}\' + DeskBoxProcessName);
   StringChangeEx(PathAppUserModelId, '\', '.', True);

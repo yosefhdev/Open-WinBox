@@ -157,7 +157,7 @@ public sealed class CloudBackupServiceCredentialTests : IDisposable
 
         Assert.Equal("webdav", options.Provider);
         Assert.Equal("https://dav.example.com/dav/", options.ServerUrl);
-        Assert.Equal("DeskBox/backups", options.RemotePath);
+        Assert.Equal("OpenWinBox/backups", options.RemotePath);
         Assert.Equal(1, options.RetentionCount);
         Assert.Equal(5, options.IntervalMinutes);
 
@@ -179,7 +179,7 @@ public sealed class CloudBackupServiceCredentialTests : IDisposable
         new(
             Provider: provider,
             ServerUrl: serverUrl,
-            RemotePath: "DeskBox/backups",
+            RemotePath: "OpenWinBox/backups",
             Username: username,
             Scope: CloudBackupDomain.TodoData,
             RetentionCount: CloudBackupSettingsPolicy.DefaultRetentionCount,

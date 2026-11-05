@@ -553,7 +553,7 @@ public partial class App : Application
 
     private static string GetAppCompatReport()
     {
-        string exePath = Path.Combine(AppContext.BaseDirectory, "DeskBox.exe");
+        string exePath = Path.Combine(AppContext.BaseDirectory, "OpenWinBox.exe");
         string? currentUser = GetAppCompatLayerValue(Registry.CurrentUser, exePath);
         string? localMachine = GetAppCompatLayerValue(Registry.LocalMachine, exePath);
 

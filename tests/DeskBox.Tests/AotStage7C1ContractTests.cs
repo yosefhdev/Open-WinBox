@@ -133,7 +133,7 @@ public sealed class AotStage7C1ContractTests
                      "DeskBox\\.Updater",
                      "HasClrHeader",
                      "publishPayloadHashesMatch",
-                     "DeskBox.pdb",
+                     "OpenWinBox.pdb",
                      "deskbox_native.pdb",
                      "signingAndWackExecuted = $false"
                  })

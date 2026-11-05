@@ -12,9 +12,9 @@ namespace DeskBox.Services;
 
 public sealed partial class AppUpdateService : IAppUpdateService
 {
-    public const string DefaultManifestUrl = "https://deskbox.fun/update/stable.json";
-    public const string DefaultGitHubLatestReleaseApiUrl = "https://api.github.com/repos/Tianyu199509/DeskBox/releases/latest";
-    public const string DefaultManualDownloadUrl = "https://deskbox.fun/download";
+    public const string DefaultManifestUrl = "https://github.com/yosefhdev/Open-WinBox/releases/latest/download/stable.json";
+    public const string DefaultGitHubLatestReleaseApiUrl = "https://api.github.com/repos/yosefhdev/Open-WinBox/releases/latest";
+    public const string DefaultManualDownloadUrl = "https://github.com/yosefhdev/Open-WinBox/releases/latest";
 
     private readonly HttpClient _httpClient;
     private readonly string _manifestUrl;
@@ -32,7 +32,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
         {
             Timeout = TimeSpan.FromSeconds(10)
         };
-        client.DefaultRequestHeaders.UserAgent.ParseAdd($"DeskBox/{GetCurrentAppVersion()}");
+        client.DefaultRequestHeaders.UserAgent.ParseAdd($"OpenWinBox/{GetCurrentAppVersion()}");
         return client;
     }
 
@@ -45,7 +45,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
         _httpClient = httpClient ?? new HttpClient();
         _httpClient.Timeout = TimeSpan.FromSeconds(20);
         _httpClient.DefaultRequestHeaders.UserAgent.Clear();
-        _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("DeskBox", GetCurrentAppVersion()));
+        _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("OpenWinBox", GetCurrentAppVersion()));
 
         _manifestUrl = string.IsNullOrWhiteSpace(manifestUrl)
             ? DefaultManifestUrl
@@ -470,7 +470,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
         string? appPath = Environment.ProcessPath;
         if (string.IsNullOrWhiteSpace(appPath) || !File.Exists(appPath))
         {
-            appPath = Path.Combine(AppContext.BaseDirectory, "DeskBox.exe");
+            appPath = Path.Combine(AppContext.BaseDirectory, "OpenWinBox.exe");
         }
 
         if (!TryGetInstallDirectory(appPath, out string installDirectory))
@@ -532,7 +532,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
     /// Maps the app's effective UI culture (LocalizationService.CurrentCultureName)
     /// to the installer language names declared in installer/DeskBox.iss — the
     /// exact reverse of InstallLanguageCode in that script, which writes
-    /// HKCU\Software\DeskBox\InstallLanguage after each install. Both sides
+    /// HKCU\Software\OpenWinBox\InstallLanguage after each install. Both sides
     /// and the [Languages] sections must be extended together when a language
     /// is added; DeskBox.Updater.KnownInstallerLanguages whitelists the same
     /// names before they reach the installer command line.
@@ -571,7 +571,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
             string fullAppPath = Path.GetFullPath(appPath);
             if (!string.Equals(
                     Path.GetFileName(fullAppPath),
-                    "DeskBox.exe",
+                    "OpenWinBox.exe",
                     StringComparison.OrdinalIgnoreCase))
             {
                 return false;
@@ -756,7 +756,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
         {
             Channel = "direct",
             Version = version.Trim(),
-            ReleaseNotesUrl = $"https://github.com/Tianyu199509/DeskBox/releases/tag/v{version.Trim()}",
+            ReleaseNotesUrl = $"https://github.com/yosefhdev/Open-WinBox/releases/tag/v{version.Trim()}",
         };
     }
 
@@ -773,11 +773,6 @@ public sealed partial class AppUpdateService : IAppUpdateService
             return false;
         }
 
-        if (IsHostOrSubdomain(uri, "deskbox.fun"))
-        {
-            return true;
-        }
-
         // GitHub hosts third-party repositories, so trusting the whole domain
         // would let a tampered manifest point at any attacker repository with
         // a matching hash. Only this project's own release downloads count;
@@ -786,7 +781,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
         // which therefore must never be trusted as a manifest origin itself.
         return string.Equals(uri.Host, "github.com", StringComparison.OrdinalIgnoreCase) &&
             uri.AbsolutePath.StartsWith(
-                "/Tianyu199509/DeskBox/releases/download/",
+                "/yosefhdev/Open-WinBox/releases/download/",
                 StringComparison.OrdinalIgnoreCase);
     }
 
@@ -932,7 +927,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
         string fileName = Path.GetFileName(downloadUri.LocalPath);
         return string.IsNullOrWhiteSpace(fileName) ||
             !fileName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
-            ? $"DeskBox_Setup_{SanitizePathSegment(version)}_{CurrentInstallerArchitectureSuffix}.exe"
+            ? $"OpenWinBox_Setup_{SanitizePathSegment(version)}_{CurrentInstallerArchitectureSuffix}.exe"
             : SanitizeFileName(fileName);
     }
 
@@ -974,7 +969,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
     internal static bool IsInstallerAssetName(string assetName, string architectureSuffix)
     {
         return !string.IsNullOrWhiteSpace(architectureSuffix) &&
-            assetName.StartsWith("DeskBox_Setup_", StringComparison.OrdinalIgnoreCase) &&
+            assetName.StartsWith("OpenWinBox_Setup_", StringComparison.OrdinalIgnoreCase) &&
             assetName.EndsWith($"_{architectureSuffix}.exe", StringComparison.OrdinalIgnoreCase);
     }
 
@@ -989,7 +984,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
         }
 
         string fileName = Path.GetFileName(uri.LocalPath);
-        if (!fileName.StartsWith("DeskBox_Setup_", StringComparison.OrdinalIgnoreCase))
+        if (!fileName.StartsWith("OpenWinBox_Setup_", StringComparison.OrdinalIgnoreCase))
         {
             // Keep compatibility with a server endpoint that returns a
             // redirect or content-disposition filename instead of exposing

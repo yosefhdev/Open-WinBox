@@ -10,14 +10,14 @@ public sealed class StartupLaunchPolicyTests
     [InlineData("\"--startup\"")]
     public void IsStartupLaunch_AcceptsProcessArgument(string argument)
     {
-        Assert.True(StartupLaunchPolicy.IsStartupLaunch(["DeskBox.exe", argument]));
+        Assert.True(StartupLaunchPolicy.IsStartupLaunch(["OpenWinBox.exe", argument]));
     }
 
     [Fact]
     public void IsStartupLaunch_AcceptsActivationArguments()
     {
         Assert.True(StartupLaunchPolicy.IsStartupLaunch(
-            ["DeskBox.exe"],
+            ["OpenWinBox.exe"],
             "--some-argument --startup"));
     }
 
@@ -25,7 +25,7 @@ public sealed class StartupLaunchPolicyTests
     public void IsStartupLaunch_AcceptsStartupTaskActivation()
     {
         Assert.True(StartupLaunchPolicy.IsStartupLaunch(
-            ["DeskBox.exe"],
+            ["OpenWinBox.exe"],
             isStartupTaskActivation: true));
     }
 
@@ -33,14 +33,14 @@ public sealed class StartupLaunchPolicyTests
     public void IsStartupLaunch_AcceptsScheduledTaskCommandLine()
     {
         Assert.True(StartupLaunchPolicy.IsStartupLaunch(
-            ["DeskBox.exe", "--startup", "--startup-source=scheduled-task"]));
+            ["OpenWinBox.exe", "--startup", "--startup-source=scheduled-task"]));
     }
 
     [Fact]
     public void IsStartupLaunch_RejectsOrdinaryLaunch()
     {
         Assert.False(StartupLaunchPolicy.IsStartupLaunch(
-            ["DeskBox.exe"],
+            ["OpenWinBox.exe"],
             "--some-argument"));
     }
 }

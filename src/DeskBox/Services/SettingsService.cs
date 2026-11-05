@@ -3252,7 +3252,7 @@ settings.FocusClickedWidgetOnRaise = false;
     {
         return Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-            "DeskBox");
+            "OpenWinBox");
     }
 
     public static string GetRecommendedManagedStorageRootPath()

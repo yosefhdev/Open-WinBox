@@ -11,7 +11,7 @@ namespace DeskBox.Tests;
 public sealed class AutostartBootReliabilityTests
 {
     private const string ExecutablePath =
-        @"C:\Program Files\DeskBox\DeskBox.exe";
+        @"C:\Program Files\DeskBox\OpenWinBox.exe";
 
     [Theory]
     [InlineData("小")]
@@ -21,7 +21,7 @@ public sealed class AutostartBootReliabilityTests
     [InlineData("日本語 😀")]
     public void TaskXml_PreservesUnicodePaths(string folderName)
     {
-        string path = $@"C:\Users\{folderName}\DeskBox\DeskBox.exe";
+        string path = $@"C:\Users\{folderName}\DeskBox\OpenWinBox.exe";
         string xml = DirectStartupTaskBackend.BuildTaskXml(path, "S-1-5-21-1000");
         DirectStartupTaskRegistration registration = DirectStartupTaskBackend.ParseTaskXml(xml);
 

@@ -619,7 +619,12 @@ public sealed partial class WidgetManager
                 WidgetKind.Glance,
                 CreateOrShowGlanceWidgetsAsync,
                 SetGlanceFeatureWidgetEnabledAsync,
-                () => CloseLoadedFeatureWidgetWindows(WidgetKind.Glance))
+                () => CloseLoadedFeatureWidgetWindows(WidgetKind.Glance)),
+            new(
+                WidgetKind.Audio,
+                async _ => await CreateSingletonContentFeatureWidgetAsync(WidgetKind.Audio),
+                (enabled, reveal) => SetContentFeatureWidgetEnabledAsync(WidgetKind.Audio, enabled, reveal),
+                () => HideAndCloseFeatureWidgetAsync(WidgetKind.Audio))
         ];
 
         return handlers.ToDictionary(handler => handler.WidgetKind);
@@ -655,6 +660,14 @@ public sealed partial class WidgetManager
                     request.CancellationToken)),
             new(
                 WidgetKind.Music,
+                async request => await CreateContentWidgetFromConfigAsync(
+                    request.Config,
+                    request.KeepPreparedForAnimation,
+                    request.RevealAfterCreate,
+                    request.ShowRaisedWhileInitializing,
+                    request.CancellationToken)),
+            new(
+                WidgetKind.Audio,
                 async request => await CreateContentWidgetFromConfigAsync(
                     request.Config,
                     request.KeepPreparedForAnimation,
@@ -2739,6 +2752,7 @@ public sealed partial class WidgetManager
             WidgetKind.Music => (380, 190),
             WidgetKind.Weather => (200, 200),
             WidgetKind.Glance => (360, 260),
+            WidgetKind.Audio => (340, 320),
             _ => (
                 _settingsService.Settings.DefaultWidgetWidth,
                 _settingsService.Settings.DefaultWidgetHeight)

@@ -18,7 +18,7 @@ public sealed class LocalDumpsSupportContractTests
             combined,
             StringComparison.Ordinal);
         Assert.Contains(
-            "[ValidateSet('DeskBox.exe', 'DeskBox.Updater.exe')]",
+            "[ValidateSet('OpenWinBox.exe', 'DeskBox.Updater.exe')]",
             enable,
             StringComparison.Ordinal);
         Assert.Contains("Join-Path $localDumpsRoot $exeName", combined, StringComparison.Ordinal);

@@ -263,7 +263,7 @@ public sealed partial class DeskBoxDiagnosticsBundleService
                 string sanitizedLog = await ReadSanitizedLogTailAsync(logFilePath, cancellationToken);
                 await WriteTextEntryAsync(
                     archive,
-                    "DeskBox-sanitized.log",
+                    "OpenWinBox-sanitized.log",
                     sanitizedLog,
                     cancellationToken);
 
@@ -325,7 +325,7 @@ public sealed partial class DeskBoxDiagnosticsBundleService
     /// <summary>
     /// Redacts a single structured value (event-log properties). Unlike
     /// <see cref="SanitizeLog"/> this keeps the file name of a path — the
-    /// image name is the diagnostic signal ("DeskBox.exe" vs
+    /// image name is the diagnostic signal ("OpenWinBox.exe" vs
     /// "explorer.exe") while the directory is the private part. Log tails
     /// stay fully redacted.
     /// </summary>
@@ -443,7 +443,7 @@ public sealed partial class DeskBoxDiagnosticsBundleService
         string destinationDirectory,
         DateTimeOffset generatedAtUtc)
     {
-        string stem = $"DeskBox-Diagnostics-{generatedAtUtc.ToLocalTime():yyyyMMdd-HHmmss}";
+        string stem = $"OpenWinBox-Diagnostics-{generatedAtUtc.ToLocalTime():yyyyMMdd-HHmmss}";
         string path = Path.Combine(destinationDirectory, stem + ".zip");
         for (int suffix = 2; File.Exists(path) || File.Exists(path + ".tmp"); suffix++)
         {

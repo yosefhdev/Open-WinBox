@@ -42,7 +42,7 @@ public sealed partial class BackupSettingsViewModel
     private int _selectedLocalRetentionCount = BackupOptionKinds.DefaultLocalRetentionCount;
     private string _selectedProvider = BackupOptionKinds.ProviderNone;
     private string _serverUrl = string.Empty;
-    private string _remotePath = "DeskBox/backups";
+    private string _remotePath = "OpenWinBox/backups";
     private string _username = string.Empty;
     private bool _todoDataEnabled;
     private bool _quickCaptureDataEnabled;

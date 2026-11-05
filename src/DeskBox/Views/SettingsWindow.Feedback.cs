@@ -8,7 +8,8 @@ namespace DeskBox.Views;
 
 public sealed partial class SettingsWindow
 {
-    private const string FeedbackWallUrl = "https://deskbox.fun/feedback/";
+    private const string FeedbackWallUrl = "https://github.com/yosefhdev/Open-WinBox/issues";
+    private const string NewFeedbackUrl = "https://github.com/yosefhdev/Open-WinBox/issues/new";
     private const string FeedbackTempDirectoryName = "DeskBoxFeedback";
 
     private FeedbackService? _feedbackService;
@@ -19,20 +20,8 @@ public sealed partial class SettingsWindow
 
     private async void ShowFeedbackDialogButton_Click(object sender, RoutedEventArgs e)
     {
-        if (SettingsRoot.XamlRoot is null || _feedbackDialogShowing)
-        {
-            return;
-        }
-
-        _feedbackDialogShowing = true;
-        try
-        {
-            await ShowFeedbackDialogAsync();
-        }
-        finally
-        {
-            _feedbackDialogShowing = false;
-        }
+        // OpenWinBox has no feedback server; the inherited DeskBox dialog posted to deskbox.fun.
+        await Launcher.LaunchUriAsync(new Uri(NewFeedbackUrl));
     }
 
     private async Task ShowFeedbackDialogAsync()
@@ -356,20 +345,7 @@ public sealed partial class SettingsWindow
 
     private async void ShowMyFeedbackButton_Click(object sender, RoutedEventArgs e)
     {
-        if (SettingsRoot.XamlRoot is null || _feedbackDialogShowing)
-        {
-            return;
-        }
-
-        _feedbackDialogShowing = true;
-        try
-        {
-            await ShowMyFeedbackDialogAsync();
-        }
-        finally
-        {
-            _feedbackDialogShowing = false;
-        }
+        await Launcher.LaunchUriAsync(new Uri(FeedbackWallUrl));
     }
 
     private async Task ShowMyFeedbackDialogAsync()

@@ -32,7 +32,7 @@ public sealed class ManagedStorageDesktopShortcutServiceTests : IDisposable
         string candidate =
             ManagedStorageDesktopShortcutService.GetAvailableShortcutPath(_root);
 
-        Assert.Equal(Path.Combine(_root, "DeskBox Files (2).lnk"), candidate);
+        Assert.Equal(Path.Combine(_root, "OpenWinBox Files (2).lnk"), candidate);
         Assert.Equal("belongs to the user", File.ReadAllText(existing));
     }
 

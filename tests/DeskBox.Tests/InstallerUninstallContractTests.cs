@@ -60,9 +60,9 @@ public sealed class InstallerUninstallContractTests
         Assert.Contains("SuppressibleTaskDialogMsgBox", code, StringComparison.Ordinal);
         Assert.Contains("IDYES", code, StringComparison.Ordinal);
         Assert.Contains("DeskBoxPurgeUserDataParameter = '/PURGEUSERDATA'", code, StringComparison.Ordinal);
-        Assert.Contains("DeskBoxAppDataRootPath = '{localappdata}\\DeskBox'", code, StringComparison.Ordinal);
-        Assert.Contains("DeskBoxRecoveryRootPath = '{localappdata}\\DeskBox-Recovery'", code, StringComparison.Ordinal);
-        Assert.Contains("DeskBoxTemporaryRootPath = '{%TEMP}\\DeskBox'", code, StringComparison.Ordinal);
+        Assert.Contains("DeskBoxAppDataRootPath = '{localappdata}\\OpenWinBox'", code, StringComparison.Ordinal);
+        Assert.Contains("DeskBoxRecoveryRootPath = '{localappdata}\\OpenWinBox-Recovery'", code, StringComparison.Ordinal);
+        Assert.Contains("DeskBoxTemporaryRootPath = '{%TEMP}\\OpenWinBox'", code, StringComparison.Ordinal);
         Assert.Contains("MB_YESNO or MB_DEFBUTTON2", code, StringComparison.Ordinal);
         Assert.Contains("RemoveNotificationRegistration", code, StringComparison.Ordinal);
         Assert.Contains("if ActivatorId <> '' then", code, StringComparison.Ordinal);
@@ -96,7 +96,7 @@ public sealed class InstallerUninstallContractTests
         string code = ReadRepositoryFile("installer/DeskBox.Uninstall.iss");
 
         Assert.Contains(
-            "DeskBoxStartupTaskNamePrefix = 'DeskBox User Startup'",
+            "DeskBoxStartupTaskNamePrefix = 'OpenWinBox User Startup'",
             code,
             StringComparison.Ordinal);
         Assert.Contains("CreateOleObject('Schedule.Service')", code, StringComparison.Ordinal);
@@ -132,11 +132,11 @@ public sealed class InstallerUninstallContractTests
         Assert.Contains("UsePreviousPrivileges=yes", installer, StringComparison.Ordinal);
         Assert.Contains("{autoprograms}", installer, StringComparison.Ordinal);
         Assert.Contains("{autodesktop}", installer, StringComparison.Ordinal);
-        Assert.Contains("Root: HKA; Subkey: \"Software\\DeskBox\\DirectInstall\"", installer, StringComparison.Ordinal);
+        Assert.Contains("Root: HKA; Subkey: \"Software\\OpenWinBox\\DirectInstall\"", installer, StringComparison.Ordinal);
         Assert.Contains("ValueName: \"InstallScope\"", installer, StringComparison.Ordinal);
         Assert.Contains("if (CurStep = ssPostInstall) and (not IsAdminInstallMode) then", installer, StringComparison.Ordinal);
-        Assert.DoesNotContain("Root: HKCU; Subkey: \"Software\\DeskBox\"; ValueType: string; ValueName: \"InstallLanguage\"", installer, StringComparison.Ordinal);
-        Assert.Contains("ExpandConstant('{autopf}\\DeskBox')", installation, StringComparison.Ordinal);
+        Assert.DoesNotContain("Root: HKCU; Subkey: \"Software\\OpenWinBox\"; ValueType: string; ValueName: \"InstallLanguage\"", installer, StringComparison.Ordinal);
+        Assert.Contains("ExpandConstant('{autopf}\\OpenWinBox')", installation, StringComparison.Ordinal);
         Assert.Contains("HKEY_LOCAL_MACHINE, DeskBoxInstallStateKey", installation, StringComparison.Ordinal);
         Assert.DoesNotContain("DelTree(LegacyInstallPath", migration, StringComparison.Ordinal);
         Assert.DoesNotContain("DeskBoxAdminCleanupParam", migration, StringComparison.Ordinal);

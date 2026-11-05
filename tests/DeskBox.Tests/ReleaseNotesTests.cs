@@ -146,12 +146,12 @@ public sealed class ReleaseNotesTests : IDisposable
         var manifest = new AppUpdateManifest
         {
             Version = "1.3.4",
-            ReleaseNotesUrl = "https://github.com/Tianyu199509/DeskBox/releases/tag/v1.3.4"
+            ReleaseNotesUrl = "https://github.com/yosefhdev/Open-WinBox/releases/tag/v1.3.4"
         };
 
         ReleaseNotesLoadResult result = await service.LoadAsync(manifest, "en-US");
 
-        Assert.Equal("https://api.github.com/repos/Tianyu199509/DeskBox/releases/tags/v1.3.4", requestedUri?.ToString());
+        Assert.Equal("https://api.github.com/repos/yosefhdev/Open-WinBox/releases/tags/v1.3.4", requestedUri?.ToString());
         Assert.Equal("## Latest\n- Fixed update content", result.Content);
     }
 

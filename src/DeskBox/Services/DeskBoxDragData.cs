@@ -589,7 +589,7 @@ public static class DeskBoxDragData
     {
         string directory = Path.Combine(
             Path.GetTempPath(),
-            "DeskBox",
+            "OpenWinBox",
             "DroppedFiles",
             Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(directory);

@@ -28,7 +28,7 @@ internal static class WindowsCrashEventFilterPolicy
 {
     private static readonly string[] MonitoredImageNames =
     [
-        "DeskBox.exe",
+        "OpenWinBox.exe",
         "explorer.exe"
     ];
 

@@ -14,7 +14,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="DeskBox Settings">
+    Title="OpenWinBox Settings">
 
     <Grid
         x:Name="SettingsRoot"
@@ -139,7 +139,7 @@
 VerticalAlignment="Center"
 FontSize="14"
 FontWeight="SemiBold"
-Text="DeskBox" />
+Text="OpenWinBox" />
 </StackPanel>
 
             <AutoSuggestBox svc:Localized.AutomationNameKey="Settings.Search.Placeholder"
@@ -3248,7 +3248,7 @@ Text="DeskBox" />
                                             <TextBlock
                                                 FontSize="16"
                                                 FontWeight="SemiBold"
-                                                Text="DeskBox"
+                                                Text="OpenWinBox"
                                                 TextWrapping="Wrap" />
                                             <TextBlock
                                                 FontSize="16"

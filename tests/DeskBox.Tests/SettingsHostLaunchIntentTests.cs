@@ -83,7 +83,7 @@ public sealed class SettingsHostLaunchIntentTests
     {
         string[] args =
         [
-            "DeskBox.exe",
+            "OpenWinBox.exe",
             "--settings",
             "1234",
             "--settings-section",
@@ -103,7 +103,7 @@ public sealed class SettingsHostLaunchIntentTests
     {
         string[] args =
         [
-            "DeskBox.exe",
+            "OpenWinBox.exe",
             "--settings",
             "1234",
             "--settings-glance",
@@ -121,7 +121,7 @@ public sealed class SettingsHostLaunchIntentTests
         // The jump list argument must never be misread as a host deep link.
         string[] args =
         [
-            "DeskBox.exe",
+            "OpenWinBox.exe",
             "--settings",
             "1234",
             "--open-settings",

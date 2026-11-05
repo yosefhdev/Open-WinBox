@@ -89,7 +89,7 @@ internal static class NativeDropMaterializationWorker
     {
         string temporaryRoot = Path.GetFullPath(Path.Combine(
                 Path.GetTempPath(),
-                "DeskBox",
+                "OpenWinBox",
                 "VirtualDrops"))
             .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
             Path.DirectorySeparatorChar;

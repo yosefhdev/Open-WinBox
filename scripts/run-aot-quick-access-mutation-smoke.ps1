@@ -108,7 +108,7 @@ function Stop-ExactPreviewProcess {
         }
     }
 
-    foreach ($process in @(Get-CimInstance Win32_Process -Filter "Name='DeskBox.exe'")) {
+    foreach ($process in @(Get-CimInstance Win32_Process -Filter "Name='OpenWinBox.exe'")) {
         if (-not [string]::IsNullOrWhiteSpace($process.ExecutablePath) -and
             (Test-PathEqual -Left $process.ExecutablePath -Right $ExecutablePath)) {
             $null = $processIds.Add([int]$process.ProcessId)
@@ -513,7 +513,7 @@ if (-not (Test-Path -LiteralPath $SummaryPath -PathType Leaf)) {
 }
 $auditSummary = Get-Content -LiteralPath $SummaryPath -Raw | ConvertFrom-Json
 $expectedExecutablePath = [System.IO.Path]::GetFullPath(
-    (Join-Path $auditSummary.publishDirectory "DeskBox.exe"))
+    (Join-Path $auditSummary.publishDirectory "OpenWinBox.exe"))
 if ([string]::IsNullOrWhiteSpace($DataRoot)) {
     $worktreeName = (Split-Path $repoRoot -Leaf) -replace '[^A-Za-z0-9._-]', '-'
     $pathHash = (Get-TextSha256 -Value $repoRoot.ToUpperInvariant()).Substring(0, 8)

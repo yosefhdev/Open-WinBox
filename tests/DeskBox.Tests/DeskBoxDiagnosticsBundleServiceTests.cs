@@ -36,11 +36,11 @@ public sealed class DeskBoxDiagnosticsBundleServiceTests : IDisposable
             .Order(StringComparer.Ordinal)
             .ToArray();
         Assert.Equal(
-            new[] { "DeskBox-sanitized.log", "README.txt", "diagnostics.json", "windows-events.json" }
+            new[] { "OpenWinBox-sanitized.log", "README.txt", "diagnostics.json", "windows-events.json" }
                 .Order(StringComparer.Ordinal),
             entryNames);
 
-        string log = await ReadEntryAsync(archive, "DeskBox-sanitized.log");
+        string log = await ReadEntryAsync(archive, "OpenWinBox-sanitized.log");
         Assert.DoesNotContain(userName, log, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("secret-file.txt", log, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("user@example.com", log, StringComparison.OrdinalIgnoreCase);
@@ -80,13 +80,13 @@ public sealed class DeskBoxDiagnosticsBundleServiceTests : IDisposable
     [Fact]
     public void SanitizeDiagnosticsValue_KeepsImageNameButRedactsDirectories()
     {
-        string value = $@"C:\Users\{Environment.UserName}\AppData\Local\DeskBox\DeskBox.exe";
+        string value = $@"C:\Users\{Environment.UserName}\AppData\Local\DeskBox\OpenWinBox.exe";
 
         string sanitized = DeskBoxDiagnosticsBundleService.SanitizeDiagnosticsValue(value);
 
         Assert.DoesNotContain(Environment.UserName, sanitized, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("AppData", sanitized, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("<PATH>\\DeskBox.exe", sanitized, StringComparison.Ordinal);
+        Assert.Contains("<PATH>\\OpenWinBox.exe", sanitized, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -122,8 +122,8 @@ public sealed class DeskBoxDiagnosticsBundleServiceTests : IDisposable
         string executionLimitCheck)
     {
         string source =
-            "expectedPath='C:\\Private Folder\\DeskBox.exe' " +
-            "actualPath='C:\\Other Private Folder\\DeskBox.exe' " +
+            "expectedPath='C:\\Private Folder\\OpenWinBox.exe' " +
+            "actualPath='C:\\Other Private Folder\\OpenWinBox.exe' " +
             $"checks=taskName=True path={pathCheck} arguments=True " +
             $"executionLimit={executionLimitCheck} restart=True";
 

@@ -429,7 +429,10 @@
           "xunit.extensibility.core": "[2.5.3]"
         }
       },
-      "deskbox": {
+      "deskbox.updater": {
+        "type": "Project"
+      },
+      "OpenWinBox": {
         "type": "Project",
         "dependencies": {
           "CommunityToolkit.Mvvm": "[8.4.2, )",
@@ -446,9 +449,6 @@
           "Microsoft.WindowsAppSDK": "[2.5.1, )",
           "WinUIEx": "[2.9.3, )"
         }
-      },
-      "deskbox.updater": {
-        "type": "Project"
       }
     },
     "net10.0-windows10.0.22621/win-arm64": {

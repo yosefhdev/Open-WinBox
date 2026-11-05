@@ -10,15 +10,15 @@
   IgnorableNamespaces="uap uap5 desktop com rescap">
 
   <Identity
-    Name="D1FC332A.DeskBoxWidgets"
-    Publisher="CN=3B75AA4A-2433-4F71-9CC1-B644B26F474A"
-    Version="1.5.9.0" />
+    Name="yosefhdev.OpenWinBox"
+    Publisher="CN=9EE06219-506F-458E-9E3A-5278814A5A2E"
+    Version="1.0.4.0" />
 
-  <mp:PhoneIdentity PhoneProductId="7bb59608-421d-4fd4-8f12-8929f87d086a" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <mp:PhoneIdentity PhoneProductId="8983cf44-0eac-4fd1-ab95-d877f2ec34ae" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
 
   <Properties>
     <DisplayName>ms-resource:AppDisplayName</DisplayName>
-    <PublisherDisplayName>朱天雨</PublisherDisplayName>
+    <PublisherDisplayName>yosefhdev</PublisherDisplayName>
     <Logo>Assets\Store\StoreLogo.png</Logo>
   </Properties>
 
@@ -64,20 +64,20 @@
       <Extensions>
         <uap5:Extension Category="windows.startupTask">
           <uap5:StartupTask
-            TaskId="DeskBoxStartupTask"
+            TaskId="OpenWinBoxStartupTask"
             Enabled="false"
             DisplayName="ms-resource:AppDisplayName" />
         </uap5:Extension>
         <desktop:Extension Category="windows.toastNotificationActivation">
-          <desktop:ToastNotificationActivation ToastActivatorCLSID="4D54EEC6-13BE-4C8F-A8F7-81FE72F4B2C9" />
+          <desktop:ToastNotificationActivation ToastActivatorCLSID="3D2D7B41-FC2A-441C-B4A3-6D726BD6BB83" />
         </desktop:Extension>
         <com:Extension Category="windows.comServer">
           <com:ComServer>
             <com:ExeServer
-              Executable="DeskBox.exe"
+              Executable="OpenWinBox.exe"
               Arguments="----AppNotificationActivated:"
-              DisplayName="DeskBox">
-              <com:Class Id="4D54EEC6-13BE-4C8F-A8F7-81FE72F4B2C9" DisplayName="DeskBox" />
+              DisplayName="OpenWinBox">
+              <com:Class Id="3D2D7B41-FC2A-441C-B4A3-6D726BD6BB83" DisplayName="OpenWinBox" />
             </com:ExeServer>
           </com:ComServer>
         </com:Extension>

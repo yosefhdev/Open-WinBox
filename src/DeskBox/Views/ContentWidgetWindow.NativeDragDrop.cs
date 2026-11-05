@@ -352,7 +352,7 @@ public sealed partial class ContentWidgetWindow
             } folder
                 ? folder.Name
                 : string.IsNullOrWhiteSpace(_config.Name)
-                    ? "DeskBox"
+                    ? "OpenWinBox"
                     : _config.Name.Trim();
         return new NativeDropDescriptionText(message, targetName);
     }

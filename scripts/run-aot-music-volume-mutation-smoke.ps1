@@ -99,7 +99,7 @@ function Get-ExactPreviewProcesses {
     )
 
     return @(
-        Get-CimInstance Win32_Process -Filter "Name='DeskBox.exe'" |
+        Get-CimInstance Win32_Process -Filter "Name='OpenWinBox.exe'" |
             Where-Object {
                 -not [string]::IsNullOrWhiteSpace($_.ExecutablePath) -and
                 (Test-PathEqual -Left $_.ExecutablePath -Right $ExecutablePath)
@@ -569,7 +569,7 @@ if (-not (Test-Path -LiteralPath $SummaryPath -PathType Leaf)) {
 }
 $auditSummary = Get-Content -LiteralPath $SummaryPath -Raw | ConvertFrom-Json
 $script:expectedExecutablePath = [System.IO.Path]::GetFullPath(
-    (Join-Path $auditSummary.publishDirectory "DeskBox.exe"))
+    (Join-Path $auditSummary.publishDirectory "OpenWinBox.exe"))
 if ([string]::IsNullOrWhiteSpace($DataRoot)) {
     $worktreeName = (Split-Path $repoRoot -Leaf) -replace '[^A-Za-z0-9._-]', '-'
     $pathHash = (Get-TextSha256 -Value $repoRoot.ToUpperInvariant()).Substring(0, 8)

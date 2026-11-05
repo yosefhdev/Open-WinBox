@@ -33,7 +33,7 @@ internal sealed class StackPopoverInlineRenameWindow : Window
         WidgetMaterialBackdropAppearance materialAppearance,
         IntPtr ownerWindowHandle)
     {
-        Title = "DeskBox Inline Rename";
+        Title = "OpenWinBox Inline Rename";
         _ownerWindowHandle = ownerWindowHandle;
         Editor = new TextBox
         {

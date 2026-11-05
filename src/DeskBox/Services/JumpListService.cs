@@ -9,7 +9,7 @@ namespace DeskBox.Services;
 /// </summary>
 public static class JumpListService
 {
-    private const string AppUserModelId = "DeskBox.DeskBox";
+    private const string AppUserModelId = "OpenWinBox.OpenWinBox";
 
     private const string ArgToggleWidgets = "--toggle-widgets";
     private const string ArgNewFolderWidget = "--new-folder-widget";
@@ -260,7 +260,7 @@ public static class JumpListService
         {
             string shortcutPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.Programs),
-                "DeskBox.lnk");
+                "OpenWinBox.lnk");
             if (!File.Exists(shortcutPath))
             {
                 return;

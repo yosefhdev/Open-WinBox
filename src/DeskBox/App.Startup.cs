@@ -149,7 +149,7 @@ public partial class App
 
         try
         {
-            Win32Helper.ShowFatalError(BuildFatalStartupMessage(), "DeskBox");
+            Win32Helper.ShowFatalError(BuildFatalStartupMessage(), "OpenWinBox");
         }
         catch (Exception dialogFailure)
         {
@@ -172,9 +172,9 @@ public partial class App
         LocalizationService? localization = Current?.LocalizationService;
         if (localization is null)
         {
-            return "DeskBox could not finish starting and is about to close.\n\n" +
+            return "OpenWinBox could not finish starting and is about to close.\n\n" +
                 $"Details were written to the log:\n{LogPath}\n\n" +
-                "You can start DeskBox again in a moment.";
+                "You can start OpenWinBox again in a moment.";
         }
 
         string message = localization.Format("Startup.Fatal.Body", LogPath);

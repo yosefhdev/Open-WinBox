@@ -306,7 +306,7 @@ public sealed class DeskBoxDataBackupServiceTests : IDisposable
         Assert.NotNull(firstPath);
         Assert.True(File.Exists(firstPath));
         Assert.Null(secondPath);
-        Assert.Single(Directory.EnumerateFiles(service.AutomaticSnapshotDirectory, "DeskBox-Auto-*.zip"));
+        Assert.Single(Directory.EnumerateFiles(service.AutomaticSnapshotDirectory, "OpenWinBox-Auto-*.zip"));
         Assert.False(Directory.Exists(service.BackupSnapshotStagingDirectory));
     }
 
@@ -449,7 +449,7 @@ public sealed class DeskBoxDataBackupServiceTests : IDisposable
             Assert.NotNull(await service.CreateAutomaticSnapshotNowAsync());
         }
 
-        Assert.Equal(3, Directory.EnumerateFiles(service.AutomaticSnapshotDirectory, "DeskBox-Auto-*.zip").Count());
+        Assert.Equal(3, Directory.EnumerateFiles(service.AutomaticSnapshotDirectory, "OpenWinBox-Auto-*.zip").Count());
     }
 
     [Fact]
@@ -464,7 +464,7 @@ public sealed class DeskBoxDataBackupServiceTests : IDisposable
             CustomDirectory: null));
 
         // A snapshot newer than 5 minutes is fresh for a 5-minute schedule...
-        string recentSnapshot = Path.Combine(service.AutomaticSnapshotDirectory, "DeskBox-Auto-20260101-000000.zip");
+        string recentSnapshot = Path.Combine(service.AutomaticSnapshotDirectory, "OpenWinBox-Auto-20260101-000000.zip");
         Directory.CreateDirectory(service.AutomaticSnapshotDirectory);
         await File.WriteAllTextAsync(recentSnapshot, "placeholder");
         File.SetLastWriteTimeUtc(recentSnapshot, DateTime.UtcNow.AddMinutes(-2));
@@ -483,7 +483,7 @@ public sealed class DeskBoxDataBackupServiceTests : IDisposable
     {
         string dataDirectory = Directory.CreateDirectory(Path.Combine(_appDataRoot, "data")).FullName;
         await File.WriteAllTextAsync(Path.Combine(dataDirectory, "settings.json"), "{\"theme\":\"Dark\"}");
-        string recoveryRoot = Path.Combine(_tempRoot, "DeskBox-Recovery");
+        string recoveryRoot = Path.Combine(_tempRoot, "OpenWinBox-Recovery");
         var service = new DeskBoxDataBackupService(_appDataRoot, recoveryRoot);
 
         string snapshotPath = Assert.IsType<string>(await service.CreateAutomaticSnapshotNowAsync());
@@ -671,7 +671,7 @@ public sealed class DeskBoxDataBackupServiceTests : IDisposable
         Assert.Equal("Smart", restoredWidget.Metadata[WidgetCollapseBehaviorNames.MetadataKey]);
         Assert.Single(Directory.EnumerateFiles(
             targetService.PreRestoreBackupDirectory,
-            "DeskBox-PreRestore-*.zip"));
+            "OpenWinBox-PreRestore-*.zip"));
         Assert.False(Directory.Exists(targetService.BackupSnapshotStagingDirectory));
     }
 
@@ -1153,7 +1153,7 @@ public sealed class DeskBoxDataBackupServiceTests : IDisposable
         // The pre-restore safety net survives the whole retry cycle:
         // exactly one archive, holding the ORIGINAL pre-restore state.
         string archive = Assert.Single(
-            Directory.GetFiles(service.PreRestoreBackupDirectory, "DeskBox-PreRestore-*.zip"));
+            Directory.GetFiles(service.PreRestoreBackupDirectory, "OpenWinBox-PreRestore-*.zip"));
 
         using var zip = new ZipArchive(File.OpenRead(archive), ZipArchiveMode.Read);
         ZipArchiveEntry? settingsEntry = zip.GetEntry("data/settings.json");

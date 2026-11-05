@@ -61,7 +61,7 @@ internal interface IDirectStartupTaskBackend
 /// </summary>
 internal sealed partial class DirectStartupTaskBackend : IDirectStartupTaskBackend
 {
-    internal const string LegacyTaskName = "DeskBox User Startup";
+    internal const string LegacyTaskName = "OpenWinBox User Startup";
     internal const string TaskNamePrefix = LegacyTaskName + "-";
     internal const string StartupArguments =
         "--startup --startup-source=scheduled-task";
@@ -201,7 +201,7 @@ internal sealed partial class DirectStartupTaskBackend : IDirectStartupTaskBacke
         string taskXml = BuildTaskXml(executablePath, currentUserSid);
         string temporaryPath = Path.Combine(
             Path.GetTempPath(),
-            $"DeskBox-startup-{Guid.NewGuid():N}.xml");
+            $"OpenWinBox-startup-{Guid.NewGuid():N}.xml");
         TaskXmlSnapshot previousTask = QueryTaskXml(taskName);
         if (!previousTask.Succeeded && !previousTask.IsMissing)
         {
@@ -372,7 +372,7 @@ internal sealed partial class DirectStartupTaskBackend : IDirectStartupTaskBacke
             return false;
         }
 
-        string temporaryPath = Path.Combine(Path.GetTempPath(), $"DeskBox-startup-restore-{Guid.NewGuid():N}.xml");
+        string temporaryPath = Path.Combine(Path.GetTempPath(), $"OpenWinBox-startup-restore-{Guid.NewGuid():N}.xml");
         try
         {
             File.WriteAllText(temporaryPath, registration.Xml, Encoding.Unicode);
@@ -493,8 +493,8 @@ internal sealed partial class DirectStartupTaskBackend : IDirectStartupTaskBacke
                 new XAttribute("version", "1.4"),
                 new XElement(
                     TaskNamespace + "RegistrationInfo",
-                    new XElement(TaskNamespace + "Source", "DeskBox"),
-                    new XElement(TaskNamespace + "Author", "DeskBox"),
+                    new XElement(TaskNamespace + "Source", "OpenWinBox"),
+                    new XElement(TaskNamespace + "Author", "OpenWinBox"),
                     new XElement(
                         TaskNamespace + "Description",
                         "Starts DeskBox promptly after this user signs in."),

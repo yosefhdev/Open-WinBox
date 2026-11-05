@@ -4,7 +4,7 @@ namespace DeskBox.Services;
 
 public sealed class StoreStartupService : IStartupService
 {
-    private const string StartupTaskId = "DeskBoxStartupTask";
+    private const string StartupTaskId = "OpenWinBoxStartupTask";
 
     public StartupRegistrationState GetState()
     {

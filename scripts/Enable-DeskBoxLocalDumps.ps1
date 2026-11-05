@@ -1,8 +1,8 @@
 [CmdletBinding(SupportsShouldProcess = $true)]
 param(
     [Parameter()]
-    [ValidateSet('DeskBox.exe', 'DeskBox.Updater.exe')]
-    [string[]]$ExecutableName = @('DeskBox.exe'),
+    [ValidateSet('OpenWinBox.exe', 'DeskBox.Updater.exe')]
+    [string[]]$ExecutableName = @('OpenWinBox.exe'),
 
     [Parameter()]
     [ValidateNotNullOrEmpty()]

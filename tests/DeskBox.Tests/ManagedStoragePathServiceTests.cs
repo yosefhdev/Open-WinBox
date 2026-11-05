@@ -13,7 +13,7 @@ public sealed class ManagedStoragePathServiceTests
         // happens to be attached at first launch (e.g. a USB drive).
         string expected = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-            "DeskBox");
+            "OpenWinBox");
 
         Assert.Equal(expected, ManagedStoragePathService.GetRecommendedPath());
     }

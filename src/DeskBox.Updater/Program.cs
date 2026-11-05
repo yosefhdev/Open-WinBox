@@ -40,14 +40,14 @@ internal static class Program
         "russian",
         "korean",
     }.ToFrozenSet(StringComparer.OrdinalIgnoreCase);
-    private const string InstallStateRegistryPath = @"Software\DeskBox\DirectInstall";
+    private const string InstallStateRegistryPath = @"Software\OpenWinBox\DirectInstall";
     private const string UninstallRegistryPath =
         @"Software\Microsoft\Windows\CurrentVersion\Uninstall\{5E052824-3456-427E-9759-3BCAE078A1D3}_is1";
     private const string WowUninstallRegistryPath =
         @"Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{5E052824-3456-427E-9759-3BCAE078A1D3}_is1";
     private static readonly string LogPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "DeskBox",
+        "OpenWinBox",
         "DeskBox.Updater.log");
 
     private static int Main(string[] args)
@@ -392,7 +392,7 @@ internal static class Program
         try
         {
             string normalizedDirectory = Path.GetFullPath(candidate);
-            string expectedAppPath = Path.Combine(normalizedDirectory, "DeskBox.exe");
+            string expectedAppPath = Path.Combine(normalizedDirectory, "OpenWinBox.exe");
             if (!Directory.Exists(normalizedDirectory) || !File.Exists(expectedAppPath))
             {
                 return false;
@@ -548,7 +548,7 @@ internal static class Program
                 continue;
             }
 
-            string shortcutPath = Path.Combine(menuRoot, "Programs", "DeskBox.lnk");
+            string shortcutPath = Path.Combine(menuRoot, "Programs", "OpenWinBox.lnk");
             if (!File.Exists(shortcutPath))
             {
                 continue;

@@ -165,7 +165,7 @@ $directFiles | Set-Content -LiteralPath (Join-Path $OutputDirectory "direct-publ
     -Encoding utf8
 
 $directRequiredFiles = @(
-    "DeskBox.exe",
+    "OpenWinBox.exe",
     "DeskBox.Updater.exe",
     "DeskBox.ThumbnailProxy.exe",
     "deskbox_native.dll",
@@ -175,7 +175,7 @@ $directRequiredFiles = @(
     "Microsoft.WindowsAppRuntime.dll",
     "Microsoft.WindowsAppRuntime.Insights.Resource.dll",
     "ThirdParty/Everything/LICENSE.txt",
-    "DeskBox.pri",
+    "OpenWinBox.pri",
     "DeskBox.InstallManifest.txt"
 )
 $missingDirectFiles = @($directRequiredFiles | Where-Object { $directFiles -notcontains $_ })
@@ -207,7 +207,7 @@ if ($forbiddenDirectFiles.Count -gt 0) {
     throw "The Direct AOT publish contains forbidden files: $($forbiddenDirectFiles -join ', ')."
 }
 
-$deskBoxMachine = Get-PeMachine -Path (Join-Path $directPublishDirectory "DeskBox.exe")
+$deskBoxMachine = Get-PeMachine -Path (Join-Path $directPublishDirectory "OpenWinBox.exe")
 $updaterMachine = Get-PeMachine -Path (Join-Path $directPublishDirectory "DeskBox.Updater.exe")
 $thumbnailProxyMachine = Get-PeMachine -Path (
     Join-Path $directPublishDirectory "DeskBox.ThumbnailProxy.exe")
