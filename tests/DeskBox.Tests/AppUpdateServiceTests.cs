@@ -22,6 +22,8 @@ public sealed class AppUpdateServiceTests : IDisposable
         Assert.True(AppUpdateService.IsInstallerAssetName("OpenWinBox_Setup_1.2.4_arm64.exe", "arm64"));
         Assert.True(AppUpdateService.IsInstallerAssetName("OpenWinBox_Setup_1.4.8_x64.exe", "x64"));
         Assert.True(AppUpdateService.IsInstallerAssetName("OpenWinBox_Setup_1.4.8_arm64.exe", "arm64"));
+        Assert.True(AppUpdateService.IsInstallerAssetName("OpenWinBox-1.0.0-beta.3-Setup.exe", "x64"));
+        Assert.False(AppUpdateService.IsInstallerAssetName("OpenWinBox-1.0.0-beta.3-Setup.exe", "arm64"));
         Assert.False(AppUpdateService.IsInstallerAssetName("OpenWinBox_Setup_1.4.3_x64_Full.exe", "x64"));
         Assert.False(AppUpdateService.IsInstallerAssetName("OpenWinBox_Setup_1.4.3_arm64_Full.exe", "arm64"));
         Assert.True(AppUpdateService.IsInstallerDownloadCompatibleWithArchitecture(
@@ -110,9 +112,9 @@ public sealed class AppUpdateServiceTests : IDisposable
         };
 
         Assert.Equal(
-            "https://github.com/yosefhdev/Open-WinBox/releases/latest",
+            "https://github.com/yosefhdev/Open-WinBox/releases",
             SettingsViewModel.GetManualUpdateDownloadUrl(manifest));
-        Assert.Equal("https://github.com/yosefhdev/Open-WinBox/releases/latest", SettingsViewModel.GetManualUpdateDownloadUrl(null));
+        Assert.Equal("https://github.com/yosefhdev/Open-WinBox/releases", SettingsViewModel.GetManualUpdateDownloadUrl(null));
     }
 
     [Theory]
@@ -122,9 +124,68 @@ public sealed class AppUpdateServiceTests : IDisposable
     [InlineData("1.2.1", "1.2.1", false)]
     [InlineData("1.2.1", "1.2.0", false)]
     [InlineData("1.2.1", "not-a-version", false)]
+    [InlineData("1.0.0-beta.3", "1.0.0-beta.4", true)]
+    [InlineData("1.0.0-beta.4", "v1.0.0-beta.3", false)]
+    [InlineData("1.0.0-beta.4", "1.0.0-beta.4", false)]
+    [InlineData("1.0.0-beta.9", "1.0.0-beta.10", true)]
+    [InlineData("1.0.0-beta.4", "1.0.0", true)]
+    [InlineData("1.0.0", "1.0.0-beta.4", false)]
+    [InlineData("1.0.0-beta.4", "1.0.0-rc.1", true)]
     public void IsRemoteVersionNewer_ComparesSemanticVersionPrefix(string currentVersion, string remoteVersion, bool expected)
     {
         Assert.Equal(expected, AppUpdateService.IsRemoteVersionNewer(currentVersion, remoteVersion));
+    }
+
+    [Theory]
+    [InlineData("1.0.0-beta.3", AppUpdateCheckStatus.UpdateAvailable, "1.0.0-beta.4")] // a beta sees newer betas
+    [InlineData("1.0.0-beta.4", AppUpdateCheckStatus.UpToDate, "1.0.0-beta.4")]
+    [InlineData("0.9.0", AppUpdateCheckStatus.UpdateAvailable, "0.9.5")]               // a final build skips betas
+    public async Task CheckForUpdatesAsync_PicksNewestEligibleReleaseFromTheReleaseList(
+        string currentVersion,
+        AppUpdateCheckStatus expectedStatus,
+        string expectedVersion)
+    {
+        using var httpClient = CreateHttpClient(request =>
+            request.RequestUri!.ToString().Contains("stable.json", StringComparison.OrdinalIgnoreCase)
+                ? new HttpResponseMessage(HttpStatusCode.NotFound)
+                : new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(
+                        """
+                        [
+                          { "tag_name": "v1.0.0-beta.5", "draft": true, "prerelease": true, "assets": [
+                            { "name": "OpenWinBox-1.0.0-beta.5-Setup.exe",
+                              "browser_download_url": "https://github.com/yosefhdev/Open-WinBox/releases/download/v1.0.0-beta.5/OpenWinBox-1.0.0-beta.5-Setup.exe",
+                              "digest": "sha256:8ecb3092ae5bd6883f8a75bbea03d9800251e0c23fdbe1bf4d91fd3a62565561" } ] },
+                          { "tag_name": "v1.0.0-beta.3", "prerelease": true, "assets": [
+                            { "name": "OpenWinBox-1.0.0-beta.3-Setup.exe",
+                              "browser_download_url": "https://github.com/yosefhdev/Open-WinBox/releases/download/v1.0.0-beta.3/OpenWinBox-1.0.0-beta.3-Setup.exe",
+                              "digest": "sha256:8ecb3092ae5bd6883f8a75bbea03d9800251e0c23fdbe1bf4d91fd3a62565561" } ] },
+                          { "tag_name": "v1.0.0-beta.4", "prerelease": true, "assets": [
+                            { "name": "OpenWinBox-1.0.0-beta.4-Setup.exe",
+                              "browser_download_url": "https://github.com/yosefhdev/Open-WinBox/releases/download/v1.0.0-beta.4/OpenWinBox-1.0.0-beta.4-Setup.exe",
+                              "digest": "sha256:8ecb3092ae5bd6883f8a75bbea03d9800251e0c23fdbe1bf4d91fd3a62565561" },
+                            { "name": "SHA256SUMS.txt",
+                              "browser_download_url": "https://github.com/yosefhdev/Open-WinBox/releases/download/v1.0.0-beta.4/SHA256SUMS.txt" } ] },
+                          { "tag_name": "v0.9.5", "assets": [
+                            { "name": "OpenWinBox_Setup_0.9.5_x64.exe",
+                              "browser_download_url": "https://github.com/yosefhdev/Open-WinBox/releases/download/v0.9.5/OpenWinBox_Setup_0.9.5_x64.exe",
+                              "digest": "sha256:8ecb3092ae5bd6883f8a75bbea03d9800251e0c23fdbe1bf4d91fd3a62565561" } ] }
+                        ]
+                        """,
+                        Encoding.UTF8,
+                        "application/json")
+                });
+        var service = new AppUpdateService(
+            httpClient,
+            "https://github.com/yosefhdev/Open-WinBox/releases/download/update/stable.json",
+            _tempRoot,
+            AppUpdateService.DefaultGitHubReleasesApiUrl);
+
+        var result = await service.CheckForUpdatesAsync(currentVersion);
+
+        Assert.Equal(expectedStatus, result.Status);
+        Assert.Equal(expectedVersion, result.Manifest!.Version);
     }
 
     [Fact]
@@ -202,7 +263,7 @@ public sealed class AppUpdateServiceTests : IDisposable
             httpClient,
             "https://github.com/yosefhdev/Open-WinBox/releases/download/update/stable.json",
             _tempRoot,
-            AppUpdateService.DefaultGitHubLatestReleaseApiUrl);
+            AppUpdateService.DefaultGitHubReleasesApiUrl);
 
         var result = await service.CheckForUpdatesAsync("1.2.3");
 
@@ -268,7 +329,7 @@ public sealed class AppUpdateServiceTests : IDisposable
             httpClient,
             "https://github.com/yosefhdev/Open-WinBox/releases/download/update/stable.json",
             _tempRoot,
-            AppUpdateService.DefaultGitHubLatestReleaseApiUrl);
+            AppUpdateService.DefaultGitHubReleasesApiUrl);
 
         var result = await service.CheckForUpdatesAsync("1.2.3");
 

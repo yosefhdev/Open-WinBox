@@ -24,8 +24,10 @@ public sealed class WidgetRaiseBandContractTests
     [Fact]
     public void SingleWidgetTemporaryRaise_UsesNormalBandFrontWithoutPulse()
     {
+        // The end marker spans two lines: normalize the source too, so the test
+        // does not depend on the checkout's line endings (core.autocrlf).
         string layerService = File.ReadAllText(TestPaths.FromRepository(
-            "src/DeskBox/Services/WidgetLayerService.cs"));
+            "src/DeskBox/Services/WidgetLayerService.cs")).ReplaceLineEndings("\r\n");
         string hold = SliceMethod(
             layerService,
             "public static void HoldTemporaryTopMost",

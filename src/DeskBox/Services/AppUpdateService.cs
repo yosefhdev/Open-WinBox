@@ -13,8 +13,9 @@ namespace DeskBox.Services;
 public sealed partial class AppUpdateService : IAppUpdateService
 {
     public const string DefaultManifestUrl = "https://github.com/yosefhdev/Open-WinBox/releases/latest/download/stable.json";
-    public const string DefaultGitHubLatestReleaseApiUrl = "https://api.github.com/repos/yosefhdev/Open-WinBox/releases/latest";
-    public const string DefaultManualDownloadUrl = "https://github.com/yosefhdev/Open-WinBox/releases/latest";
+    // The list, not /releases/latest: "latest" skips prereleases and answers 404 while only betas exist.
+    public const string DefaultGitHubReleasesApiUrl = "https://api.github.com/repos/yosefhdev/Open-WinBox/releases?per_page=20";
+    public const string DefaultManualDownloadUrl = "https://github.com/yosefhdev/Open-WinBox/releases";
 
     private readonly HttpClient _httpClient;
     private readonly string _manifestUrl;
@@ -51,7 +52,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
             ? DefaultManifestUrl
             : manifestUrl;
         _githubLatestReleaseApiUrl = string.IsNullOrWhiteSpace(githubLatestReleaseApiUrl)
-            ? DefaultGitHubLatestReleaseApiUrl
+            ? DefaultGitHubReleasesApiUrl
             : githubLatestReleaseApiUrl;
         _updateRootPath = string.IsNullOrWhiteSpace(updateRootPath)
             ? DeskBoxDataPathService.Current.UpdatesDirectory
@@ -249,11 +250,17 @@ public sealed partial class AppUpdateService : IAppUpdateService
             using var response = await _httpClient.GetAsync(_githubLatestReleaseApiUrl, cancellationToken);
             response.EnsureSuccessStatusCode();
 
-            await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-            var release = await JsonSerializer.DeserializeAsync(
-                stream,
-                AppUpdateJsonContext.Default.GitHubRelease,
-                cancellationToken);
+            // The releases list is an array; a single release object (a /releases/latest
+            // style endpoint) is still accepted.
+            string json = await response.Content.ReadAsStringAsync(cancellationToken);
+            System.Text.Json.Serialization.Metadata.JsonTypeInfo shape = json.AsSpan().TrimStart().StartsWith("[")
+                ? AppUpdateJsonContext.Default.ReleaseList
+                : AppUpdateJsonContext.Default.GitHubRelease;
+            GitHubReleaseResponse? release = JsonSerializer.Deserialize(json, shape) switch
+            {
+                GitHubReleaseResponse[] list => SelectNewestRelease(list, currentVersion),
+                var single => single as GitHubReleaseResponse,
+            };
             var manifest = await CreateManifestFromGitHubReleaseAsync(release, cancellationToken);
             if (!IsManifestUsable(manifest) || string.IsNullOrWhiteSpace(manifest!.Sha256))
             {
@@ -657,7 +664,78 @@ public sealed partial class AppUpdateService : IAppUpdateService
             return false;
         }
 
-        return remote > current;
+        int core = remote.CompareTo(current);
+        return core != 0
+            ? core > 0
+            : ComparePrerelease(GetPrerelease(remoteVersion), GetPrerelease(currentVersion)) > 0;
+    }
+
+    /// <summary>"1.0.0-beta.4+build" -> "beta.4"; empty for a final version.</summary>
+    internal static string GetPrerelease(string? version)
+    {
+        string value = (version ?? string.Empty).Trim();
+        int plus = value.IndexOf('+');
+        if (plus >= 0)
+        {
+            value = value[..plus];
+        }
+
+        int dash = value.IndexOf('-');
+        return dash >= 0 ? value[(dash + 1)..] : string.Empty;
+    }
+
+    // SemVer precedence: a final version beats any prerelease of the same number, identifiers
+    // compare left to right, numeric ones as numbers (beta.10 > beta.9) and below text ones.
+    private static int ComparePrerelease(string left, string right)
+    {
+        if (left.Length == 0 || right.Length == 0)
+        {
+            return right.Length.CompareTo(left.Length);
+        }
+
+        string[] a = left.Split('.'), b = right.Split('.');
+        for (int i = 0; i < Math.Min(a.Length, b.Length); i++)
+        {
+            bool aNumeric = ulong.TryParse(a[i], NumberStyles.None, CultureInfo.InvariantCulture, out ulong x);
+            bool bNumeric = ulong.TryParse(b[i], NumberStyles.None, CultureInfo.InvariantCulture, out ulong y);
+            int result = aNumeric && bNumeric
+                ? x.CompareTo(y)
+                : aNumeric != bNumeric
+                    ? (aNumeric ? -1 : 1)
+                    : string.CompareOrdinal(a[i], b[i]);
+            if (result != 0)
+            {
+                return result;
+            }
+        }
+
+        return a.Length.CompareTo(b.Length);
+    }
+
+    // Newest published release that carries an installer for this architecture. Betas are
+    // only offered to someone already running a beta; a final build stays on final builds.
+    private static GitHubReleaseResponse? SelectNewestRelease(
+        GitHubReleaseResponse[]? releases,
+        string currentVersion)
+    {
+        bool acceptPrereleases = GetPrerelease(currentVersion).Length > 0;
+        GitHubReleaseResponse? newest = null;
+        foreach (var release in releases ?? [])
+        {
+            if (release.Draft ||
+                (release.Prerelease && !acceptPrereleases) ||
+                !release.Assets.Any(IsInstallerAsset))
+            {
+                continue;
+            }
+
+            if (newest is null || IsRemoteVersionNewer(newest.TagName, release.TagName))
+            {
+                newest = release;
+            }
+        }
+
+        return newest;
     }
 
     public static bool TryParseVersion(string? value, out Version version)
@@ -968,8 +1046,20 @@ public sealed partial class AppUpdateService : IAppUpdateService
 
     internal static bool IsInstallerAssetName(string assetName, string architectureSuffix)
     {
-        return !string.IsNullOrWhiteSpace(architectureSuffix) &&
-            assetName.StartsWith("OpenWinBox_Setup_", StringComparison.OrdinalIgnoreCase) &&
+        if (string.IsNullOrWhiteSpace(architectureSuffix))
+        {
+            return false;
+        }
+
+        // The 1.0.0 betas were published as OpenWinBox-<version>-Setup.exe, x64 only.
+        if (string.Equals(architectureSuffix, "x64", StringComparison.OrdinalIgnoreCase) &&
+            assetName.StartsWith("OpenWinBox-", StringComparison.OrdinalIgnoreCase) &&
+            assetName.EndsWith("-Setup.exe", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return assetName.StartsWith("OpenWinBox_Setup_", StringComparison.OrdinalIgnoreCase) &&
             assetName.EndsWith($"_{architectureSuffix}.exe", StringComparison.OrdinalIgnoreCase);
     }
 
@@ -1069,6 +1159,10 @@ public sealed partial class AppUpdateService : IAppUpdateService
         [JsonPropertyName("body")]
         public string Body { get; set; } = string.Empty;
 
+        public bool Draft { get; set; }
+
+        public bool Prerelease { get; set; }
+
         public GitHubReleaseAsset[] Assets { get; set; } = [];
     }
 
@@ -1090,6 +1184,7 @@ public sealed partial class AppUpdateService : IAppUpdateService
         PropertyNameCaseInsensitive = true)]
     [JsonSerializable(typeof(AppUpdateManifest), TypeInfoPropertyName = "UpdateManifest")]
     [JsonSerializable(typeof(GitHubReleaseResponse), TypeInfoPropertyName = "GitHubRelease")]
+    [JsonSerializable(typeof(GitHubReleaseResponse[]), TypeInfoPropertyName = "ReleaseList")]
     private sealed partial class AppUpdateJsonContext : JsonSerializerContext
     {
     }

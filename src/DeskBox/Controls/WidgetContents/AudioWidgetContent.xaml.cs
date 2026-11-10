@@ -29,7 +29,7 @@ public sealed partial class AudioWidgetContent : UserControl
     private CoreAudio.Device? _output, _input;
     private bool _updating;        // changes made by code: don't send them back to Windows
     private long _userChangedAt;   // don't overwrite a slider the user is dragging
-    private bool _active;
+    private bool _active = true;   // window visible, as last reported by the host
 
     private sealed record AppRow(Slider Slider, FontIcon MuteIcon, HashSet<uint> ProcessIds);
 
@@ -41,8 +41,9 @@ public sealed partial class AudioWidgetContent : UserControl
         _timer = DispatcherQueue.CreateTimer();
         _timer.Interval = TimeSpan.FromMilliseconds(1500);
         _timer.Tick += (_, _) => Refresh();
-        Loaded += (_, _) => SetActive(true);
-        Unloaded += (_, _) => SetActive(false);
+        // Loading must not override a window that is already hidden, so it only applies the current state.
+        Loaded += (_, _) => SetActive(_active);
+        Unloaded += (_, _) => _timer.Stop();
     }
 
     public void SetActive(bool active)
@@ -107,6 +108,16 @@ public sealed partial class AudioWidgetContent : UserControl
     private void RefreshApps()
     {
         List<CoreAudio.Session> sessions = TryGet(CoreAudio.GetSessions) ?? [];
+        // Windows reuses process ids: forget the ones without a session so a new app never shows an old name.
+        if (_processes.Count > 0)
+        {
+            var live = sessions.Select(s => s.ProcessId).ToHashSet();
+            foreach (uint pid in _processes.Keys.Where(pid => !live.Contains(pid)).ToList())
+            {
+                _processes.Remove(pid);
+            }
+        }
+
         // One row per app even when it has several sessions (browsers, for example).
         var groups = new Dictionary<string, (string Name, string? Path, CoreAudio.Session First, HashSet<uint> Pids)>(StringComparer.OrdinalIgnoreCase);
         foreach (var session in sessions)

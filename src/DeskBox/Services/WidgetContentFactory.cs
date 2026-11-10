@@ -138,7 +138,7 @@ public sealed class WidgetContentFactory
         new(
             WidgetKind.Audio,
             "Audio",
-            "E767",
+            "",
             WidgetContentStage.Implemented,
             CanShowInCreateEntry: false,
             WidgetContentAvailability.Available,
