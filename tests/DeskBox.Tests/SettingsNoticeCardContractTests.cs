@@ -34,7 +34,7 @@ public sealed class SettingsNoticeCardContractTests
     }
 
     [Theory]
-    [InlineData("src/DeskBox/Views/SettingsWindow.xaml", 3)]
+    [InlineData("src/DeskBox/Views/SettingsWindow.xaml", 2)]
     [InlineData("src/DeskBox/Views/SettingsSections/SearchSettingsSection.xaml", 1)]
     public void Notices_AreNativeInfoBarsWithTitleAndMessageProperties(string path, int expectedCount)
     {

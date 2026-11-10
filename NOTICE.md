@@ -25,6 +25,11 @@ repository. Changes made by OpenWinBox, starting 2026-11-05:
   the in-app feedback form that posted to deskbox.fun now opens GitHub Issues.
 - **Credits:** the "About me" dialog of the original author is kept and is now
   labelled "Original author".
+- **No donation codes:** the WeChat/Alipay support QR codes and the
+  "Support DeskBox" dialog were removed; the "About me" dialog credits Tianyu
+  Zhu and links to the original repository instead.
+- **Microsoft Store edition:** published as OpenWinBox (Store ID
+  9P91207LL0RC); privacy policy in [PRIVACY.md](PRIVACY.md).
 - **New: Audio widget** (`Controls/WidgetContents/AudioWidgetContent*`,
   `Platform/CoreAudio.cs`, `Services/AudioWidgetContentProvider.cs`).
 - **New: second time zone in Glance** (`GlanceWidgetData.SecondTimeZoneId`,

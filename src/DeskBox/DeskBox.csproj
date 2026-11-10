@@ -233,8 +233,6 @@
       opt them back in only for Direct builds so Store packaging cannot inherit
       them through the SDK wildcard.
     -->
-    <Content Remove="Assets\wechat-qrcode.jpg" />
-    <Content Remove="Assets\Support\*.png" />
     <!-- city data is consumed exclusively through the embedded resource in
          CitySearchService; the SDK wildcard Content copy is dead weight in
          every package -->
@@ -275,9 +273,6 @@
     <Content Include="Assets\deskbox-tray-dark.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\wechat-qrcode.jpg" Condition="'$(DeskBoxDistribution)' != 'Store'">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\SettingsNavIcons\*.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -294,10 +289,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Store\*.png" />
-    <Content Include="Assets\Support\*.png" Condition="'$(DeskBoxDistribution)' != 'Store'">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-    </Content>
     <EmbeddedResource Include="Assets\Cities\cities.json" />
     <EmbeddedResource Include="Strings\zh-CN.json" />
     <EmbeddedResource Include="Strings\zh-TW.json" />

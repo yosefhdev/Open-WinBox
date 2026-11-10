@@ -14,8 +14,8 @@ public sealed class AotStage7C1ContractTests
                      "DependsOnTargets=\"BuildDeskBoxRustNative\"",
                      "<TargetPath>deskbox_native.dll</TargetPath>",
                      "<TargetPath>deskbox_native.pdb</TargetPath>",
-                     "DeskBox.deps.json",
-                     "DeskBox.runtimeconfig.json"
+                     "$(AssemblyName).deps.json",
+                     "$(AssemblyName).runtimeconfig.json"
                  })
         {
             Assert.Contains(token, project, StringComparison.Ordinal);
@@ -25,39 +25,15 @@ public sealed class AotStage7C1ContractTests
     [Fact]
     public void StoreBuild_ExcludesDonationQrAssets()
     {
+        // OpenWinBox ships no donation QR images in any channel; the Store
+        // audit still forbids them so they cannot come back by accident.
         string project = Read("src/DeskBox/DeskBox.csproj");
         string storeAudit = Read("scripts/audit-store-native-aot-package.ps1");
-        string about = Read("src/DeskBox/ViewModels/SettingsViewModel.AboutAndUpdates.cs");
 
-        Assert.Contains(
-            "<Content Remove=\"Assets\\wechat-qrcode.jpg\" />",
-            project,
-            StringComparison.Ordinal);
-        Assert.Contains(
-            "<Content Remove=\"Assets\\Support\\*.png\" />",
-            project,
-            StringComparison.Ordinal);
-        Assert.Contains(
-            "<Content Include=\"Assets\\wechat-qrcode.jpg\" Condition=\"'$(DeskBoxDistribution)' != 'Store'\">",
-            project,
-            StringComparison.Ordinal);
-        Assert.Contains(
-            "<Content Include=\"Assets\\Support\\*.png\" Condition=\"'$(DeskBoxDistribution)' != 'Store'\">",
-            project,
-            StringComparison.Ordinal);
-        // Direct payloads must actually carry the support QR images: without
-        // explicit copy metadata the files never reach the publish directory
-        // and the support dialog renders empty placeholders.
-        Assert.Contains(
-            "<CopyToPublishDirectory>Always</CopyToPublishDirectory>",
-            project,
-            StringComparison.Ordinal);
+        Assert.DoesNotContain("wechat-qrcode", project, StringComparison.Ordinal);
+        Assert.DoesNotContain("Assets\\Support", project, StringComparison.Ordinal);
         Assert.Contains("'wechat-qrcode'", storeAudit, StringComparison.Ordinal);
         Assert.Contains("'Assets/Support/'", storeAudit, StringComparison.Ordinal);
-        Assert.Contains(
-            "DonationQrCodeVisibility",
-            about,
-            StringComparison.Ordinal);
     }
 
     [Fact]
@@ -124,11 +100,11 @@ public sealed class AotStage7C1ContractTests
 
         foreach (string token in new[]
                  {
-                     "D1FC332A.DeskBoxWidgets",
+                     "yosefhdev.OpenWinBox",
                      "Microsoft.WindowsAppRuntime.2",
                      "deskbox_native.dll",
-                     "DeskBox\\.deps\\.json",
-                     "DeskBox\\.runtimeconfig\\.json",
+                     "OpenWinBox\\.deps\\.json",
+                     "OpenWinBox\\.runtimeconfig\\.json",
                      "deskbox_search_core",
                      "DeskBox\\.Updater",
                      "HasClrHeader",

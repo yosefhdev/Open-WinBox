@@ -27,8 +27,7 @@ internal static class SettingsSearchChannelPolicy
     // direct-installer-only spelled out above.
     internal static HashSet<string> DirectOnlyHeaderKeys { get; } = new(StringComparer.Ordinal)
     {
-        SettingsKeyPrefix + "AutoStart.Mode.Title",
-        SettingsKeyPrefix + "About.StoreSupportTitle"
+        SettingsKeyPrefix + "AutoStart.Mode.Title"
     };
 
     /// <summary>True when the settings-search entry must not surface in Store builds.</summary>

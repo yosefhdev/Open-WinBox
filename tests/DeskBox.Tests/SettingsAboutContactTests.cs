@@ -42,32 +42,6 @@ public sealed class SettingsAboutContactTests
                     element.Attribute("Text")?.Value,
                     "{Binding AppVersion}",
                     StringComparison.Ordinal)));
-        var supportDialogContent = Assert.Single(xamlDocument
-            .Descendants()
-            .Where(element =>
-                element.Name.LocalName == "StackPanel" &&
-                string.Equals(
-                    element.Attributes().FirstOrDefault(attribute => attribute.Name.LocalName == "Name")?.Value,
-                    "SupportDialogContent",
-                    StringComparison.Ordinal)));
-        var supportQrContainers = xamlDocument
-            .Descendants()
-            .Where(element =>
-                element.Name.LocalName == "Border" &&
-                element.Attributes().Any(attribute =>
-                    attribute.Name.LocalName == "Name" &&
-                    (string.Equals(attribute.Value, "WechatSupportQrContainer", StringComparison.Ordinal) ||
-                     string.Equals(attribute.Value, "AlipaySupportQrContainer", StringComparison.Ordinal))))
-            .ToArray();
-        var supportStoreButton = Assert.Single(xamlDocument
-            .Descendants()
-            .Where(element =>
-                element.Name.LocalName == "Button" &&
-                string.Equals(
-                    element.Attribute("Click")?.Value,
-                    "OpenMicrosoftStoreButton_Click",
-                    StringComparison.Ordinal)));
-
         Assert.Contains("Settings.About.FeedbackTitle", xaml, StringComparison.Ordinal);
         Assert.Contains("ShowFeedbackDialogButton_Click", xaml, StringComparison.Ordinal);
         Assert.Contains("Settings.About.FeedbackSendButton", xaml, StringComparison.Ordinal);
@@ -97,49 +71,20 @@ public sealed class SettingsAboutContactTests
         Assert.Contains("Settings.Dialog.AboutMeP1", xaml, StringComparison.Ordinal);
         Assert.Contains("Text=\"{Binding AppVersion}\"", xaml, StringComparison.Ordinal);
         Assert.Null(versionText.Attribute("Foreground"));
-        Assert.Contains("ms-appx:///Assets/wechat-qrcode.jpg", xaml, StringComparison.Ordinal);
-        Assert.Equal(1, CountOccurrences(xaml, "ms-appx:///Assets/wechat-qrcode.jpg"));
-        Assert.Contains("StoreSupportCardVisibility", xaml, StringComparison.Ordinal);
-        Assert.Contains("x:Name=\"SupportDeskBoxDialog\"", xaml, StringComparison.Ordinal);
-        Assert.Equal("480", supportDialogContent.Attribute("Width")?.Value);
-        Assert.Equal("480", supportDialogContent.Attribute("MaxWidth")?.Value);
-        Assert.Equal(2, supportQrContainers.Length);
-        Assert.All(supportQrContainers, container =>
-        {
-            Assert.Equal("108", container.Attribute("Width")?.Value);
-            Assert.Equal("108", container.Attribute("Height")?.Value);
-        });
-        Assert.Equal("12,5,12,7", supportStoreButton.Attribute("Padding")?.Value);
-        // The store button lives in the notice InfoBar's action-button slot;
-        // the template places that slot on the right, so the button itself
-        // no longer carries an explicit HorizontalAlignment.
-        Assert.Equal("InfoBar.ActionButton", supportStoreButton.Parent?.Name.LocalName);
-        Assert.Equal("Center", supportStoreButton.Attribute("VerticalAlignment")?.Value);
-        Assert.Contains("ShowStoreSupportDialogButton_Click", xaml, StringComparison.Ordinal);
-        Assert.Contains("OpenMicrosoftStoreButton_Click", xaml, StringComparison.Ordinal);
-        Assert.Contains("ms-appx:///Assets/Support/support-wechat.png", xaml, StringComparison.Ordinal);
-        Assert.Contains("ms-appx:///Assets/Support/support-alipay.png", xaml, StringComparison.Ordinal);
-        Assert.Equal(1, CountOccurrences(xaml, "ms-appx:///Assets/Support/support-wechat.png"));
-        Assert.Equal(1, CountOccurrences(xaml, "ms-appx:///Assets/Support/support-alipay.png"));
-        Assert.Contains("https://apps.microsoft.com/detail/", viewModel, StringComparison.Ordinal);
-        Assert.Contains("9PBZSNB4D69H", viewModel, StringComparison.Ordinal);
-        Assert.Contains("deskbox_about_support", viewModel, StringComparison.Ordinal);
-        Assert.Contains("?cid=", viewModel, StringComparison.Ordinal);
-        Assert.Contains("ms-windows-store://pdp/?ProductId=", viewModel, StringComparison.Ordinal);
-        Assert.Contains("&cid=", viewModel, StringComparison.Ordinal);
-        Assert.Contains("IsDirectInstallerUpdateDelivery ? Visibility.Visible : Visibility.Collapsed", aboutViewModel, StringComparison.Ordinal);
+        // OpenWinBox: no donation or support QR codes; the original author is
+        // credited in the About-me dialog with a link to the DeskBox repository.
+        Assert.DoesNotContain("wechat-qrcode", xaml, StringComparison.Ordinal);
+        Assert.DoesNotContain("Assets/Support/", xaml, StringComparison.Ordinal);
+        Assert.DoesNotContain("SupportDeskBoxDialog", xaml, StringComparison.Ordinal);
+        Assert.DoesNotContain("StoreSupportButton", xaml, StringComparison.Ordinal);
+        Assert.DoesNotContain("SupportDeskBoxDialog", storeActions, StringComparison.Ordinal);
+        Assert.Contains("NavigateUri=\"https://github.com/Tianyu199509/DeskBox\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("9P91207LL0RC", viewModel, StringComparison.Ordinal);
+        Assert.DoesNotContain("9PBZSNB4D69H", viewModel, StringComparison.Ordinal);
         Assert.Contains("AboutMeDialog.ShowAsync", dialogCode, StringComparison.Ordinal);
-        Assert.Contains("SupportDeskBoxDialog.ShowAsync", storeActions, StringComparison.Ordinal);
-        Assert.Contains("ViewModel.StoreSupportCardVisibility != Visibility.Visible", storeActions, StringComparison.Ordinal);
-        Assert.Contains("Launcher.LaunchUriAsync(new Uri(ViewModel.MicrosoftStoreAppLink))", storeActions, StringComparison.Ordinal);
-        Assert.Contains("Win32Helper.OpenFile(ViewModel.MicrosoftStoreLink)", storeActions, StringComparison.Ordinal);
-        Assert.Contains("感谢每一位愿意使用和支持 OpenWinBox 的朋友。", zhCn, StringComparison.Ordinal);
-        Assert.Contains("无论是否支持，OpenWinBox 都会继续认真维护，努力为大家带来更好的使用体验。", zhCn, StringComparison.Ordinal);
-        Assert.DoesNotContain("不会解锁额外功能", zhCn, StringComparison.Ordinal);
-        Assert.DoesNotContain("暂时不支持", zhCn, StringComparison.Ordinal);
-        Assert.Contains("Assets\\Support\\*.png", project, StringComparison.Ordinal);
-        Assert.True(File.Exists(Path.Combine(root, "src", "DeskBox", "Assets", "Support", "support-wechat.png")));
-        Assert.True(File.Exists(Path.Combine(root, "src", "DeskBox", "Assets", "Support", "support-alipay.png")));
+        Assert.Contains("Tianyu199509/DeskBox", File.ReadAllText(Path.Combine(root, "src/DeskBox/Strings/en-US.json")) + xaml, StringComparison.Ordinal);
+        Assert.False(Directory.Exists(Path.Combine(root, "src", "DeskBox", "Assets", "Support")));
+        Assert.False(File.Exists(Path.Combine(root, "src", "DeskBox", "Assets", "wechat-qrcode.jpg")));
         Assert.DoesNotContain("AboutRepositoryButton", xaml, StringComparison.Ordinal);
         Assert.DoesNotContain("AboutRepositoryButton", responsiveLayout, StringComparison.Ordinal);
         Assert.DoesNotContain("OpenRepositoryButton_Click", xaml, StringComparison.Ordinal);

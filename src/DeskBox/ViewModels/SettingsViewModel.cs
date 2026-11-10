@@ -45,10 +45,8 @@ public partial class SettingsViewModel : ObservableObject, IDisposable
     private const string AnimationPresetCustom = "Custom";
     private const string RepositoryUrl = "https://github.com/yosefhdev/Open-WinBox";
     private const string OfficialWebsiteUrl = "https://github.com/yosefhdev/Open-WinBox";
-    private const string MicrosoftStoreProductId = "9PBZSNB4D69H";
-    private const string MicrosoftStoreCampaignId = "deskbox_about_support";
-    private const string MicrosoftStoreUrl =
-        "https://apps.microsoft.com/detail/" + MicrosoftStoreProductId + "?cid=" + MicrosoftStoreCampaignId;
+    private const string MicrosoftStoreProductId = "9P91207LL0RC";
+    private const string MicrosoftStoreCampaignId = "openwinbox_about";
     private const string MicrosoftStoreAppUrl =
         "ms-windows-store://pdp/?ProductId=" + MicrosoftStoreProductId + "&cid=" + MicrosoftStoreCampaignId;
 

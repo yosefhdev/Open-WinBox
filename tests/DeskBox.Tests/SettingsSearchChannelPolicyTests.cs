@@ -13,11 +13,11 @@ namespace DeskBox.Tests;
 public sealed class SettingsSearchChannelPolicyTests
 {
     [Fact]
-    public void DirectOnlyHeaderKeys_AreFrozenAtTheTwoChannelGatedCards()
+    public void DirectOnlyHeaderKeys_AreFrozenAtTheChannelGatedCards()
     {
-        Assert.Equal(2, SettingsSearchChannelPolicy.DirectOnlyHeaderKeys.Count);
+        Assert.Single(SettingsSearchChannelPolicy.DirectOnlyHeaderKeys);
         Assert.Contains("Settings.AutoStart.Mode.Title", SettingsSearchChannelPolicy.DirectOnlyHeaderKeys);
-        Assert.Contains("Settings.About.StoreSupportTitle", SettingsSearchChannelPolicy.DirectOnlyHeaderKeys);
+        Assert.DoesNotContain("Settings.About.StoreSupportTitle", SettingsSearchChannelPolicy.DirectOnlyHeaderKeys);
     }
 
     [Fact]
