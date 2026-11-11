@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "تم التنفيذ",
   "Glance.SecondClock.Title": "منطقة زمنية ثانية",
   "Glance.SecondClock.Description": "اعرض الوقت في مدينة أخرى بجانب التاريخ",
-  "Glance.SecondClock.Off": "إيقاف"
+  "Glance.SecondClock.Off": "إيقاف",
+  "SystemMonitor.Storage": "التخزين",
+  "SystemMonitor.Network": "الشبكة",
+  "SystemMonitor.NoGpu": "وحدة GPU غير متاحة",
+  "SystemMonitor.Customize": "اختر ما يتم عرضه",
+  "SystemMonitor.Drives": "محركات الأقراص",
+  "Battery.Title": "البطارية",
+  "WidgetContent.Battery.StatusLabel": "تم التنفيذ",
+  "WidgetContent.Battery.StatusDescription": "يعرض مستوى بطارية الفأرات ولوحات المفاتيح والأجهزة اللاسلكية الأخرى",
+  "WidgetTitleIcon.Label.Battery": "البطارية",
+  "Battery.None": "لم يتم العثور على أجهزة بها بطارية",
+  "Battery.Charging": "قيد الشحن",
+  "Battery.Searching": "جارٍ البحث عن الأجهزة…",
+  "Battery.System": "البطارية / UPS",
+  "Battery.Controller": "وحدة التحكم {0}"
 }

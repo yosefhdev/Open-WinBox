@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "Реализовано",
   "Glance.SecondClock.Title": "Второй часовой пояс",
   "Glance.SecondClock.Description": "Показывает время в другом городе рядом с датой",
-  "Glance.SecondClock.Off": "Выкл."
+  "Glance.SecondClock.Off": "Выкл.",
+  "SystemMonitor.Storage": "Хранилище",
+  "SystemMonitor.Network": "Сеть",
+  "SystemMonitor.NoGpu": "GPU недоступен",
+  "SystemMonitor.Customize": "Выбрать, что показывать",
+  "SystemMonitor.Drives": "Диски",
+  "Battery.Title": "Батарея",
+  "WidgetContent.Battery.StatusLabel": "Реализовано",
+  "WidgetContent.Battery.StatusDescription": "Показывает заряд беспроводных мышей, клавиатур и других устройств",
+  "WidgetTitleIcon.Label.Battery": "Батарея",
+  "Battery.None": "Устройства с батареей не найдены",
+  "Battery.Charging": "Заряжается",
+  "Battery.Searching": "Поиск устройств…",
+  "Battery.System": "Батарея / ИБП",
+  "Battery.Controller": "Контроллер {0}"
 }

@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "क्रियान्वित किया गया",
   "Glance.SecondClock.Title": "दूसरा समय क्षेत्र",
   "Glance.SecondClock.Description": "तारीख के पास किसी दूसरे शहर का समय दिखाएँ",
-  "Glance.SecondClock.Off": "बंद"
+  "Glance.SecondClock.Off": "बंद",
+  "SystemMonitor.Storage": "स्टोरेज",
+  "SystemMonitor.Network": "नेटवर्क",
+  "SystemMonitor.NoGpu": "GPU उपलब्ध नहीं है",
+  "SystemMonitor.Customize": "चुनें कि क्या दिखाना है",
+  "SystemMonitor.Drives": "ड्राइव",
+  "Battery.Title": "बैटरी",
+  "WidgetContent.Battery.StatusLabel": "क्रियान्वित किया गया",
+  "WidgetContent.Battery.StatusDescription": "वायरलेस माउस, कीबोर्ड और अन्य डिवाइस की बैटरी दिखाता है",
+  "WidgetTitleIcon.Label.Battery": "बैटरी",
+  "Battery.None": "बैटरी वाला कोई डिवाइस नहीं मिला",
+  "Battery.Charging": "चार्ज हो रहा है",
+  "Battery.Searching": "डिवाइस खोजे जा रहे हैं…",
+  "Battery.System": "बैटरी / UPS",
+  "Battery.Controller": "कंट्रोलर {0}"
 }

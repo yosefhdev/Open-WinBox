@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "Implementado",
   "Glance.SecondClock.Title": "Segunda zona horaria",
   "Glance.SecondClock.Description": "Muestra la hora de otra ciudad junto a la fecha",
-  "Glance.SecondClock.Off": "Desactivada"
+  "Glance.SecondClock.Off": "Desactivada",
+  "SystemMonitor.Storage": "Almacenamiento",
+  "SystemMonitor.Network": "Red",
+  "SystemMonitor.NoGpu": "GPU no disponible",
+  "SystemMonitor.Customize": "Elegir qué mostrar",
+  "SystemMonitor.Drives": "Unidades",
+  "Battery.Title": "Batería",
+  "WidgetContent.Battery.StatusLabel": "Implementado",
+  "WidgetContent.Battery.StatusDescription": "Muestra la batería de mouse, teclados y otros dispositivos inalámbricos",
+  "WidgetTitleIcon.Label.Battery": "Batería",
+  "Battery.None": "No se encontraron dispositivos con batería",
+  "Battery.Charging": "Cargando",
+  "Battery.Searching": "Buscando dispositivos…",
+  "Battery.System": "Batería / UPS",
+  "Battery.Controller": "Mando {0}"
 }

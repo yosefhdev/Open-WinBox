@@ -700,6 +700,7 @@ public sealed partial class WidgetManager
             WidgetKind.Search => "Search.Title",
             WidgetKind.Glance => "Glance.Title",
             WidgetKind.Audio => "Audio.Title",
+            WidgetKind.Battery => "Battery.Title",
             WidgetKind.Tags => "Tags.Title",
             WidgetKind.SystemMonitor => "SystemMonitor.Title",
             _ => null

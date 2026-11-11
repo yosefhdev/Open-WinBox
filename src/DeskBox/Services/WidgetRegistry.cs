@@ -67,7 +67,8 @@ public sealed class WidgetRegistry
             new(WidgetKind.Search, CanCreateWindow: true, IsImplemented: true),
             new(WidgetKind.Glance, CanCreateWindow: true, IsImplemented: true),
             new(WidgetKind.Audio, CanCreateWindow: true, IsImplemented: true),
-            new(WidgetKind.SystemMonitor, CanCreateWindow: false, IsImplemented: false)
+            new(WidgetKind.Battery, CanCreateWindow: true, IsImplemented: true),
+            new(WidgetKind.SystemMonitor, CanCreateWindow: true, IsImplemented: true)
         ]);
     }
 }

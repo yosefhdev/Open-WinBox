@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "Implementiert",
   "Glance.SecondClock.Title": "Zweite Zeitzone",
   "Glance.SecondClock.Description": "Zeigt die Uhrzeit einer anderen Stadt neben dem Datum",
-  "Glance.SecondClock.Off": "Aus"
+  "Glance.SecondClock.Off": "Aus",
+  "SystemMonitor.Storage": "Speicher",
+  "SystemMonitor.Network": "Netzwerk",
+  "SystemMonitor.NoGpu": "GPU nicht verfügbar",
+  "SystemMonitor.Customize": "Anzeige auswählen",
+  "SystemMonitor.Drives": "Laufwerke",
+  "Battery.Title": "Akku",
+  "WidgetContent.Battery.StatusLabel": "Implementiert",
+  "WidgetContent.Battery.StatusDescription": "Zeigt den Akkustand kabelloser Mäuse, Tastaturen und anderer Geräte",
+  "WidgetTitleIcon.Label.Battery": "Akku",
+  "Battery.None": "Keine Geräte mit Akku gefunden",
+  "Battery.Charging": "Wird geladen",
+  "Battery.Searching": "Geräte werden gesucht…",
+  "Battery.System": "Akku / USV",
+  "Battery.Controller": "Controller {0}"
 }

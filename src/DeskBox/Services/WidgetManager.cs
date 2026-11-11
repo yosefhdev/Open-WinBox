@@ -624,7 +624,17 @@ public sealed partial class WidgetManager
                 WidgetKind.Audio,
                 async _ => await CreateSingletonContentFeatureWidgetAsync(WidgetKind.Audio),
                 (enabled, reveal) => SetContentFeatureWidgetEnabledAsync(WidgetKind.Audio, enabled, reveal),
-                () => HideAndCloseFeatureWidgetAsync(WidgetKind.Audio))
+                () => HideAndCloseFeatureWidgetAsync(WidgetKind.Audio)),
+            new(
+                WidgetKind.Battery,
+                async _ => await CreateSingletonContentFeatureWidgetAsync(WidgetKind.Battery),
+                (enabled, reveal) => SetContentFeatureWidgetEnabledAsync(WidgetKind.Battery, enabled, reveal),
+                () => HideAndCloseFeatureWidgetAsync(WidgetKind.Battery)),
+            new(
+                WidgetKind.SystemMonitor,
+                async _ => await CreateSingletonContentFeatureWidgetAsync(WidgetKind.SystemMonitor),
+                (enabled, reveal) => SetContentFeatureWidgetEnabledAsync(WidgetKind.SystemMonitor, enabled, reveal),
+                () => HideAndCloseFeatureWidgetAsync(WidgetKind.SystemMonitor))
         ];
 
         return handlers.ToDictionary(handler => handler.WidgetKind);
@@ -668,6 +678,22 @@ public sealed partial class WidgetManager
                     request.CancellationToken)),
             new(
                 WidgetKind.Audio,
+                async request => await CreateContentWidgetFromConfigAsync(
+                    request.Config,
+                    request.KeepPreparedForAnimation,
+                    request.RevealAfterCreate,
+                    request.ShowRaisedWhileInitializing,
+                    request.CancellationToken)),
+            new(
+                WidgetKind.Battery,
+                async request => await CreateContentWidgetFromConfigAsync(
+                    request.Config,
+                    request.KeepPreparedForAnimation,
+                    request.RevealAfterCreate,
+                    request.ShowRaisedWhileInitializing,
+                    request.CancellationToken)),
+            new(
+                WidgetKind.SystemMonitor,
                 async request => await CreateContentWidgetFromConfigAsync(
                     request.Config,
                     request.KeepPreparedForAnimation,
@@ -2753,6 +2779,8 @@ public sealed partial class WidgetManager
             WidgetKind.Weather => (200, 200),
             WidgetKind.Glance => (360, 260),
             WidgetKind.Audio => (340, 320),
+            WidgetKind.Battery => (320, 220),
+            WidgetKind.SystemMonitor => (340, 420),
             _ => (
                 _settingsService.Settings.DefaultWidgetWidth,
                 _settingsService.Settings.DefaultWidgetHeight)

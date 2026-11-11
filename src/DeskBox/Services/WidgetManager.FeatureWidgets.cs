@@ -385,6 +385,7 @@ public sealed partial class WidgetManager
             WidgetKind.Search => "Search.Title",
             WidgetKind.Glance => "Glance.Title",
             WidgetKind.Audio => "Audio.Title",
+            WidgetKind.Battery => "Battery.Title",
             WidgetKind.Tags => "Tags.Title",
             WidgetKind.SystemMonitor => "SystemMonitor.Title",
             _ => string.Empty
@@ -435,6 +436,8 @@ public sealed partial class WidgetManager
                 WidgetKind.Search => 280,
                 WidgetKind.Glance => 360,
                 WidgetKind.Audio => 340,
+                WidgetKind.Battery => 320,
+                WidgetKind.SystemMonitor => 340,
                 _ => Math.Max(_settingsService.Settings.DefaultWidgetWidth, 320)
             },
             Height = kind switch
@@ -444,6 +447,8 @@ public sealed partial class WidgetManager
                 WidgetKind.Search => 90,
                 WidgetKind.Glance => 260,
                 WidgetKind.Audio => 320,
+                WidgetKind.Battery => 220,
+                WidgetKind.SystemMonitor => 420,
                 _ => Math.Max(_settingsService.Settings.DefaultWidgetHeight, 360)
             }
         };

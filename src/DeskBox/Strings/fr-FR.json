@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "Mis en œuvre",
   "Glance.SecondClock.Title": "Second fuseau horaire",
   "Glance.SecondClock.Description": "Affiche l'heure d'une autre ville à côté de la date",
-  "Glance.SecondClock.Off": "Désactivé"
+  "Glance.SecondClock.Off": "Désactivé",
+  "SystemMonitor.Storage": "Stockage",
+  "SystemMonitor.Network": "Réseau",
+  "SystemMonitor.NoGpu": "GPU non disponible",
+  "SystemMonitor.Customize": "Choisir ce qui s'affiche",
+  "SystemMonitor.Drives": "Lecteurs",
+  "Battery.Title": "Batterie",
+  "WidgetContent.Battery.StatusLabel": "Mis en œuvre",
+  "WidgetContent.Battery.StatusDescription": "Affiche la batterie des souris, claviers et autres appareils sans fil",
+  "WidgetTitleIcon.Label.Battery": "Batterie",
+  "Battery.None": "Aucun appareil avec batterie trouvé",
+  "Battery.Charging": "En charge",
+  "Battery.Searching": "Recherche d'appareils…",
+  "Battery.System": "Batterie / onduleur",
+  "Battery.Controller": "Manette {0}"
 }

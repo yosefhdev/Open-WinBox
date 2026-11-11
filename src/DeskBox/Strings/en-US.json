@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "Implemented",
   "Glance.SecondClock.Title": "Second time zone",
   "Glance.SecondClock.Description": "Show the time in another city next to the date",
-  "Glance.SecondClock.Off": "Off"
+  "Glance.SecondClock.Off": "Off",
+  "SystemMonitor.Storage": "Storage",
+  "SystemMonitor.Network": "Network",
+  "SystemMonitor.NoGpu": "GPU not available",
+  "SystemMonitor.Customize": "Choose what to show",
+  "SystemMonitor.Drives": "Drives",
+  "Battery.Title": "Battery",
+  "WidgetContent.Battery.StatusLabel": "Implemented",
+  "WidgetContent.Battery.StatusDescription": "Shows the battery level of wireless mice, keyboards and other devices",
+  "WidgetTitleIcon.Label.Battery": "Battery",
+  "Battery.None": "No devices with battery found",
+  "Battery.Charging": "Charging",
+  "Battery.Searching": "Looking for devices…",
+  "Battery.System": "Battery / UPS",
+  "Battery.Controller": "Controller {0}"
 }

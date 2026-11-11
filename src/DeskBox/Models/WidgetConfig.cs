@@ -291,7 +291,10 @@ public enum WidgetKind
     Glance,
 
     /// <summary>OpenWinBox: output/input device switch, volume and per-app mixer.</summary>
-    Audio
+    Audio,
+
+    /// <summary>OpenWinBox: battery level of wireless peripherals (Razer dongles, Bluetooth).</summary>
+    Battery
 }
 
 /// <summary>

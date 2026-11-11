@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "বাস্তবায়িত",
   "Glance.SecondClock.Title": "দ্বিতীয় সময় অঞ্চল",
   "Glance.SecondClock.Description": "তারিখের পাশে অন্য শহরের সময় দেখান",
-  "Glance.SecondClock.Off": "বন্ধ"
+  "Glance.SecondClock.Off": "বন্ধ",
+  "SystemMonitor.Storage": "স্টোরেজ",
+  "SystemMonitor.Network": "নেটওয়ার্ক",
+  "SystemMonitor.NoGpu": "GPU পাওয়া যাচ্ছে না",
+  "SystemMonitor.Customize": "কী দেখাবেন তা বেছে নিন",
+  "SystemMonitor.Drives": "ড্রাইভ",
+  "Battery.Title": "ব্যাটারি",
+  "WidgetContent.Battery.StatusLabel": "বাস্তবায়িত",
+  "WidgetContent.Battery.StatusDescription": "ওয়্যারলেস মাউস, কিবোর্ড ও অন্যান্য ডিভাইসের ব্যাটারি দেখায়",
+  "WidgetTitleIcon.Label.Battery": "ব্যাটারি",
+  "Battery.None": "ব্যাটারিযুক্ত কোনো ডিভাইস পাওয়া যায়নি",
+  "Battery.Charging": "চার্জ হচ্ছে",
+  "Battery.Searching": "ডিভাইস খোঁজা হচ্ছে…",
+  "Battery.System": "ব্যাটারি / UPS",
+  "Battery.Controller": "কন্ট্রোলার {0}"
 }

@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "구현됨",
   "Glance.SecondClock.Title": "두 번째 표준 시간대",
   "Glance.SecondClock.Description": "날짜 옆에 다른 도시의 시간을 표시합니다",
-  "Glance.SecondClock.Off": "끔"
+  "Glance.SecondClock.Off": "끔",
+  "SystemMonitor.Storage": "저장소",
+  "SystemMonitor.Network": "네트워크",
+  "SystemMonitor.NoGpu": "GPU 사용 불가",
+  "SystemMonitor.Customize": "표시할 항목 선택",
+  "SystemMonitor.Drives": "드라이브",
+  "Battery.Title": "배터리",
+  "WidgetContent.Battery.StatusLabel": "구현됨",
+  "WidgetContent.Battery.StatusDescription": "무선 마우스, 키보드 등 기기의 배터리 잔량을 표시합니다",
+  "WidgetTitleIcon.Label.Battery": "배터리",
+  "Battery.None": "배터리가 있는 기기를 찾을 수 없습니다",
+  "Battery.Charging": "충전 중",
+  "Battery.Searching": "기기를 찾는 중…",
+  "Battery.System": "배터리 / UPS",
+  "Battery.Controller": "컨트롤러 {0}"
 }

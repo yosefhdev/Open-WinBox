@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "已实现",
   "Glance.SecondClock.Title": "第二时区",
   "Glance.SecondClock.Description": "在日期旁显示另一个城市的时间",
-  "Glance.SecondClock.Off": "关闭"
+  "Glance.SecondClock.Off": "关闭",
+  "SystemMonitor.Storage": "存储",
+  "SystemMonitor.Network": "网络",
+  "SystemMonitor.NoGpu": "GPU 不可用",
+  "SystemMonitor.Customize": "选择要显示的内容",
+  "SystemMonitor.Drives": "驱动器",
+  "Battery.Title": "电池",
+  "WidgetContent.Battery.StatusLabel": "已实现",
+  "WidgetContent.Battery.StatusDescription": "显示无线鼠标、键盘等设备的电量",
+  "WidgetTitleIcon.Label.Battery": "电池",
+  "Battery.None": "未找到带电池的设备",
+  "Battery.Charging": "充电中",
+  "Battery.Searching": "正在查找设备…",
+  "Battery.System": "电池 / UPS",
+  "Battery.Controller": "手柄 {0}"
 }

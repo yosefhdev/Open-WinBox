@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "已實現",
   "Glance.SecondClock.Title": "第二時區",
   "Glance.SecondClock.Description": "在日期旁顯示另一個城市的時間",
-  "Glance.SecondClock.Off": "關閉"
+  "Glance.SecondClock.Off": "關閉",
+  "SystemMonitor.Storage": "儲存空間",
+  "SystemMonitor.Network": "網路",
+  "SystemMonitor.NoGpu": "GPU 無法使用",
+  "SystemMonitor.Customize": "選擇要顯示的內容",
+  "SystemMonitor.Drives": "磁碟機",
+  "Battery.Title": "電池",
+  "WidgetContent.Battery.StatusLabel": "已實現",
+  "WidgetContent.Battery.StatusDescription": "顯示無線滑鼠、鍵盤等裝置的電量",
+  "WidgetTitleIcon.Label.Battery": "電池",
+  "Battery.None": "找不到有電池的裝置",
+  "Battery.Charging": "充電中",
+  "Battery.Searching": "正在尋找裝置…",
+  "Battery.System": "電池 / UPS",
+  "Battery.Controller": "控制器 {0}"
 }

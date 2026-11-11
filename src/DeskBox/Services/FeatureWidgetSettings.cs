@@ -151,6 +151,8 @@ public static class FeatureWidgetSettings
             WidgetKind.Search => HasLiveWidget(settings, WidgetKind.Search),
             WidgetKind.Glance => HasLiveWidget(settings, WidgetKind.Glance),
             WidgetKind.Audio => HasLiveWidget(settings, WidgetKind.Audio),
+            WidgetKind.Battery => HasLiveWidget(settings, WidgetKind.Battery),
+            WidgetKind.SystemMonitor => HasLiveWidget(settings, WidgetKind.SystemMonitor),
             _ => false
         };
     }

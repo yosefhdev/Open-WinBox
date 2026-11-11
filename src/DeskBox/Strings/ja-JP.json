@@ -3014,5 +3014,19 @@
   "WidgetContent.Audio.StatusLabel": "実装済み",
   "Glance.SecondClock.Title": "2 つ目のタイム ゾーン",
   "Glance.SecondClock.Description": "日付の横に別の都市の時刻を表示します",
-  "Glance.SecondClock.Off": "オフ"
+  "Glance.SecondClock.Off": "オフ",
+  "SystemMonitor.Storage": "ストレージ",
+  "SystemMonitor.Network": "ネットワーク",
+  "SystemMonitor.NoGpu": "GPU を利用できません",
+  "SystemMonitor.Customize": "表示する項目を選択",
+  "SystemMonitor.Drives": "ドライブ",
+  "Battery.Title": "バッテリー",
+  "WidgetContent.Battery.StatusLabel": "実装済み",
+  "WidgetContent.Battery.StatusDescription": "ワイヤレスマウスやキーボードなどのバッテリー残量を表示",
+  "WidgetTitleIcon.Label.Battery": "バッテリー",
+  "Battery.None": "バッテリー搭載デバイスが見つかりません",
+  "Battery.Charging": "充電中",
+  "Battery.Searching": "デバイスを検索中…",
+  "Battery.System": "バッテリー / UPS",
+  "Battery.Controller": "コントローラー {0}"
 }

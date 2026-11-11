@@ -101,11 +101,12 @@ public sealed class WidgetContentFactory
             WidgetKind.SystemMonitor,
             "System Monitor",
             "\uE9D9",
-            WidgetContentStage.Placeholder,
+            WidgetContentStage.Implemented,
             CanShowInCreateEntry: false,
-            WidgetContentAvailability.Planned,
+            WidgetContentAvailability.Available,
             "WidgetContent.SystemMonitor.StatusLabel",
             "WidgetContent.SystemMonitor.StatusDescription",
+            IsFeatureWidget: true,
             ChromeCategory: WidgetChromeCategory.Display,
             DefaultChromeMode: WidgetChromeMode.Overlay),
         new(
@@ -144,6 +145,16 @@ public sealed class WidgetContentFactory
             WidgetContentAvailability.Available,
             "WidgetContent.Audio.StatusLabel",
             "WidgetContent.Audio.StatusDescription",
+            IsFeatureWidget: true),
+        new(
+            WidgetKind.Battery,
+            "Battery",
+            "",
+            WidgetContentStage.Implemented,
+            CanShowInCreateEntry: false,
+            WidgetContentAvailability.Available,
+            "WidgetContent.Battery.StatusLabel",
+            "WidgetContent.Battery.StatusDescription",
             IsFeatureWidget: true)
     ];
 
@@ -287,9 +298,10 @@ public sealed class WidgetContentFactory
             new WeatherWidgetContentProvider(),
             new GlanceWidgetContentProvider(),
             new AudioWidgetContentProvider(),
+            new BatteryWidgetContentProvider(),
             new SearchWidgetContentProvider(),
             new PlaceholderWidgetContentProvider(WidgetKind.Tags),
-            new PlaceholderWidgetContentProvider(WidgetKind.SystemMonitor)
+            new SystemMonitorWidgetContentProvider()
         ];
 
         return providers.ToDictionary(provider => provider.WidgetKind);
