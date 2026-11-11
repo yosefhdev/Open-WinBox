@@ -5,8 +5,8 @@
 ; ISCC /DDeskBoxNativeAot=1 /DDeskBoxBundledRuntime=1 /DMyAppReleaseDir=<publish 目录> DeskBox.arm64.iss
 
 #define MyAppName "OpenWinBox"
-#define MyAppVersion "1.0.0-beta.5"
-#define MyAppVersionInfo "1.0.0.5"
+#define MyAppVersion "1.0.0-beta.6"
+#define MyAppVersionInfo "1.0.0.6"
 #define MyAppPublisher "yosefhdev"
 #define MyAppExeName "OpenWinBox.exe"
 #define MyAppOutputBaseName "OpenWinBox_Setup"

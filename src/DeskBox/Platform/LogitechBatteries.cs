@@ -170,7 +170,7 @@ internal sealed unsafe partial class LogitechBatteries
                 // The charger lifts the cell voltage (4198 mV read 100 % while the headset really had 76 %),
                 // so while charging the voltage says nothing about the level.
                 // shortcut: no level while charging, upgrade if a voltage-to-level table per model turns up.
-                return (charging ? null : PercentFromMillivolts(millivolts), charging, true);
+                return (charging ? null : e.FeatureId == 0x1F20 ? PercentFromHeadsetMillivolts(millivolts) : PercentFromMillivolts(millivolts), charging, true);
             }
         }
     }
@@ -182,17 +182,29 @@ internal sealed unsafe partial class LogitechBatteries
         (3778, 40), (3751, 30), (3717, 20), (3671, 10), (3646, 5), (3579, 2), (3500, 0)
     ];
 
-    internal static int PercentFromMillivolts(int millivolts)
+    // Headsets (feature 0x1F20): HeadsetControl's G PRO X curve (4150 mV = 100 %, 3830 = 50 %, 3320 = 0 %),
+    // with the top moved to match one reading: 4044 mV was 95 % in Logitech G HUB.
+    // shortcut: calibrated on a single point, adjust if G HUB disagrees at other levels.
+    private static readonly (int Millivolts, int Percent)[] HeadsetCurve =
+    [
+        (4150, 100), (4044, 95), (3830, 50), (3780, 30), (3740, 20), (3670, 5), (3320, 0)
+    ];
+
+    internal static int PercentFromMillivolts(int millivolts) => PercentFromMillivolts(millivolts, VoltageCurve);
+
+    internal static int PercentFromHeadsetMillivolts(int millivolts) => PercentFromMillivolts(millivolts, HeadsetCurve);
+
+    private static int PercentFromMillivolts(int millivolts, (int Millivolts, int Percent)[] curve)
     {
-        if (millivolts >= VoltageCurve[0].Millivolts)
+        if (millivolts >= curve[0].Millivolts)
         {
             return 100;
         }
 
-        for (int i = 1; i < VoltageCurve.Length; i++)
+        for (int i = 1; i < curve.Length; i++)
         {
-            var (upperMv, upperPct) = VoltageCurve[i - 1];
-            var (lowerMv, lowerPct) = VoltageCurve[i];
+            var (upperMv, upperPct) = curve[i - 1];
+            var (lowerMv, lowerPct) = curve[i];
             if (millivolts >= lowerMv)
             {
                 return lowerPct + (int)Math.Round((upperPct - lowerPct) * (millivolts - lowerMv) / (double)(upperMv - lowerMv));

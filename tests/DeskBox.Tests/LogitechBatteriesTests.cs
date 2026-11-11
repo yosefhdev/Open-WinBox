@@ -27,4 +27,14 @@ public sealed class LogitechBatteriesTests
             previous = percent;
         }
     }
+
+    [Theory]
+    [InlineData(4044, 95)]
+    [InlineData(4200, 100)]
+    [InlineData(3830, 50)]
+    [InlineData(3000, 0)]
+    public void HeadsetCurve_MatchesCalibrationPoints(int millivolts, int expected)
+    {
+        Assert.Equal(expected, LogitechBatteries.PercentFromHeadsetMillivolts(millivolts));
+    }
 }

@@ -173,6 +173,7 @@ public sealed class ReleaseNotesService
     public static readonly IReadOnlyList<string> KnownReleaseVersions =
     [
         // OpenWinBox releases only: notes resolve through this repository's GitHub tags.
+        "1.0.0-beta.6",
         "1.0.0-beta.4",
     ];
 

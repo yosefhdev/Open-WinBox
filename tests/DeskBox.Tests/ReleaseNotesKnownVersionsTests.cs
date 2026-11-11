@@ -17,12 +17,23 @@ public sealed class ReleaseNotesKnownVersionsTests
         var versions = ReleaseNotesService.KnownReleaseVersions;
         for (int i = 1; i < versions.Count; i++)
         {
-            Version previous = Version.Parse(versions[i - 1]);
-            Version current = Version.Parse(versions[i]);
             Assert.True(
-                previous > current,
+                Rank(versions[i - 1]).CompareTo(Rank(versions[i])) > 0,
                 $"{versions[i - 1]} must sort newer than {versions[i]}.");
         }
+    }
+
+    // Core version, then prerelease: a final release beats its betas, "beta.N" orders by N.
+    private static (Version Core, int Pre) Rank(string version)
+    {
+        string[] parts = version.Split('-', 2);
+        int pre = int.MaxValue;
+        if (parts.Length == 2)
+        {
+            _ = int.TryParse(parts[1].Split('.').Last(), out pre);
+        }
+
+        return (Version.Parse(parts[0]), pre);
     }
 
     [Fact]
