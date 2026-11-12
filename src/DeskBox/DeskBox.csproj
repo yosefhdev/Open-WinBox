@@ -243,6 +243,9 @@
     <Content Include="Assets\deskbox.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\deskbox-dark.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\deskbox-mark-slab-0.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
