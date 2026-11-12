@@ -241,7 +241,9 @@ public sealed class SettingsSliceOwnershipContractTests
         // switch-animation default write (R5) plus the groups master switch
         // the restore-defaults command carries (R9 — snapshots strip the
         // layout domain, so the reset rides ApplyGroupNavigationDefaults).
-        ["src/DeskBox/Services/InProcessSettingsWidgetActions.cs"] = 10,
+        // 11 = the 10 above plus the per-widget option helper (WidgetsOfKind) behind
+        // Get/SetWidgetMetadataAsync: widget metadata lives in the layout domain.
+        ["src/DeskBox/Services/InProcessSettingsWidgetActions.cs"] = 11,
         // Capsule override resetter (batch R2): 8 = Widgets/WidgetGroups
         // scans shared by the host mirror and the main-process executor.
         ["src/DeskBox/Services/CapsuleOverrideResetter.cs"] = 8,

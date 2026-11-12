@@ -20,19 +20,29 @@ internal static class SystemMonitorWidgetSettings
     {
         ArgumentNullException.ThrowIfNull(config);
         config.Metadata ??= [];
-        // Unknown ids (older or newer builds) are dropped instead of failing.
-        return config.Metadata.TryGetValue(MetadataKey, out string? value) && value is not null
-            ? value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        return ParseHidden(config.Metadata.GetValueOrDefault(MetadataKey));
+    }
+
+    /// <summary>Unknown ids (older or newer builds) are dropped instead of failing.</summary>
+    internal static HashSet<string> ParseHidden(string? value) =>
+        value is null
+            ? []
+            : value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                 .Where(Sections.Contains)
-                .ToHashSet()
-            : [];
+                .ToHashSet();
+
+    /// <summary>Metadata value for the hidden ids; null when nothing is hidden (the key is then removed).</summary>
+    internal static string? FormatHidden(IEnumerable<string> hidden)
+    {
+        string value = string.Join(',', Sections.Where(hidden.Contains));
+        return value.Length == 0 ? null : value;
     }
 
     internal static void SetHidden(WidgetConfig config, IEnumerable<string> hidden)
     {
         ArgumentNullException.ThrowIfNull(config);
         config.Metadata ??= [];
-        string value = string.Join(',', Sections.Where(hidden.Contains));
+        string value = FormatHidden(hidden) ?? string.Empty;
         if (value.Length == 0)
         {
             config.Metadata.Remove(MetadataKey);

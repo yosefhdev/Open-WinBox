@@ -42,8 +42,24 @@ public sealed partial class SystemMonitorWidgetContent : UserControl
         _timer.Interval = TimeSpan.FromMilliseconds(1000);
         _timer.Tick += (_, _) => _ = SampleAsync();
         // Loading must not override a window that is already hidden, so it only applies the current state.
-        Loaded += (_, _) => SetActive(_active);
-        Unloaded += (_, _) => Stop();
+        Loaded += (_, _) =>
+        {
+            if (_settingsService is not null)
+            {
+                _settingsService.SettingsChanged += OnSettingsChanged;
+            }
+
+            SetActive(_active);
+        };
+        Unloaded += (_, _) =>
+        {
+            if (_settingsService is not null)
+            {
+                _settingsService.SettingsChanged -= OnSettingsChanged;
+            }
+
+            Stop();
+        };
     }
 
     public void SetActive(bool active)
@@ -111,56 +127,22 @@ public sealed partial class SystemMonitorWidgetContent : UserControl
         Set(DriveSection, SystemMonitorWidgetSettings.Drives);
     }
 
-    private void Customize_Click(object sender, RoutedEventArgs e)
-    {
-        var menu = new MenuFlyout();
-        foreach (string id in SystemMonitorWidgetSettings.Sections)
-        {
-            string section = id;
-            var item = new ToggleMenuFlyoutItem
-            {
-                Text = SectionLabel(section),
-                Icon = new FontIcon { Glyph = SectionGlyph(section) },
-                IsChecked = !_hidden.Contains(section)
-            };
-            item.Click += (_, _) =>
-            {
-                if (!_hidden.Remove(section))
-                {
-                    _hidden.Add(section);
-                }
-
-                SystemMonitorWidgetSettings.SetHidden(_config, _hidden);
-                ApplyVisibility();
-                _settingsService?.SaveDebounced();
-            };
-            menu.Items.Add(item);
-        }
-
-        menu.ShowAt((FrameworkElement)sender);
-    }
-
     private const string DriveGlyph = "";
 
-    private static string SectionGlyph(string id) => id switch
-    {
-        SystemMonitorWidgetSettings.Cpu => "",
-        SystemMonitorWidgetSettings.Memory => "",
-        SystemMonitorWidgetSettings.Gpu => "",
-        SystemMonitorWidgetSettings.Storage => "",
-        SystemMonitorWidgetSettings.Network => "",
-        _ => DriveGlyph
-    };
+    // Sections are edited in Settings > functional widgets; SettingsChanged may arrive on any thread.
+    private void OnSettingsChanged() =>
+        DispatcherQueue.TryEnqueue(() =>
+        {
+            var hidden = SystemMonitorWidgetSettings.GetHidden(_config);
+            if (hidden.SetEquals(_hidden))
+            {
+                return;
+            }
 
-    private string SectionLabel(string id) => id switch
-    {
-        SystemMonitorWidgetSettings.Cpu => "CPU",
-        SystemMonitorWidgetSettings.Memory => "RAM",
-        SystemMonitorWidgetSettings.Gpu => "GPU",
-        SystemMonitorWidgetSettings.Storage => _localization.T("SystemMonitor.Storage"),
-        SystemMonitorWidgetSettings.Network => _localization.T("SystemMonitor.Network"),
-        _ => _localization.T("SystemMonitor.Drives")
-    };
+            _hidden.Clear();
+            _hidden.UnionWith(hidden);
+            ApplyVisibility();
+        });
 
     private void Show(SystemMetrics.Snapshot s)
     {

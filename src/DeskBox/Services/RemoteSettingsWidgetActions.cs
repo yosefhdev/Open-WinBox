@@ -370,6 +370,25 @@ public sealed class RemoteSettingsWidgetActions : ISettingsWidgetActions
                 new SettingsIpcGlanceRename(widgetId, newName),
                 SettingsIpcJsonContext.Default.SettingsIpcGlanceRename));
 
+    public async Task<string?> GetWidgetMetadataAsync(WidgetKind kind, string key)
+    {
+        (bool ok, string? payload, _) = await _client.RequestAsync(
+            SettingsIpcMethods.WidgetMetadataGet,
+            SettingsIpcPayload.Encode(
+                new SettingsIpcMetadata((int)kind, key, null),
+                SettingsIpcJsonContext.Default.SettingsIpcMetadata));
+        return ok
+            ? SettingsIpcPayload.Decode(payload, SettingsIpcJsonContext.Default.SettingsIpcMetadata)?.Value
+            : null;
+    }
+
+    public Task SetWidgetMetadataAsync(WidgetKind kind, string key, string? value) =>
+        RequestVoidAsync(
+            SettingsIpcMethods.WidgetMetadataSet,
+            SettingsIpcPayload.Encode(
+                new SettingsIpcMetadata((int)kind, key, value),
+                SettingsIpcJsonContext.Default.SettingsIpcMetadata));
+
     public async Task<(int MovedCount, WidgetMoveAllUndoToken Token)> MoveAllWidgetSurfacesToDisplayAsync(
         string displayStableId)
     {

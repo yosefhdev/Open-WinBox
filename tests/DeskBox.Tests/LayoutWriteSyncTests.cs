@@ -190,6 +190,10 @@ public sealed class LayoutWriteSyncTests : IDisposable
         public Task<bool> LocateGlanceWidgetAsync(string widgetId) => Task.FromResult(true);
         public Task RemoveGlanceWidgetAsync(string widgetId) => Task.CompletedTask;
         public Task RenameWidgetAsync(string widgetId, string newName) => Task.CompletedTask;
+
+        public Task<string?> GetWidgetMetadataAsync(DeskBox.Models.WidgetKind kind, string key) => Task.FromResult<string?>(null);
+
+        public Task SetWidgetMetadataAsync(DeskBox.Models.WidgetKind kind, string key, string? value) => Task.CompletedTask;
         public Task<(int MovedCount, Services.WidgetMoveAllUndoToken Token)> MoveAllWidgetSurfacesToDisplayAsync(string displayStableId) => throw new NotImplementedException();
         public Task<bool> UndoMoveAllWidgetSurfacesAsync(Services.WidgetMoveAllUndoToken token) => Task.FromResult(true);
         public Task ApplyScreenBindingAsync(string widgetId, Models.WidgetScreenBindingMode mode, string? boundScreenId, bool persistImmediately = true) => Task.CompletedTask;

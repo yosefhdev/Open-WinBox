@@ -2467,6 +2467,12 @@ Text="OpenWinBox" />
                     <DataTemplate x:Key="GlanceSettingsSectionTemplate" x:DataType="viewModels:SettingsViewModel">
                         <sections:GlanceWidgetSettingsSection x:Name="GlanceSettingsSection" Visibility="Collapsed" />
                     </DataTemplate>
+                    <DataTemplate x:Key="BatterySettingsSectionTemplate" x:DataType="viewModels:SettingsViewModel">
+                        <sections:BatteryWidgetSettingsSection x:Name="BatterySettingsSection" Visibility="Collapsed" />
+                    </DataTemplate>
+                    <DataTemplate x:Key="SystemMonitorSettingsSectionTemplate" x:DataType="viewModels:SettingsViewModel">
+                        <sections:SystemMonitorWidgetSettingsSection x:Name="SystemMonitorSettingsSection" Visibility="Collapsed" />
+                    </DataTemplate>
                     <DataTemplate x:Key="SearchSettingsSectionTemplate" x:DataType="viewModels:SettingsViewModel">
                         <sections:SearchSettingsSection x:Name="SearchSettingsSection" Visibility="Collapsed" />
                     </DataTemplate>

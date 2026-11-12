@@ -3028,5 +3028,10 @@
   "Battery.Charging": "Wird geladen",
   "Battery.Searching": "Geräte werden gesucht…",
   "Battery.System": "Akku / USV",
-  "Battery.Controller": "Controller {0}"
+  "Battery.Controller": "Controller {0}",
+  "Battery.Style": "Stil",
+  "Battery.Style.Bar": "Balken",
+  "Battery.Style.Ring": "Ring",
+  "Battery.Style.Battery": "Akku",
+  "Battery.Style.Segments": "Segmente"
 }

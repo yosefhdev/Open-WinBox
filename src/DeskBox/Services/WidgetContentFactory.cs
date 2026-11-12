@@ -106,7 +106,9 @@ public sealed class WidgetContentFactory
             WidgetContentAvailability.Available,
             "WidgetContent.SystemMonitor.StatusLabel",
             "WidgetContent.SystemMonitor.StatusDescription",
+            HasSettingsPage: true,
             IsFeatureWidget: true,
+            SettingsSectionTag: "SystemMonitorSettings",
             ChromeCategory: WidgetChromeCategory.Display,
             DefaultChromeMode: WidgetChromeMode.Overlay),
         new(
@@ -155,7 +157,9 @@ public sealed class WidgetContentFactory
             WidgetContentAvailability.Available,
             "WidgetContent.Battery.StatusLabel",
             "WidgetContent.Battery.StatusDescription",
-            IsFeatureWidget: true)
+            HasSettingsPage: true,
+            IsFeatureWidget: true,
+            SettingsSectionTag: "BatterySettings")
     ];
 
     private static readonly IReadOnlyDictionary<WidgetKind, WidgetContentDescriptor> Descriptors =

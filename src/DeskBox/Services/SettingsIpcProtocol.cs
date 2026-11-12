@@ -127,6 +127,8 @@ public static class SettingsIpcMethods
     /// it directly.
     /// </summary>
     public const string WidgetGlanceApplyData = "widget.glance-apply-data";
+    public const string WidgetMetadataGet = "widget.metadata-get";
+    public const string WidgetMetadataSet = "widget.metadata-set";
     public const string WidgetMoveAll = "widget.move-all";
     public const string WidgetMoveAllUndo = "widget.move-all-undo";
     public const string WidgetApplyScreenBinding = "widget.apply-screen-binding";
@@ -330,6 +332,8 @@ public sealed record SettingsIpcGlanceRename(string WidgetId, string NewName);
 
 public sealed record SettingsIpcGlanceCreate(string? SourceWidgetId);
 
+public sealed record SettingsIpcMetadata(int Kind, string Key, string? Value);
+
 public sealed record SettingsIpcMoveAllResult(int MovedCount, long Handle);
 
 public sealed record SettingsIpcMigrationRequest(string NewRootPath, bool RestartIfCopiesRemoved);
@@ -405,6 +409,7 @@ public static class SettingsIpcPayload
 [JsonSerializable(typeof(SettingsIpcGlanceSetEnabled))]
 [JsonSerializable(typeof(SettingsIpcGlanceRename))]
 [JsonSerializable(typeof(SettingsIpcGlanceCreate))]
+[JsonSerializable(typeof(SettingsIpcMetadata))]
 [JsonSerializable(typeof(SettingsIpcMoveAllResult))]
 [JsonSerializable(typeof(SettingsIpcMigrationRequest))]
 [JsonSerializable(typeof(SettingsIpcReleaseNotes))]

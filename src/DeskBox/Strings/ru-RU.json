@@ -3028,5 +3028,10 @@
   "Battery.Charging": "Заряжается",
   "Battery.Searching": "Поиск устройств…",
   "Battery.System": "Батарея / ИБП",
-  "Battery.Controller": "Контроллер {0}"
+  "Battery.Controller": "Контроллер {0}",
+  "Battery.Style": "Стиль",
+  "Battery.Style.Bar": "Полоса",
+  "Battery.Style.Ring": "Кольцо",
+  "Battery.Style.Battery": "Батарея",
+  "Battery.Style.Segments": "Сегменты"
 }

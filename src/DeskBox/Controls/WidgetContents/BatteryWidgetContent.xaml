@@ -8,15 +8,17 @@
 
     <!-- OpenWinBox: battery level of wireless peripherals (Razer dongles, Bluetooth devices). -->
     <Grid Padding="12,4,12,12" RowDefinitions="Auto,*" RowSpacing="6">
-        <Button x:Name="RefreshButton" HorizontalAlignment="Right" Width="28" Height="28" Padding="0"
-                Background="Transparent" BorderThickness="0" Click="Refresh_Click"
-                svc:Localized.AutomationNameKey="Common.Refresh" svc:Localized.ToolTipKey="Common.Refresh">
-            <FontIcon Glyph="&#xE72C;" FontSize="14" RenderTransformOrigin="0.5,0.5">
-                <FontIcon.RenderTransform>
-                    <RotateTransform x:Name="RefreshRotation" />
-                </FontIcon.RenderTransform>
-            </FontIcon>
-        </Button>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="2">
+            <Button x:Name="RefreshButton" HorizontalAlignment="Right" Width="28" Height="28" Padding="0"
+                    Background="Transparent" BorderThickness="0" Click="Refresh_Click"
+                    svc:Localized.AutomationNameKey="Common.Refresh" svc:Localized.ToolTipKey="Common.Refresh">
+                <FontIcon Glyph="&#xE72C;" FontSize="14" RenderTransformOrigin="0.5,0.5">
+                    <FontIcon.RenderTransform>
+                        <RotateTransform x:Name="RefreshRotation" />
+                    </FontIcon.RenderTransform>
+                </FontIcon>
+            </Button>
+        </StackPanel>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel x:Name="DeviceList" Spacing="12" />
         </ScrollViewer>

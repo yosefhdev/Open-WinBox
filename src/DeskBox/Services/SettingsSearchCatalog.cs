@@ -214,6 +214,7 @@ internal static class SettingsSearchCatalog
         new("GlanceSettings", "Glance.Speed.Title", null),
         new("GlanceSettings", "Glance.Readability.Title", "Settings.Glance.Readability.Description"),
         new("GlanceSettings", "Glance.PhotoControls.Title", "Glance.PhotoControls.Description"),
+        new("BatterySettings", "Battery.Style", null),
         new("SearchSettings", "Settings.Search.Everything.Title", null),
         new("SearchSettings", "Settings.Search.Hotkey.Title", "Settings.Search.Hotkey.Description"),
         new("SearchSettings", "Settings.Search.Hotkey.CustomTitle", null),

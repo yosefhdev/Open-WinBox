@@ -634,6 +634,10 @@ public sealed class SettingsIpcFacadeTests : IDisposable
             return Task.CompletedTask;
         }
 
+        public Task<string?> GetWidgetMetadataAsync(WidgetKind kind, string key) => Task.FromResult<string?>(null);
+
+        public Task SetWidgetMetadataAsync(WidgetKind kind, string key, string? value) => Task.CompletedTask;
+
         public async Task<(int MovedCount, WidgetMoveAllUndoToken Token)> MoveAllWidgetSurfacesToDisplayAsync(
             string displayStableId)
         {

@@ -3028,5 +3028,10 @@
   "Battery.Charging": "Charging",
   "Battery.Searching": "Looking for devices…",
   "Battery.System": "Battery / UPS",
-  "Battery.Controller": "Controller {0}"
+  "Battery.Controller": "Controller {0}",
+  "Battery.Style": "Style",
+  "Battery.Style.Bar": "Bar",
+  "Battery.Style.Ring": "Ring",
+  "Battery.Style.Battery": "Battery",
+  "Battery.Style.Segments": "Segments"
 }

@@ -555,6 +555,30 @@ public sealed class SettingsIpcMethodRouter
                 await _widget.RenameWidgetAsync(rename.WidgetId, rename.NewName);
                 return (true, null, null);
 
+            case SettingsIpcMethods.WidgetMetadataGet:
+                if (_widget is null) return unavailable(method);
+                if (SettingsIpcPayload.Decode(payload, SettingsIpcJsonContext.Default.SettingsIpcMetadata)
+                    is not { } metadataGet)
+                {
+                    return (false, null, "missing payload");
+                }
+
+                string? metadataValue = await _widget.GetWidgetMetadataAsync((WidgetKind)metadataGet.Kind, metadataGet.Key);
+                return (true, SettingsIpcPayload.Encode(
+                    metadataGet with { Value = metadataValue },
+                    SettingsIpcJsonContext.Default.SettingsIpcMetadata), null);
+
+            case SettingsIpcMethods.WidgetMetadataSet:
+                if (_widget is null) return unavailable(method);
+                if (SettingsIpcPayload.Decode(payload, SettingsIpcJsonContext.Default.SettingsIpcMetadata)
+                    is not { } metadataSet)
+                {
+                    return (false, null, "missing payload");
+                }
+
+                await _widget.SetWidgetMetadataAsync((WidgetKind)metadataSet.Kind, metadataSet.Key, metadataSet.Value);
+                return (true, null, null);
+
             case SettingsIpcMethods.WidgetGlanceApplyData:
                 return await HandleGlanceApplyDataAsync(payload);
 

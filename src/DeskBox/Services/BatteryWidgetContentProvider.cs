@@ -17,6 +17,6 @@ internal sealed class BatteryWidgetContentProvider : IWidgetContentProvider
             throw new ArgumentException("Battery content requires a Battery widget config.", nameof(config));
         }
 
-        return new BatteryWidgetContentAdapter(config, context.LocalizationService);
+        return new BatteryWidgetContentAdapter(config, context.LocalizationService, context.SettingsService);
     }
 }

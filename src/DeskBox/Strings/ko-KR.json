@@ -3028,5 +3028,10 @@
   "Battery.Charging": "충전 중",
   "Battery.Searching": "기기를 찾는 중…",
   "Battery.System": "배터리 / UPS",
-  "Battery.Controller": "컨트롤러 {0}"
+  "Battery.Controller": "컨트롤러 {0}",
+  "Battery.Style": "스타일",
+  "Battery.Style.Bar": "막대",
+  "Battery.Style.Ring": "링",
+  "Battery.Style.Battery": "배터리",
+  "Battery.Style.Segments": "세그먼트"
 }

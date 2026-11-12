@@ -52,6 +52,7 @@ public sealed partial class SettingsWindow
         // FeatureWidgets family
         "QuickCaptureSettings", "TodoSettings", "MusicSettings",
         "WeatherSettings", "GlanceSettings", "SearchSettings",
+        "BatterySettings", "SystemMonitorSettings",
         // Appearance family
         "AppearanceMaterialSettings", "AppearanceDensitySettings",
         "AppearanceWindowSettings", "AppearanceAnimationSettings",
@@ -641,6 +642,18 @@ public sealed partial class SettingsWindow
         if (sectionTag == "GlanceSettings")
         {
             _ = GlanceSettingsSection.RefreshFromStoreAsync();
+        }
+        if (_settingsSectionElements.TryGetValue(sectionTag, out FrameworkElement? widgetSection))
+        {
+            // Functional-widget pages read their values from the main process on every visit.
+            if (widgetSection is BatteryWidgetSettingsSection battery)
+            {
+                _ = battery.RefreshAsync();
+            }
+            else if (widgetSection is SystemMonitorWidgetSettingsSection monitor)
+            {
+                _ = monitor.RefreshAsync();
+            }
         }
         if (sectionTag == "CloudBackupSettings")
         {

@@ -97,6 +97,12 @@ public sealed partial class SettingsWindow
             case GlanceWidgetSettingsSection glanceSettings:
                 glanceSettings.Configure(_widgetActions, _hWnd);
                 break;
+            case BatteryWidgetSettingsSection batterySettings:
+                batterySettings.Configure(_widgetActions, _localizationService);
+                break;
+            case SystemMonitorWidgetSettingsSection monitorSettings:
+                monitorSettings.Configure(_widgetActions, _localizationService);
+                break;
             case DisplaySettingsSection displaySettings:
                 displaySettings.Configure(_widgetActions, _appActions);
                 break;

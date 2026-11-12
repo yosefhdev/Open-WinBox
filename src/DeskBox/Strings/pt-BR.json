@@ -3028,5 +3028,10 @@
   "Battery.Charging": "Carregando",
   "Battery.Searching": "Procurando dispositivos…",
   "Battery.System": "Bateria / nobreak",
-  "Battery.Controller": "Controle {0}"
+  "Battery.Controller": "Controle {0}",
+  "Battery.Style": "Estilo",
+  "Battery.Style.Bar": "Barra",
+  "Battery.Style.Ring": "Anel",
+  "Battery.Style.Battery": "Bateria",
+  "Battery.Style.Segments": "Segmentos"
 }

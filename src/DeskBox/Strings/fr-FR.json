@@ -3028,5 +3028,10 @@
   "Battery.Charging": "En charge",
   "Battery.Searching": "Recherche d'appareils…",
   "Battery.System": "Batterie / onduleur",
-  "Battery.Controller": "Manette {0}"
+  "Battery.Controller": "Manette {0}",
+  "Battery.Style": "Style",
+  "Battery.Style.Bar": "Barre",
+  "Battery.Style.Ring": "Anneau",
+  "Battery.Style.Battery": "Batterie",
+  "Battery.Style.Segments": "Segments"
 }

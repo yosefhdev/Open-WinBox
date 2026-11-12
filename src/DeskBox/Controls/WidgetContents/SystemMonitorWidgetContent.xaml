@@ -6,14 +6,8 @@
     xmlns:svc="using:DeskBox.Services"
     Foreground="{ThemeResource TextFillColorPrimaryBrush}">
 
-    <!-- OpenWinBox: live CPU, RAM, GPU, disk activity, network and drive usage. Each section can be hidden from the gear menu. -->
+    <!-- OpenWinBox: live CPU, RAM, GPU, disk activity, network and drive usage. Sections are chosen in Settings > functional widgets. -->
     <Grid Padding="12,4,12,12" RowDefinitions="Auto,Auto,*" RowSpacing="6">
-        <Button x:Name="CustomizeButton" HorizontalAlignment="Right" Width="28" Height="28" Padding="0"
-                Background="Transparent" BorderThickness="0" Click="Customize_Click"
-                svc:Localized.AutomationNameKey="SystemMonitor.Customize" svc:Localized.ToolTipKey="SystemMonitor.Customize">
-            <FontIcon Glyph="&#xE713;" FontSize="14" />
-        </Button>
-
         <StackPanel Grid.Row="1" Spacing="10">
             <Grid x:Name="CpuSection" RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" RowSpacing="4">
                 <StackPanel Orientation="Horizontal" Spacing="6">

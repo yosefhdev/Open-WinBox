@@ -3028,5 +3028,10 @@
   "Battery.Charging": "充電中",
   "Battery.Searching": "正在尋找裝置…",
   "Battery.System": "電池 / UPS",
-  "Battery.Controller": "控制器 {0}"
+  "Battery.Controller": "控制器 {0}",
+  "Battery.Style": "樣式",
+  "Battery.Style.Bar": "長條",
+  "Battery.Style.Ring": "圓環",
+  "Battery.Style.Battery": "電池",
+  "Battery.Style.Segments": "分段"
 }

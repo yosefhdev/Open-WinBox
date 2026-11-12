@@ -3028,5 +3028,10 @@
   "Battery.Charging": "चार्ज हो रहा है",
   "Battery.Searching": "डिवाइस खोजे जा रहे हैं…",
   "Battery.System": "बैटरी / UPS",
-  "Battery.Controller": "कंट्रोलर {0}"
+  "Battery.Controller": "कंट्रोलर {0}",
+  "Battery.Style": "शैली",
+  "Battery.Style.Bar": "पट्टी",
+  "Battery.Style.Ring": "रिंग",
+  "Battery.Style.Battery": "बैटरी",
+  "Battery.Style.Segments": "खंड"
 }

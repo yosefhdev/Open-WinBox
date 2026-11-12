@@ -455,6 +455,44 @@ public sealed class InProcessSettingsWidgetActions : ISettingsWidgetActions
             ? manager.RenameWidgetAsync(widgetId, newName)
             : Task.CompletedTask;
 
+    public Task<string?> GetWidgetMetadataAsync(WidgetKind kind, string key) =>
+        DeskBox.Platform.UiDispatch.RunAsync(() =>
+        {
+            string? value = null;
+            _settingsService.MutateGraphUnderLock(() =>
+                WidgetsOfKind(kind).FirstOrDefault()?.Metadata?.TryGetValue(key, out value));
+            return Task.FromResult(value);
+        });
+
+    private IEnumerable<WidgetConfig> WidgetsOfKind(WidgetKind kind) =>
+        _settingsService.Settings.Widgets.Where(w => w.WidgetKind == kind);
+
+    public async Task SetWidgetMetadataAsync(WidgetKind kind, string key, string? value)
+    {
+        await DeskBox.Platform.UiDispatch.RunAsync(() =>
+        {
+            _settingsService.MutateGraphUnderLock(() =>
+            {
+                foreach (WidgetConfig widget in WidgetsOfKind(kind).ToList())
+                {
+                    widget.Metadata ??= [];
+                    if (value is null)
+                    {
+                        widget.Metadata.Remove(key);
+                    }
+                    else
+                    {
+                        widget.Metadata[key] = value;
+                    }
+                }
+            });
+            return Task.CompletedTask;
+        });
+
+        // Notifies the live widgets (they re-read their options) and schedules the save.
+        _settingsService.SaveDebounced();
+    }
+
     public Task<(int MovedCount, WidgetMoveAllUndoToken Token)> MoveAllWidgetSurfacesToDisplayAsync(
         string displayStableId) =>
         _widgetManager is { } manager

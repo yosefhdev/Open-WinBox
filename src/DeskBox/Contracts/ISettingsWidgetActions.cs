@@ -143,6 +143,22 @@ public interface ISettingsWidgetActions
 
     Task RenameWidgetAsync(string widgetId, string newName);
 
+    // ── Per-widget options (functional widgets) ─────────────────────
+
+    /// <summary>
+    /// Reads one option stored in the Metadata of the first widget of
+    /// <paramref name="kind"/>, or null when it is unset or no widget exists.
+    /// The main process owns widget metadata, so a settings host reads it here.
+    /// </summary>
+    Task<string?> GetWidgetMetadataAsync(WidgetKind kind, string key);
+
+    /// <summary>
+    /// Writes (or, with a null value, clears) one option on every widget of
+    /// <paramref name="kind"/>; the live widgets pick the change up through
+    /// the settings-changed notification.
+    /// </summary>
+    Task SetWidgetMetadataAsync(WidgetKind kind, string key, string? value);
+
     // ── Displays ────────────────────────────────────────────────────
 
     Task<(int MovedCount, WidgetMoveAllUndoToken Token)> MoveAllWidgetSurfacesToDisplayAsync(

@@ -3028,5 +3028,10 @@
   "Battery.Charging": "قيد الشحن",
   "Battery.Searching": "جارٍ البحث عن الأجهزة…",
   "Battery.System": "البطارية / UPS",
-  "Battery.Controller": "وحدة التحكم {0}"
+  "Battery.Controller": "وحدة التحكم {0}",
+  "Battery.Style": "النمط",
+  "Battery.Style.Bar": "شريط",
+  "Battery.Style.Ring": "حلقة",
+  "Battery.Style.Battery": "بطارية",
+  "Battery.Style.Segments": "مقاطع"
 }
