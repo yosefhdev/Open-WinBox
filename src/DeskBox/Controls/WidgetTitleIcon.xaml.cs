@@ -347,6 +347,9 @@ public sealed partial class WidgetTitleIcon : UserControl
                 WidgetTitleIconKind.Tags => "FilledTagsPath",
                 WidgetTitleIconKind.Search => "FilledSearchPath",
                 WidgetTitleIconKind.SystemMonitor => "FilledSystemMonitorPath",
+                WidgetTitleIconKind.Battery => "FilledBatteryPath",
+                WidgetTitleIconKind.Audio => "FilledAudioPath",
+                WidgetTitleIconKind.Glance => "FilledGlancePath",
                 _ => "FilledDefaultPath"
             }
             : kind switch
@@ -360,6 +363,9 @@ public sealed partial class WidgetTitleIcon : UserControl
                 WidgetTitleIconKind.Tags => "LineTagsPath",
                 WidgetTitleIconKind.Search => "LineSearchPath",
                 WidgetTitleIconKind.SystemMonitor => "LineSystemMonitorPath",
+                WidgetTitleIconKind.Battery => "LineBatteryPath",
+                WidgetTitleIconKind.Audio => "LineAudioPath",
+                WidgetTitleIconKind.Glance => "LineGlancePath",
                 _ => "LineDefaultPath"
             };
 

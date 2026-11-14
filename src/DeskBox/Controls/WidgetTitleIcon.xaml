@@ -79,6 +79,24 @@
         <DataTemplate x:Key="FilledSystemMonitorPathTemplate">
             <Path x:Name="FilledSystemMonitorPath" Style="{StaticResource MonoIconPathStyle}" Data="M5.75,4 C4.78,4 4,4.78 4,5.75 L4,18.25 C4,19.22 4.78,20 5.75,20 L18.25,20 C19.22,20 20,19.22 20,18.25 L20,5.75 C20,4.78 19.22,4 18.25,4 Z M10.14,7.28 C10.37,7.26 10.6,7.35 10.76,7.51 C10.92,7.67 11.02,7.89 11.04,8.12 L12.37,15.01 L14.1,10.5 C14.24,10.13 14.61,9.89 15,9.92 C15.4,9.94 15.73,10.23 15.83,10.61 L16.17,12 L18.25,12 C18.66,12 19,12.34 19,12.75 C19,13.16 18.66,13.5 18.25,13.5 L15.6,13.5 C15.25,13.5 14.94,13.26 14.85,12.92 L14.78,12.64 L12.9,17.54 C12.77,17.88 12.43,18.12 12.06,18.1 C11.68,18.08 11.37,17.82 11.29,17.45 L9.91,10.3 L8.86,14.92 C8.78,15.26 8.48,15.5 8.13,15.5 L5.75,15.5 C5.34,15.5 5,15.16 5,14.75 C5,14.34 5.34,14 5.75,14 L7.53,14 L9.28,8.05 C9.39,7.62 9.73,7.32 10.14,7.28 Z" />
         </DataTemplate>
+        <DataTemplate x:Key="LineBatteryPathTemplate">
+            <Path x:Name="LineBatteryPath" Style="{StaticResource MonoIconPathStyle}" Data="M5.75,7 L16.25,7 C17.22,7 18,7.78 18,8.75 L18,15.25 C18,16.22 17.22,17 16.25,17 L5.75,17 C4.78,17 4,16.22 4,15.25 L4,8.75 C4,7.78 4.78,7 5.75,7 Z M20.5,10.25 L20.5,13.75 M7.5,10.5 L7.5,13.5 M10.5,10.5 L10.5,13.5 M13.5,10.5 L13.5,13.5" />
+        </DataTemplate>
+        <DataTemplate x:Key="FilledBatteryPathTemplate">
+            <Path x:Name="FilledBatteryPath" Style="{StaticResource MonoIconPathStyle}" Data="M5.75,6.5 L16.25,6.5 C17.49,6.5 18.5,7.51 18.5,8.75 L18.5,15.25 C18.5,16.49 17.49,17.5 16.25,17.5 L5.75,17.5 C4.51,17.5 3.5,16.49 3.5,15.25 L3.5,8.75 C3.5,7.51 4.51,6.5 5.75,6.5 Z M5.75,8 C5.34,8 5,8.34 5,8.75 L5,15.25 C5,15.66 5.34,16 5.75,16 L16.25,16 C16.66,16 17,15.66 17,15.25 L17,8.75 C17,8.34 16.66,8 16.25,8 Z M6.5,9.5 L13.5,9.5 L13.5,14.5 L6.5,14.5 Z M19.5,10 L20.25,10 C20.66,10 21,10.34 21,10.75 L21,13.25 C21,13.66 20.66,14 20.25,14 L19.5,14 Z" />
+        </DataTemplate>
+        <DataTemplate x:Key="LineAudioPathTemplate">
+            <Path x:Name="LineAudioPath" Style="{StaticResource MonoIconPathStyle}" Data="M4.5,10 L7.5,10 L11.5,6.5 L11.5,17.5 L7.5,14 L4.5,14 Z M14.5,9.5 C15.5,10.6 15.5,13.4 14.5,14.5 M17,7.5 C19,9.6 19,14.4 17,16.5" />
+        </DataTemplate>
+        <DataTemplate x:Key="FilledAudioPathTemplate">
+            <Path x:Name="FilledAudioPath" Style="{StaticResource MonoIconPathStyle}" Data="M4,9.5 L7.25,9.5 L11.3,5.9 C11.8,5.45 12.6,5.8 12.6,6.5 L12.6,17.5 C12.6,18.2 11.8,18.55 11.3,18.1 L7.25,14.5 L4,14.5 Z M15.2,8.9 C15.55,8.6 16.05,8.65 16.3,9 C17.4,10.5 17.4,13.5 16.3,15 C16.05,15.35 15.55,15.4 15.2,15.1 C14.9,14.85 14.85,14.4 15.05,14.1 C15.7,13.2 15.7,10.8 15.05,9.9 C14.85,9.6 14.9,9.15 15.2,8.9 Z" />
+        </DataTemplate>
+        <DataTemplate x:Key="LineGlancePathTemplate">
+            <Path x:Name="LineGlancePath" Style="{StaticResource MonoIconPathStyle}" Data="M12,4.5 A7.5,7.5 0 1 1 12,19.5 A7.5,7.5 0 1 1 12,4.5 Z M12,8 L12,12 L14.8,13.8" />
+        </DataTemplate>
+        <DataTemplate x:Key="FilledGlancePathTemplate">
+            <Path x:Name="FilledGlancePath" Style="{StaticResource MonoIconPathStyle}" Data="M12,4 A8,8 0 1 1 12,20 A8,8 0 1 1 12,4 Z M11.25,8 L11.25,12.4 L14.4,14.3 L14.8,13.6 L12.75,12.4 L12.75,8 Z" />
+        </DataTemplate>
     </UserControl.Resources>
 
     <Border

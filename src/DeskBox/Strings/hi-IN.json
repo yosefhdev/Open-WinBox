@@ -614,6 +614,8 @@
   "WidgetTitleIcon.Label.Weather": "मौसम",
   "WidgetTitleIcon.Label.Tags": "टैग",
   "WidgetTitleIcon.Label.SystemMonitor": "सिस्टम मॉनिटर",
+  "WidgetTitleIcon.Label.Battery": "बैटरी",
+  "WidgetTitleIcon.Label.Audio": "ऑडियो",
   "Settings.Animation.Effect.Title": "विजेट एनीमेशन",
   "Settings.Animation.Effect.Description": "जब F7 या ट्रे विजेट दिखाती और छिपाती है तो उपयोग किया जाने वाला प्रभाव चुनें",
   "Settings.Animation.Effect.None": "कोई नहीं",

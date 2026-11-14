@@ -614,6 +614,8 @@
   "WidgetTitleIcon.Label.Weather": "Météo",
   "WidgetTitleIcon.Label.Tags": "Étiquettes",
   "WidgetTitleIcon.Label.SystemMonitor": "Moniteur système",
+  "WidgetTitleIcon.Label.Battery": "Batterie",
+  "WidgetTitleIcon.Label.Audio": "Audio",
   "Settings.Animation.Effect.Title": "Animations de widgets",
   "Settings.Animation.Effect.Description": "Choisissez l'effet utilisé lorsque F7 ou la barre d'état affiche et masque les widgets",
   "Settings.Animation.Effect.None": "Aucun",

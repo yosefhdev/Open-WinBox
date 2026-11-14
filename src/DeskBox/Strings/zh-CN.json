@@ -517,6 +517,8 @@
   "Widget.Compact.Reorder": "拖动调整顺序",
   "Settings.AttachmentHealth.NotChecked": "尚未检查附件",
   "WidgetTitleIcon.Label.SystemMonitor": "监控",
+  "WidgetTitleIcon.Label.Battery": "电池",
+  "WidgetTitleIcon.Label.Audio": "音频",
   "Settings.DataBackup.RestoreFailedTitle": "无法还原这份备份",
   "Todo.Due.Today": "今天",
   "Music.MoreSessions": "多个媒体来源",

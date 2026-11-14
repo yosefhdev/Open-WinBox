@@ -600,6 +600,8 @@
   "WidgetTitleIcon.Label.Weather": "Clima",
   "WidgetTitleIcon.Label.Tags": "Tags",
   "WidgetTitleIcon.Label.SystemMonitor": "Monitor",
+  "WidgetTitleIcon.Label.Battery": "Bateria",
+  "WidgetTitleIcon.Label.Audio": "Áudio",
   "Settings.Animation.Effect.Title": "Animação de Widget",
   "Settings.Animation.Effect.Description": "O efeito de transição usado ao mostrar e ocultar widgets",
   "Settings.Animation.Effect.None": "Nenhum",

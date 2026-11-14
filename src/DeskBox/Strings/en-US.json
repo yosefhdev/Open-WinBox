@@ -614,6 +614,8 @@
   "WidgetTitleIcon.Label.Weather": "Weather",
   "WidgetTitleIcon.Label.Tags": "Tags",
   "WidgetTitleIcon.Label.SystemMonitor": "Monitor",
+  "WidgetTitleIcon.Label.Battery": "Battery",
+  "WidgetTitleIcon.Label.Audio": "Audio",
   "Settings.Animation.Effect.Title": "Widget animation",
   "Settings.Animation.Effect.Description": "The transition effect for showing and hiding widgets",
   "Settings.Animation.Effect.None": "None",

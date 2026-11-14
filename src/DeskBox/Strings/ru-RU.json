@@ -614,6 +614,8 @@
   "WidgetTitleIcon.Label.Weather": "Погода",
   "WidgetTitleIcon.Label.Tags": "Метки",
   "WidgetTitleIcon.Label.SystemMonitor": "Монитор системы",
+  "WidgetTitleIcon.Label.Battery": "Батарея",
+  "WidgetTitleIcon.Label.Audio": "Звук",
   "Settings.Animation.Effect.Title": "Анимация виджетов",
   "Settings.Animation.Effect.Description": "Выберите эффект, который будет использоваться, когда F7 или панель задач отображают и скрывают виджеты.",
   "Settings.Animation.Effect.None": "Нет",

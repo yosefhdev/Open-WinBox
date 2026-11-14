@@ -600,6 +600,8 @@
   "WidgetTitleIcon.Label.Weather": "Wetter",
   "WidgetTitleIcon.Label.Tags": "Tags",
   "WidgetTitleIcon.Label.SystemMonitor": "Monitor",
+  "WidgetTitleIcon.Label.Battery": "Akku",
+  "WidgetTitleIcon.Label.Audio": "Audio",
   "Settings.Animation.Effect.Title": "Widget-Animation",
   "Settings.Animation.Effect.Description": "Effekt wählen, der beim Ein-/Ausblenden von Widgets per F7 oder Tray verwendet wird",
   "Settings.Animation.Effect.None": "Keine",

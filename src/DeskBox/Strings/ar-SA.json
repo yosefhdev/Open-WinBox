@@ -614,6 +614,8 @@
   "WidgetTitleIcon.Label.Weather": "الطقس",
   "WidgetTitleIcon.Label.Tags": "العلامات",
   "WidgetTitleIcon.Label.SystemMonitor": "مراقب النظام",
+  "WidgetTitleIcon.Label.Battery": "البطارية",
+  "WidgetTitleIcon.Label.Audio": "الصوت",
   "Settings.Animation.Effect.Title": "حركة الأدوات",
   "Settings.Animation.Effect.Description": "اختر التأثير المستخدم عندما يقوم F7 أو الدرج بعرض الأدوات وإخفائها",
   "Settings.Animation.Effect.None": "لا شيء",

@@ -600,6 +600,8 @@
   "WidgetTitleIcon.Label.Weather": "天気",
   "WidgetTitleIcon.Label.Tags": "タグ",
   "WidgetTitleIcon.Label.SystemMonitor": "モニター",
+  "WidgetTitleIcon.Label.Battery": "バッテリー",
+  "WidgetTitleIcon.Label.Audio": "オーディオ",
   "Settings.Animation.Effect.Title": "ウィジェットアニメーション",
   "Settings.Animation.Effect.Description": "F7 またはトレイでウィジェットを表示/非表示にするときに使用されるエフェクトを選択します",
   "Settings.Animation.Effect.None": "なし",

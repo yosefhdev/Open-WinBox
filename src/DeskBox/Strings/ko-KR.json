@@ -614,6 +614,8 @@
   "WidgetTitleIcon.Label.Weather": "날씨",
   "WidgetTitleIcon.Label.Tags": "태그",
   "WidgetTitleIcon.Label.SystemMonitor": "모니터링",
+  "WidgetTitleIcon.Label.Battery": "배터리",
+  "WidgetTitleIcon.Label.Audio": "오디오",
   "Settings.Animation.Effect.Title": "표시 애니메이션",
   "Settings.Animation.Effect.Description": "위젯을 표시하고 숨길 때의 전환 효과입니다",
   "Settings.Animation.Effect.None": "애니메이션 없음",

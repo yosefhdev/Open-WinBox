@@ -614,6 +614,8 @@
   "WidgetTitleIcon.Label.Weather": "Tiempo",
   "WidgetTitleIcon.Label.Tags": "Etiquetas",
   "WidgetTitleIcon.Label.SystemMonitor": "Monitor del sistema",
+  "WidgetTitleIcon.Label.Battery": "Batería",
+  "WidgetTitleIcon.Label.Audio": "Audio",
   "Settings.Animation.Effect.Title": "Animación de widgets",
   "Settings.Animation.Effect.Description": "Efecto de transición al mostrar y ocultar los widgets",
   "Settings.Animation.Effect.None": "Ninguno",

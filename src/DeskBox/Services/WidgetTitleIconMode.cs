@@ -57,7 +57,9 @@ public enum WidgetTitleIconKind
     Glance,
     Tags,
     Search,
-    SystemMonitor
+    SystemMonitor,
+    Battery,
+    Audio
 }
 
 public static class WidgetTitleIconKindNames
@@ -73,6 +75,8 @@ public static class WidgetTitleIconKindNames
     public const string Tags = nameof(WidgetTitleIconKind.Tags);
     public const string Search = nameof(WidgetTitleIconKind.Search);
     public const string SystemMonitor = nameof(WidgetTitleIconKind.SystemMonitor);
+    public const string Battery = nameof(WidgetTitleIconKind.Battery);
+    public const string Audio = nameof(WidgetTitleIconKind.Audio);
 
     public static WidgetTitleIconKind NormalizeKind(string? value)
     {
@@ -95,6 +99,8 @@ public static class WidgetTitleIconKindNames
             WidgetTitleIconKind.Tags => Tags,
             WidgetTitleIconKind.Search => Search,
             WidgetTitleIconKind.SystemMonitor => SystemMonitor,
+            WidgetTitleIconKind.Battery => Battery,
+            WidgetTitleIconKind.Audio => Audio,
             _ => Default
         };
     }
@@ -117,6 +123,8 @@ public static class WidgetTitleIconKindNames
             WidgetKind.Tags => Tags,
             WidgetKind.Search => Search,
             WidgetKind.SystemMonitor => SystemMonitor,
+            WidgetKind.Battery => Battery,
+            WidgetKind.Audio => Audio,
             _ => Default
         };
     }
@@ -134,6 +142,9 @@ public static class WidgetTitleIconKindNames
             "\uE8EC" => Tags,
             "\uE721" => Search,
             "\uE9D9" => SystemMonitor,
+            "\uE83F" => Battery,
+            "\uE767" => Audio,
+            "\uE787" => Glance,
             _ => Default
         };
     }
@@ -152,6 +163,8 @@ public static class WidgetTitleIconKindNames
             WidgetTitleIconKind.Tags => "WidgetTitleIcon.Label.Tags",
             WidgetTitleIconKind.Search => "WidgetTitleIcon.Label.Search",
             WidgetTitleIconKind.SystemMonitor => "WidgetTitleIcon.Label.SystemMonitor",
+            WidgetTitleIconKind.Battery => "WidgetTitleIcon.Label.Battery",
+            WidgetTitleIconKind.Audio => "WidgetTitleIcon.Label.Audio",
             _ => "WidgetTitleIcon.Label.Default"
         };
     }
@@ -170,6 +183,8 @@ public static class WidgetTitleIconKindNames
             WidgetTitleIconKind.Tags => "tags",
             WidgetTitleIconKind.Search => "search",
             WidgetTitleIconKind.SystemMonitor => "system-monitor",
+            WidgetTitleIconKind.Battery => "battery",
+            WidgetTitleIconKind.Audio => "audio",
             _ => "default"
         };
     }

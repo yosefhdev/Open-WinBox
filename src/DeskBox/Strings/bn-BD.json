@@ -614,6 +614,8 @@
   "WidgetTitleIcon.Label.Weather": "আবহাওয়া",
   "WidgetTitleIcon.Label.Tags": "ট্যাগ",
   "WidgetTitleIcon.Label.SystemMonitor": "সিস্টেম মনিটর",
+  "WidgetTitleIcon.Label.Battery": "ব্যাটারি",
+  "WidgetTitleIcon.Label.Audio": "অডিও",
   "Settings.Animation.Effect.Title": "উইজেট অ্যানিমেশন",
   "Settings.Animation.Effect.Description": "F7 বা ট্রে উইজেট দেখায় এবং লুকিয়ে রাখলে ব্যবহৃত প্রভাব চয়ন করুন",
   "Settings.Animation.Effect.None": "কোনোটিই নয়",
