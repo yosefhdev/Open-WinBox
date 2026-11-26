@@ -34,6 +34,8 @@
          across incompatible native dependency policies. -->
     <DeskBoxRustCrtLinkage Condition="'$(DeskBoxRustCrtLinkage)' == ''">Static</DeskBoxRustCrtLinkage>
     <DeskBoxShellThumbnailProxy Condition="'$(DeskBoxShellThumbnailProxy)' == ''">true</DeskBoxShellThumbnailProxy>
+    <!-- Own taskbar add-on (native/openwinbox-taskbar). Shipped next to the app, off until the user installs it in Settings. -->
+    <DeskBoxTaskbarAddon Condition="'$(DeskBoxTaskbarAddon)' == ''">true</DeskBoxTaskbarAddon>
     <EverythingSdkArchitecture Condition="'$(RuntimeIdentifier)' == 'win-arm64' or '$(Platform)' == 'ARM64'">ARM64</EverythingSdkArchitecture>
     <EverythingSdkArchitecture Condition="'$(EverythingSdkArchitecture)' == ''">x64</EverythingSdkArchitecture>
     <DefineConstants Condition="'$(DeskBoxDistribution)' == 'Store'">$(DefineConstants);DESKBOX_STORE</DefineConstants>
@@ -161,6 +163,23 @@
     <DeskBoxThumbnailProxyInput Include="$(MSBuildProjectDirectory)\..\..\native\deskbox-thumbnail-proxy\src\**\*" />
     <DeskBoxThumbnailProxyInput Include="$(MSBuildProjectDirectory)\..\..\scripts\build-rust-thumbnail-proxy.ps1" />
     <DeskBoxThumbnailProxyInput Include="$(MSBuildProjectDirectory)\..\..\scripts\rust-arm64-msvc-environment.ps1" />
+  </ItemGroup>
+
+  <!-- Taskbar add-on: same platform rules as the thumbnail proxy, built by the same script. -->
+  <PropertyGroup Condition="'$(DeskBoxTaskbarAddon)' == 'true'">
+    <DeskBoxTaskbarPlatform Condition="'$(RuntimeIdentifier)' == 'win-arm64' or ('$(RuntimeIdentifier)' == '' and '$(Platform)' == 'ARM64')">ARM64</DeskBoxTaskbarPlatform>
+    <DeskBoxTaskbarPlatform Condition="'$(DeskBoxTaskbarPlatform)' == ''">x64</DeskBoxTaskbarPlatform>
+    <DeskBoxTaskbarIntermediateDir Condition="'$(DeskBoxTaskbarIntermediateDir)' == ''">$(MSBuildProjectDirectory)\obj\rust-taskbar\$(Configuration)\$(DeskBoxTaskbarPlatform)\$(DeskBoxRustCrtLinkage)</DeskBoxTaskbarIntermediateDir>
+    <DeskBoxTaskbarExe>$(DeskBoxTaskbarIntermediateDir)\openwinbox-taskbar.exe</DeskBoxTaskbarExe>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(DeskBoxTaskbarAddon)' == 'true'">
+    <DeskBoxTaskbarInput Include="$(MSBuildProjectDirectory)\..\..\rust-toolchain.toml" />
+    <DeskBoxTaskbarInput Include="$(MSBuildProjectDirectory)\..\..\native\Cargo.toml" />
+    <DeskBoxTaskbarInput Include="$(MSBuildProjectDirectory)\..\..\native\Cargo.lock" />
+    <DeskBoxTaskbarInput Include="$(MSBuildProjectDirectory)\..\..\native\openwinbox-taskbar\Cargo.toml" />
+    <DeskBoxTaskbarInput Include="$(MSBuildProjectDirectory)\..\..\native\openwinbox-taskbar\src\**\*" />
+    <DeskBoxTaskbarInput Include="$(MSBuildProjectDirectory)\..\..\scripts\build-rust-thumbnail-proxy.ps1" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(DeskBoxDistribution)' == 'Store'">
@@ -478,6 +497,44 @@
       </AppxPackagePayload>
       <AppxPackagePayload Include="$(DeskBoxThumbnailProxyPdb)" Condition="Exists('$(DeskBoxThumbnailProxyPdb)')">
         <TargetPath>DeskBox.ThumbnailProxy.pdb</TargetPath>
+      </AppxPackagePayload>
+    </ItemGroup>
+  </Target>
+
+  <Target
+    Name="BuildDeskBoxTaskbarAddon"
+    BeforeTargets="CoreCompile"
+    Condition="'$(DesignTimeBuild)' != 'true' and '$(DeskBoxTaskbarAddon)' == 'true'"
+    Inputs="@(DeskBoxTaskbarInput)"
+    Outputs="$(DeskBoxTaskbarExe)">
+    <Exec
+      Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\..\scripts\build-rust-thumbnail-proxy.ps1&quot; -Package openwinbox-taskbar -OutputName openwinbox-taskbar -Platform $(DeskBoxTaskbarPlatform) -Configuration $(Configuration) -CrtLinkage $(DeskBoxRustCrtLinkage) -OutputDirectory &quot;$(DeskBoxTaskbarIntermediateDir)&quot; -CargoTargetDirectory &quot;$(DeskBoxTaskbarIntermediateDir)\cargo-target&quot;" />
+  </Target>
+
+  <Target
+    Name="CopyDeskBoxTaskbarAddonToOutput"
+    AfterTargets="Build"
+    DependsOnTargets="BuildDeskBoxTaskbarAddon"
+    Condition="'$(DesignTimeBuild)' != 'true' and '$(DeskBoxTaskbarAddon)' == 'true'">
+    <Copy SourceFiles="$(DeskBoxTaskbarExe)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target
+    Name="CopyDeskBoxTaskbarAddonToPublish"
+    AfterTargets="Publish"
+    DependsOnTargets="BuildDeskBoxTaskbarAddon"
+    Condition="'$(DesignTimeBuild)' != 'true' and '$(DeskBoxTaskbarAddon)' == 'true'">
+    <Copy SourceFiles="$(DeskBoxTaskbarExe)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target
+    Name="PrepareDeskBoxStoreTaskbarAddonPayload"
+    BeforeTargets="_ComputeAppxPackagePayload"
+    DependsOnTargets="BuildDeskBoxTaskbarAddon"
+    Condition="'$(DesignTimeBuild)' != 'true' and '$(DeskBoxDistribution)' == 'Store' and '$(DeskBoxTaskbarAddon)' == 'true'">
+    <ItemGroup>
+      <AppxPackagePayload Include="$(DeskBoxTaskbarExe)">
+        <TargetPath>openwinbox-taskbar.exe</TargetPath>
       </AppxPackagePayload>
     </ItemGroup>
   </Target>

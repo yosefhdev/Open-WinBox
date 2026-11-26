@@ -73,6 +73,10 @@ public sealed class JsonSerializationBaselineContractTests : IDisposable
             ["src/DeskBox/Services/SyncOutboxStore.cs"] = 2,
             ["src/DeskBox/Services/SyncRevisionsStore.cs"] = 2,
             ["src/DeskBox/Services/SyncStateStore.cs"] = 2,
+            // 2: own taskbar add-on config.json (load deserialize, atomic save serialize).
+            ["src/DeskBox/Services/TaskbarAddonConfigStore.cs"] = 2,
+            // 2: taskbar folders' own data file (load deserialize, atomic save serialize).
+            ["src/DeskBox/Services/TaskbarFolderService.cs"] = 2,
             ["src/DeskBox/Services/TodoWidgetStore.cs"] = 3,
             ["src/DeskBox/Services/WeatherService.cs"] = 5,
             ["src/DeskBox/Services/WidgetFileStackSettings.cs"] = 7,
@@ -99,8 +103,8 @@ public sealed class JsonSerializationBaselineContractTests : IDisposable
             Assert.Equal(expectedCount, actual[path]);
         }
 
-        Assert.Equal(44, actual.Count);
-        Assert.Equal(111, actual.Values.Sum());
+        Assert.Equal(46, actual.Count);
+        Assert.Equal(115, actual.Values.Sum());
 
         string[] expectedContextOwners =
         [
@@ -135,6 +139,8 @@ public sealed class JsonSerializationBaselineContractTests : IDisposable
             "src/DeskBox/Services/StartupSessionLedger.cs",
             "src/DeskBox/Services/SyncRevisionsStore.cs",
             "src/DeskBox/Services/SyncStateStore.cs",
+            "src/DeskBox/Services/TaskbarAddonConfigStore.cs",
+            "src/DeskBox/Services/TaskbarFolderService.cs",
             "src/DeskBox/Services/TodoWidgetStore.cs",
             "src/DeskBox/Services/WeatherService.cs",
             "src/DeskBox/Services/WidgetFileStackSettings.cs",
@@ -151,7 +157,7 @@ public sealed class JsonSerializationBaselineContractTests : IDisposable
             .Order()
             .ToArray();
 
-        Assert.Equal(38, actualContextOwners.Length);
+        Assert.Equal(40, actualContextOwners.Length);
         Assert.Equal(expectedContextOwners, actualContextOwners);
     }
 

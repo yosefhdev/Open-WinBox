@@ -63,6 +63,9 @@ internal static class ShellIconNativeMethods
     [DllImport("shell32.dll")]
     internal static extern void ILFree(IntPtr pidl);
 
+    [DllImport("shell32.dll")]
+    internal static extern int ILGetSize(IntPtr pidl);
+
     [DllImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool DestroyIcon(IntPtr hIcon);

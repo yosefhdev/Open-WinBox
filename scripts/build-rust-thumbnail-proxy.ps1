@@ -14,6 +14,11 @@ param(
     [ValidateSet("Dynamic", "Static")]
     [string]$CrtLinkage = "Static",
 
+    [string]$Package = "deskbox-thumbnail-proxy",
+
+    # Name of the copied exe/pdb (without extension).
+    [string]$OutputName = "DeskBox.ThumbnailProxy",
+
     [switch]$ValidateOnly
 )
 
@@ -43,8 +48,8 @@ if ($Platform -eq "ARM64") {
     . $arm64EnvironmentScript
 }
 
-$outputExe = Join-Path $outputRoot "DeskBox.ThumbnailProxy.exe"
-$outputPdb = Join-Path $outputRoot "DeskBox.ThumbnailProxy.pdb"
+$outputExe = Join-Path $outputRoot "$OutputName.exe"
+$outputPdb = Join-Path $outputRoot "$OutputName.pdb"
 
 function Get-PeMachine {
     param([Parameter(Mandatory)][string]$Path)
@@ -91,7 +96,7 @@ if (-not $ValidateOnly.IsPresent) {
     $cargoArguments = @(
         "build",
         "--manifest-path", $manifestPath,
-        "--package", "deskbox-thumbnail-proxy",
+        "--package", $Package,
         "--locked",
         "--target", $targetTriple,
         "--target-dir", $cargoTargetRoot
@@ -149,8 +154,8 @@ if (-not $ValidateOnly.IsPresent) {
     }
 
     $cargoOutput = Join-Path $cargoTargetRoot "$targetTriple\$cargoProfile"
-    $builtExe = Join-Path $cargoOutput "deskbox-thumbnail-proxy.exe"
-    $builtPdb = Join-Path $cargoOutput "deskbox_thumbnail_proxy.pdb"
+    $builtExe = Join-Path $cargoOutput "$Package.exe"
+    $builtPdb = Join-Path $cargoOutput "$($Package -replace "-", "_").pdb"
     if (-not (Test-Path -LiteralPath $builtExe -PathType Leaf)) {
         throw "Rust thumbnail proxy build did not produce '$builtExe'."
     }

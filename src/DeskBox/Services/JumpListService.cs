@@ -256,27 +256,34 @@ public static class JumpListService
     /// </summary>
     private static void EnsureShortcutAumid()
     {
+        string shortcutPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.Programs),
+            "OpenWinBox.lnk");
+        if (File.Exists(shortcutPath))
+        {
+            TrySetShortcutAppUserModelId(shortcutPath, AppUserModelId);
+        }
+    }
+
+    /// <summary>
+    /// Sets System.AppUserModel.ID on an existing .lnk (no-op when it already
+    /// matches). Also used by taskbar folders, which each need their own id.
+    /// </summary>
+    internal static bool TrySetShortcutAppUserModelId(string shortcutPath, string appUserModelId)
+    {
         try
         {
-            string shortcutPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.Programs),
-                "OpenWinBox.lnk");
-            if (!File.Exists(shortcutPath))
-            {
-                return;
-            }
-
             Guid iid = s_iid_IPropertyStore;
+            // GPS_READWRITE = 2: the store must be writable for SetValue/Commit.
             int hr = JumpListNativeMethods.SHGetPropertyStoreFromParsingName(
-                shortcutPath, IntPtr.Zero, 0, ref iid, out IntPtr storePtr);
+                shortcutPath, IntPtr.Zero, 2, ref iid, out IntPtr storePtr);
             if (hr != 0 || storePtr == IntPtr.Zero)
             {
-                return;
+                return false;
             }
 
             try
             {
-                // Check current value
                 var key = s_pkey_AppUserModelID;
                 int propVarSize = IntPtr.Size == 8 ? 24 : 16;
                 IntPtr pv = Marshal.AllocCoTaskMem(propVarSize);
@@ -285,32 +292,28 @@ public static class JumpListService
                     Marshal.Copy(new byte[propVarSize], 0, pv, propVarSize);
                     if (StoreGetValue(storePtr, ref key, pv) < 0)
                     {
-                        return;
+                        return false;
                     }
 
                     string? current = ReadPropVariantString(pv);
                     JumpListNativeMethods.PropVariantClear(pv);
 
-                    if (string.Equals(current, AppUserModelId, StringComparison.Ordinal))
+                    if (string.Equals(current, appUserModelId, StringComparison.Ordinal))
                     {
-                        return; // Already set
+                        return true;
                     }
 
-                    // Set new value
                     Marshal.Copy(new byte[propVarSize], 0, pv, propVarSize);
-                    JumpListNativeMethods.PropVariantFromString(AppUserModelId, pv);
-                    if (StoreSetValue(storePtr, ref key, pv) < 0)
-                    {
-                        return;
-                    }
-
+                    JumpListNativeMethods.PropVariantFromString(appUserModelId, pv);
+                    int setHr = StoreSetValue(storePtr, ref key, pv);
                     JumpListNativeMethods.PropVariantClear(pv);
-                    if (StoreCommit(storePtr) < 0)
+                    if (setHr < 0 || StoreCommit(storePtr) < 0)
                     {
-                        return;
+                        return false;
                     }
 
                     App.LogVerbose($"[JumpList] Shortcut AUMID set: {shortcutPath}");
+                    return true;
                 }
                 finally
                 {
@@ -324,7 +327,8 @@ public static class JumpListService
         }
         catch (Exception ex)
         {
-            App.LogVerbose($"[JumpList] EnsureShortcutAumid skipped: {ex.Message}");
+            App.LogVerbose($"[JumpList] Set shortcut AUMID skipped: {ex.Message}");
+            return false;
         }
     }
 

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="DeskBox.Views.SettingsSections.TaskbarFoldersSettingsSection"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:svc="using:DeskBox.Services"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Styles/SettingsOverviewResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <StackPanel Style="{StaticResource SectionPanelStyle}">
+            <TextBlock Style="{StaticResource SectionTitleTextStyle}" AutomationProperties.HeadingLevel="Level1" svc:Localized.Key="Settings.Section.TaskbarFolders" />
+            <StackPanel Margin="0,8,0,0" Spacing="4">
+                <!-- Own taskbar add-on: hidden when the build does not ship openwinbox-taskbar.exe. -->
+                <toolkit:SettingsCard
+                    x:Name="TaskbarAddonCard"
+                    Visibility="Collapsed"
+                    svc:Localized.HeaderKey="Taskbar.Addon.Title">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE90C;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <ProgressRing x:Name="TaskbarAddonBusy" Width="16" Height="16" IsActive="False" Visibility="Collapsed" />
+                        <Button x:Name="TaskbarAddonUninstallButton" Click="TaskbarAddonUninstallButton_Click">
+                            <TextBlock svc:Localized.Key="Taskbar.Addon.Uninstall" />
+                        </Button>
+                        <Button x:Name="TaskbarAddonPauseButton" Click="TaskbarAddonPauseButton_Click">
+                            <TextBlock svc:Localized.Key="Taskbar.Addon.Pause" />
+                        </Button>
+                        <Button x:Name="TaskbarAddonStartButton" Style="{StaticResource AccentButtonStyle}" Click="TaskbarAddonStartButton_Click">
+                            <TextBlock x:Name="TaskbarAddonStartText" />
+                        </Button>
+                    </StackPanel>
+                </toolkit:SettingsCard>
+
+                <!-- Add-on options (taskbar/config.json); only while it is installed. -->
+                <StackPanel x:Name="TaskbarAddonOptions" Spacing="4" Visibility="Collapsed">
+                    <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.Alignment.Title">
+                        <toolkit:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE8E3;" />
+                        </toolkit:SettingsCard.HeaderIcon>
+                        <ComboBox x:Name="TaskbarAlignmentComboBox" MinWidth="140" svc:Localized.AutomationNameKey="Taskbar.Addon.Alignment.Title" SelectionChanged="TaskbarAddonOption_Changed">
+                            <ComboBoxItem x:Name="TaskbarAlignmentCenterItem" Tag="center" />
+                            <ComboBoxItem x:Name="TaskbarAlignmentLeftItem" Tag="left" />
+                        </ComboBox>
+                    </toolkit:SettingsCard>
+                    <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.ShowSearch.Title">
+                        <toolkit:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE721;" />
+                        </toolkit:SettingsCard.HeaderIcon>
+                        <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.ShowSearch.Title" x:Name="TaskbarShowSearchToggle" MinWidth="0" OnContent="" OffContent="" Toggled="TaskbarAddonOption_Changed" />
+                    </toolkit:SettingsCard>
+                    <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.ShowTaskView.Title">
+                        <toolkit:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE7C4;" />
+                        </toolkit:SettingsCard.HeaderIcon>
+                        <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.ShowTaskView.Title" x:Name="TaskbarShowTaskViewToggle" MinWidth="0" OnContent="" OffContent="" Toggled="TaskbarAddonOption_Changed" />
+                    </toolkit:SettingsCard>
+                    <toolkit:SettingsCard
+                        svc:Localized.HeaderKey="Taskbar.Addon.AllMonitors.Title"
+                        svc:Localized.DescriptionKey="Taskbar.Addon.AllMonitors.Description">
+                        <toolkit:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE7F4;" />
+                        </toolkit:SettingsCard.HeaderIcon>
+                        <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.AllMonitors.Title" x:Name="TaskbarAllMonitorsToggle" MinWidth="0" OnContent="" OffContent="" Toggled="TaskbarAddonOption_Changed" />
+                    </toolkit:SettingsCard>
+                </StackPanel>
+
+                <toolkit:SettingsCard
+                    svc:Localized.HeaderKey="TaskbarFolders.Intro.Title"
+                    svc:Localized.DescriptionKey="TaskbarFolders.Intro">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8B7;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <Button x:Name="NewFolderButton" Style="{StaticResource AccentButtonStyle}" Click="NewFolderButton_Click">
+                        <TextBlock svc:Localized.Key="TaskbarFolders.New" />
+                    </Button>
+                </toolkit:SettingsCard>
+
+                <InfoBar x:Name="ErrorInfoBar" IsOpen="False" Severity="Error" IsClosable="True" />
+
+                <toolkit:SettingsCard
+                    x:Name="EmptyCard"
+                    svc:Localized.HeaderKey="TaskbarFolders.Empty.Title"
+                    svc:Localized.DescriptionKey="TaskbarFolders.Empty.Description">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE7C3;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                </toolkit:SettingsCard>
+
+                <StackPanel x:Name="FoldersHost" Spacing="4" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Off-screen icon render surface: RenderTargetBitmap only captures
+             elements that are in the live tree, so the .ico is drawn here
+             instead of from a preview that may sit in a collapsed expander. -->
+        <Canvas x:Name="IconRenderCanvas" Width="0" Height="0" HorizontalAlignment="Left" VerticalAlignment="Top" IsHitTestVisible="False" AutomationProperties.AccessibilityView="Raw">
+            <Border x:Name="IconRenderSurface" Canvas.Left="-4000" Canvas.Top="-4000" Width="128" Height="128" />
+        </Canvas>
+    </Grid>
+</UserControl>

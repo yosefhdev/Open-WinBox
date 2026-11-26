@@ -1664,7 +1664,21 @@ public static partial class Win32Helper
 
     private const int ShcneRenameItem = 0x00000001;
     private const int ShcneUpdateDir = 0x00001000;
+    private const int ShcneUpdateItem = 0x00002000;
     private const uint ShcnfPathW = 0x0005;
+
+    /// <summary>Asks the Shell to refresh one item (e.g. a shortcut whose icon changed).</summary>
+    internal static void NotifyShellItemUpdated(string path)
+    {
+        try
+        {
+            SHChangeNotify(ShcneUpdateItem, ShcnfPathW, path, null);
+        }
+        catch (Exception ex)
+        {
+            App.Log($"[ShellNotify] Item update notification failed path='{path}': {ex.Message}");
+        }
+    }
 
     [LibraryImport("shell32.dll", EntryPoint = "SHChangeNotify", StringMarshalling = StringMarshalling.Utf16)]
     private static partial void SHChangeNotify(

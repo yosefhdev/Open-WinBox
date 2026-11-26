@@ -656,6 +656,54 @@ public static class ShortcutHelper
         InvalidateStoredMetadataCache(normalizedShortcutPath);
     }
 
+    /// <summary>
+    /// Writes a full .lnk (target, arguments, working directory, icon). Uses
+    /// the Rust backend when it is the active policy, otherwise the COM path,
+    /// so Debug builds without deskbox_native.dll still work.
+    /// </summary>
+    public static void WriteShortcut(string shortcutPath, ShortcutInfo metadata)
+    {
+        string normalizedShortcutPath = Path.GetFullPath(shortcutPath);
+#if DESKBOX_NATIVE_AOT
+        ShortcutNativeWriteCallResult native =
+            ShortcutNativeBackend.WriteShortcut(normalizedShortcutPath, metadata);
+        if (!native.Success)
+        {
+            LogNativeWriteFailure("write", normalizedShortcutPath, native);
+            throw new InvalidOperationException(
+                $"Rust shortcut write failed: {native.Failure}; {native.Detail}");
+        }
+#else
+        if (ShortcutBackendPolicy.Current == ShortcutBackendMode.Rust)
+        {
+            ShortcutNativeWriteCallResult native =
+                ShortcutNativeBackend.WriteShortcut(normalizedShortcutPath, metadata);
+            if (!native.Success)
+            {
+                LogNativeWriteFailure("write", normalizedShortcutPath, native);
+                throw new InvalidOperationException(
+                    $"Rust shortcut write failed: {native.Failure}; {native.Detail}");
+            }
+        }
+        else
+        {
+            var link = (IShellLinkW)new ShellLink();
+            var file = (IPersistFile)link;
+            link.SetPath(metadata.TargetPath);
+            link.SetArguments(metadata.Arguments);
+            link.SetWorkingDirectory(metadata.WorkingDirectory);
+            link.SetDescription(metadata.Description);
+            if (!string.IsNullOrEmpty(metadata.IconLocation))
+            {
+                link.SetIconLocation(metadata.IconLocation, metadata.IconIndex);
+            }
+            file.Save(normalizedShortcutPath, true);
+        }
+#endif
+
+        InvalidateStoredMetadataCache(normalizedShortcutPath);
+    }
+
 #if !DESKBOX_NATIVE_AOT
     internal static void CreateOrUpdateFolderShortcutWithCSharp(
         string normalizedShortcutPath,

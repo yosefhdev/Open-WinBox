@@ -113,6 +113,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="48" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -175,8 +176,30 @@ Text="OpenWinBox" />
             </AutoSuggestBox>
         </Grid>
 
+        <!-- Two separate areas: desktop widgets and taskbar folders each get
+             their own menu instead of sharing one list. Its own row between the
+             search bar and the menu, so it reads as a top-level switch. -->
+        <toolkit:Segmented
+            x:Name="SettingsAreaSelector"
+            Grid.Row="1"
+            MaxWidth="360"
+            Margin="0,8,0,8"
+            HorizontalAlignment="Stretch"
+            SelectionChanged="SettingsAreaSelector_SelectionChanged">
+            <toolkit:SegmentedItem svc:Localized.Key="Settings.Area.Widgets">
+                <toolkit:SegmentedItem.Icon>
+                    <FontIcon Glyph="&#xF0E2;" />
+                </toolkit:SegmentedItem.Icon>
+            </toolkit:SegmentedItem>
+            <toolkit:SegmentedItem svc:Localized.Key="Settings.Area.Taskbar">
+                <toolkit:SegmentedItem.Icon>
+                    <FontIcon Glyph="&#xE90E;" />
+                </toolkit:SegmentedItem.Icon>
+            </toolkit:SegmentedItem>
+        </toolkit:Segmented>
+
         <Border
-            Grid.Row="0"
+            Grid.Row="1"
             Height="1"
             VerticalAlignment="Bottom"
             Background="{ThemeResource DividerStrokeColorDefaultBrush}"
@@ -184,7 +207,7 @@ Text="OpenWinBox" />
 
         <NavigationView
             x:Name="SettingsNavigationView"
-            Grid.Row="1"
+            Grid.Row="2"
             CompactPaneLength="58"
             IsBackButtonVisible="Visible"
             IsBackEnabled="True"
@@ -288,6 +311,15 @@ Text="OpenWinBox" />
                                 <media:SvgImageSource UriSource="ms-appx:///Assets/SettingsNavIcons/about.svg" />
                             </ImageIcon.Source>
                         </ImageIcon>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem
+                    x:Name="TaskbarFoldersNavItem"
+                    Tag="TaskbarFolders"
+                    Visibility="Collapsed"
+                    svc:Localized.Key="Settings.Nav.TaskbarFolders">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8B7;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 			</NavigationView.MenuItems>
@@ -1113,6 +1145,9 @@ Text="OpenWinBox" />
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
+                    </DataTemplate>
+                    <DataTemplate x:Key="TaskbarFoldersSectionTemplate" x:DataType="viewModels:SettingsViewModel">
+                        <sections:TaskbarFoldersSettingsSection x:Name="TaskbarFoldersSection" Visibility="Collapsed" />
                     </DataTemplate>
                     <DataTemplate x:Key="CapsuleModeSectionTemplate" x:DataType="viewModels:SettingsViewModel">
                         <sections:CapsuleModeSettingsSection x:Name="CapsuleModeSection" Visibility="Collapsed" NavigationRequested="SettingsSection_NavigationRequested" />

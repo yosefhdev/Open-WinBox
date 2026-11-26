@@ -3,6 +3,7 @@ members = [
     "deskbox-native",
     "deskbox-audio-session-fixture",
     "deskbox-thumbnail-proxy",
+    "openwinbox-taskbar",
 ]
 resolver = "3"
 

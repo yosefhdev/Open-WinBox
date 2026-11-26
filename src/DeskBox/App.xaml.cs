@@ -412,6 +412,17 @@ public partial class App : Application
                     StorePendingJumpListArgument(jumpListArg);
                 }
 
+                string? taskbarFolderId = TaskbarFolderService.TryGetFolderIdArgument(
+                    Environment.GetCommandLineArgs());
+                if (taskbarFolderId is not null)
+                {
+                    TaskbarFolderService.StorePendingActivation(taskbarFolderId);
+                    // The shell gave this short-lived process the foreground;
+                    // hand that right to the primary so its pop-up can take
+                    // activation (and dismiss itself on outside clicks).
+                    _ = Win32Helper.AllowSetForegroundWindow(uint.MaxValue);
+                }
+
                 // The updater restarts the app with the update-result
                 // argument after a failed install; when this secondary
                 // launch races a still-living primary, forward the outcome
@@ -1767,6 +1778,8 @@ public partial class App : Application
                 () => ShowReleaseNotesAfterUpdateOnce());
 
             RunOptionalStartupStep("background-update-check", ScheduleBackgroundUpdateCheck);
+            // Pipe ping and registry stay off the UI thread.
+            RunOptionalStartupStep("taskbar-addon", () => _ = Task.Run(TaskbarHostService.StartWithApp));
             RunOptionalStartupStep(
                 "update-installer-prune",
                 // Interface-typed property: pruning only exists on the
@@ -1827,6 +1840,15 @@ public partial class App : Application
                     "jump-list-activation");
             }
 
+            string? firstLaunchTaskbarFolder = TaskbarFolderService.TryGetFolderIdArgument(
+                Environment.GetCommandLineArgs());
+            if (firstLaunchTaskbarFolder is not null)
+            {
+                SafeFireAndForget(
+                    () => DeskBox.Views.TaskbarFolderPopup.ToggleAsync(firstLaunchTaskbarFolder),
+                    "taskbar-folder-activation");
+            }
+
             RunOptionalStartupStep("idle-memory-maintenance", StartVisibleIdleMemoryMaintenance);
             RunOptionalStartupStep("quiescence-working-set-trim", StartQuiescenceWorkingSetTrim);
             if (!string.IsNullOrWhiteSpace(updateInstallOutcome))
@@ -1854,6 +1876,9 @@ public partial class App : Application
 
             EnsureStartupPipeline().WriteSummary();
             Log("OnLaunched completed successfully");
+            UiDispatcherQueue?.TryEnqueue(
+                Microsoft.UI.Dispatching.DispatcherQueuePriority.Low,
+                DeskBox.Views.TaskbarFolderPopup.Prewarm);
 #if DEBUG
             if (Environment.GetEnvironmentVariable("DESKBOX_DEV_DATA_ROOT") is { } probeRoot &&
                 probeRoot.Contains("architecture-shutdown-ownership-20260925",
@@ -3820,13 +3845,26 @@ public partial class App : Application
             do
             {
                 _externalActivationRequestedWhileBusy = false;
-                ScheduleExternalStateRecovery();
+                // A taskbar-folder click is not a "user came back" signal; the
+                // recovery refreshes every file widget on the UI thread and
+                // landed right while the pop-up was loading its icons.
+                string? taskbarFolderId = TaskbarFolderService.TakePendingActivation();
+                if (taskbarFolderId is null)
+                {
+                    ScheduleExternalStateRecovery();
+                }
 
                 bool activationHandled = DrainPendingNativeNotificationActivations();
                 string? jumpListArgument = TakePendingJumpListArgument();
                 if (!string.IsNullOrWhiteSpace(jumpListArgument))
                 {
                     await JumpListService.HandleActivationAsync(jumpListArgument);
+                    activationHandled = true;
+                }
+
+                if (taskbarFolderId is not null)
+                {
+                    await DeskBox.Views.TaskbarFolderPopup.ToggleAsync(taskbarFolderId);
                     activationHandled = true;
                 }
 

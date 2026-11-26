@@ -1610,6 +1610,54 @@ public static class IconHelper
         }
     }
 
+    /// <summary>
+    /// PNG bytes (48 px) for a Start "All apps" entry, by its shell:AppsFolder
+    /// parsing name. Those entries have no file path (Store apps), so this is
+    /// the one PIDL icon query; it only reads the shared system image list.
+    /// </summary>
+    internal static byte[]? GetAppsFolderIconPngBytes(string parsingName)
+    {
+        int hr = ShellIconNativeMethods.SHParseDisplayName(
+            "shell:AppsFolder\\" + parsingName, IntPtr.Zero, out IntPtr pidl, 0, out _);
+        if (hr < 0 || pidl == IntPtr.Zero)
+        {
+            return null;
+        }
+
+        try
+        {
+            var shinfo = new ShellIconNativeMethods.SHFILEINFO();
+            // SHGetImageList answers E_NOINTERFACE in the settings host, so ask
+            // for the icon handle itself. shortcut: 32 px; route through the
+            // out-of-process thumbnail proxy if the picker tiles grow.
+            IntPtr result = ShellIconNativeMethods.SHGetFileInfoPidl(
+                pidl,
+                0,
+                ref shinfo,
+                (uint)Marshal.SizeOf(shinfo),
+                ShellIconNativeMethods.SHGFI_PIDL | ShellIconNativeMethods.SHGFI_ICON | ShellIconNativeMethods.SHGFI_LARGEICON);
+            if (result == IntPtr.Zero || shinfo.hIcon == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            try
+            {
+                using var icon = Icon.FromHandle(shinfo.hIcon);
+                using var bitmap = icon.ToBitmap();
+                return EncodeIconBitmapAsPng(bitmap, rejectPaddedShortcutIcon: false);
+            }
+            finally
+            {
+                ShellIconNativeMethods.DestroyIcon(shinfo.hIcon);
+            }
+        }
+        finally
+        {
+            ShellIconNativeMethods.ILFree(pidl);
+        }
+    }
+
     private static byte[]? LoadIconBytesFromShGetFileInfo(
         string path,
         bool rejectPaddedShortcutIcon = false)

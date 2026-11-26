@@ -106,6 +106,7 @@ public sealed partial class SettingsWindow : Window
             ["Advanced"] = new("Advanced", "Settings.Section.Advanced", null, "Interaction"),
             ["Maintenance"] = new("Maintenance", "Settings.Section.Maintenance", null, "Maintenance"),
             ["About"] = new("About", "Settings.Nav.About", null, "About"),
+            ["TaskbarFolders"] = new("TaskbarFolders", "Settings.Section.TaskbarFolders", null, "TaskbarFolders"),
             ["FileDisplaySettings"] = new("FileDisplaySettings", "Settings.Group.FileLayout.Title", "AppearanceDetail", "AppearanceDetail"),
             ["ManagedStorage"] = new("ManagedStorage", "Settings.ManagedStorage.PageTitle", "AppearanceDetail", "AppearanceDetail"),
             ["FileStackSettings"] = new("FileStackSettings", "Settings.FileStacks.PageTitle", "AppearanceDetail", "AppearanceDetail"),

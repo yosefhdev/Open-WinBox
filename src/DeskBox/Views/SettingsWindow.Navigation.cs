@@ -568,6 +568,7 @@ public sealed partial class SettingsWindow
             return;
         }
 
+        SyncSettingsAreaForSection(route.NavTag);
         string previousSectionTag = _currentSettingsSection;
         isNestedSection = !string.IsNullOrWhiteSpace(route.ParentTag);
         _currentSettingsSection = sectionTag;
