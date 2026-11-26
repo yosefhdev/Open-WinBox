@@ -312,11 +312,15 @@ fn apply(data: ShellTrayData) -> bool {
             // Fuera del préstamo: abre el proceso y lee el registro.
             let exe = if new { tasks::process_path(owner).unwrap_or_default() } else { String::new() };
             let entries = if new { settings_entries() } else { Vec::new() };
-            let mut pid = 0;
-            if new {
-                unsafe { GetWindowThreadProcessId(owner, Some(&mut pid)) };
-            }
+            let pid = window_pid(owner);
             TRAY.with_borrow_mut(|t| {
+                // Un icono es de quien lo registró: otro proceso no puede cambiarle la ventana ni el
+                // mensaje de callback (los clics se le reenvían a esa ventana).
+                if let Some(i) = found {
+                    if pid != 0 && pid != t.icons[i].pid {
+                        return false;
+                    }
+                }
                 let idx = match found {
                     Some(i) => i,
                     None => {
@@ -347,7 +351,8 @@ fn apply(data: ShellTrayData) -> bool {
                 if !owner.is_invalid() {
                     icon.owner = owner;
                 }
-                if nid.flags & NIF_MESSAGE != 0 {
+                // Sin ventana no se sabe quién lo manda; y solo mensajes privados (nada de WM_CLOSE…).
+                if nid.flags & NIF_MESSAGE != 0 && !owner.is_invalid() && nid.callback_message >= WM_USER {
                     icon.callback = nid.callback_message;
                 }
                 if nid.flags & NIF_ICON != 0 {
@@ -374,16 +379,17 @@ fn apply(data: ShellTrayData) -> bool {
             })
         }
         NIM_DELETE => TRAY.with_borrow_mut(|t| match found {
-            Some(i) => {
+            Some(i) if owner.is_invalid() || window_pid(owner) == t.icons[i].pid => {
                 let icon = t.icons.remove(i);
                 destroy_icon(icon.icon);
                 true
             }
-            None => false,
+            _ => false,
         }),
         NIM_SETVERSION => {
             TRAY.with_borrow_mut(|t| {
-                if let Some(i) = found {
+                // Los iconos con GUID mandan SETVERSION sin ventana: entonces vale el GUID.
+                if let Some(i) = found.filter(|&i| owner.is_invalid() || window_pid(owner) == t.icons[i].pid) {
                     t.icons[i].version = nid.version_or_timeout;
                 }
             });
@@ -391,6 +397,15 @@ fn apply(data: ShellTrayData) -> bool {
         }
         _ => false,
     }
+}
+
+/// Proceso dueño de la ventana; 0 si no existe.
+fn window_pid(h: HWND) -> u32 {
+    let mut pid = 0;
+    if !h.is_invalid() {
+        unsafe { GetWindowThreadProcessId(h, Some(&mut pid)) };
+    }
+    pid
 }
 
 fn destroy_icon(icon: HICON) {
@@ -423,7 +438,8 @@ pub fn click(id: u32, right: bool) {
         crate::bar::send_keys(&[VK_LWIN, VK_A]);
         return;
     }
-    if callback == 0 {
+    // La ventana pudo cerrarse y su HWND reutilizarse por otro proceso: no reenviarle nada.
+    if callback < WM_USER || window_pid(owner) != pid {
         return;
     }
     unsafe {
