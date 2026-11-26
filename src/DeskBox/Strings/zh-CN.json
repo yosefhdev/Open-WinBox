@@ -3081,6 +3081,7 @@
   "TaskbarFolders.Delete.Confirm.PinnedBody": "将删除该文件夹、其快捷方式和应用列表。它也会被取消固定，因此任务栏和资源管理器窗口会重启几秒钟。",
   "TaskbarFolders.Error": "无法保存文件夹：{0}",
   "TaskbarFolders.Popup.Empty": "文件夹为空。请在设置中添加应用。",
+  "Taskbar.WorkInProgress.Message": "此部分仍在开发中：部分功能可能尚不可用，或在后续版本中发生变化。",
   "Taskbar.Addon.Title": "自有任务栏（实验性）",
   "Taskbar.Addon.State.NotInstalled": "用 OpenWinBox 的任务栏替换 Windows 任务栏。安装前保持关闭。",
   "Taskbar.Addon.State.Running": "正在运行。运行期间 Windows 任务栏处于隐藏状态。",

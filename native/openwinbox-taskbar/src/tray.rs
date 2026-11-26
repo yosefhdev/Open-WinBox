@@ -568,8 +568,41 @@ pub fn set_promoted(id: u32, promoted: bool) {
     crate::bar::tray_changed();
 }
 
-pub fn icon_of(id: u32) -> Option<HICON> {
-    TRAY.with_borrow(|t| t.icons.iter().find(|i| i.id == id).map(|i| i.icon))
+thread_local! {
+    /// Copia del icono usada como cursor de arrastre: la app puede borrar el suyo a mitad de arrastre.
+    static DRAG_CURSOR: RefCell<Option<(u32, HICON)>> = const { RefCell::new(None) };
+}
+
+/// Pone como cursor una copia propia del icono `id` (creada una vez por arrastre).
+pub fn set_drag_cursor(id: u32) {
+    DRAG_CURSOR.with_borrow_mut(|c| {
+        if c.is_none_or(|(cid, _)| cid != id) {
+            end_drag_cursor_inner(c);
+            let src = TRAY.with_borrow(|t| t.icons.iter().find(|i| i.id == id).map(|i| i.icon));
+            if let Some(copy) = src.filter(|h| !h.is_invalid()).and_then(|h| unsafe { CopyIcon(h) }.ok()) {
+                *c = Some((id, copy));
+            }
+        }
+        if let Some((_, icon)) = *c {
+            unsafe { SetCursor(Some(HCURSOR(icon.0))) };
+        }
+    });
+}
+
+/// Fin del arrastre: vuelve a la flecha y libera la copia.
+pub fn end_drag_cursor() {
+    DRAG_CURSOR.with_borrow_mut(end_drag_cursor_inner);
+}
+
+fn end_drag_cursor_inner(c: &mut Option<(u32, HICON)>) {
+    if let Some((_, icon)) = c.take() {
+        unsafe {
+            if let Ok(arrow) = LoadCursorW(None, IDC_ARROW) {
+                SetCursor(Some(arrow));
+            }
+            let _ = DestroyIcon(icon);
+        }
+    }
 }
 
 struct Entry {

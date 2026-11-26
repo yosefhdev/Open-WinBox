@@ -3081,6 +3081,7 @@
   "TaskbarFolders.Delete.Confirm.PinnedBody": "फ़ोल्डर, उसका शॉर्टकट और ऐप सूची हटा दी जाएगी। यह अनपिन भी होगा, इसलिए टास्कबार और एक्सप्लोरर विंडो कुछ सेकंड के लिए फिर से शुरू होंगी।",
   "TaskbarFolders.Error": "फ़ोल्डर सहेजा नहीं जा सका: {0}",
   "TaskbarFolders.Popup.Empty": "खाली फ़ोल्डर। सेटिंग्स में ऐप्स जोड़ें।",
+  "Taskbar.WorkInProgress.Message": "यह अनुभाग अभी विकास में है: कुछ सुविधाएँ अभी काम न करें या आगे के संस्करणों में बदल सकती हैं।",
   "Taskbar.Addon.Title": "अपना टास्कबार (प्रायोगिक)",
   "Taskbar.Addon.State.NotInstalled": "Windows टास्कबार की जगह OpenWinBox का टास्कबार लगाता है। इंस्टॉल करने तक बंद रहता है।",
   "Taskbar.Addon.State.Running": "चल रहा है। इसके चलने तक Windows टास्कबार छिपा रहता है।",

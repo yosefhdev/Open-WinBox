@@ -17,6 +17,9 @@
     <!-- Own taskbar add-on: install / pause / uninstall and where it shows. -->
     <StackPanel Style="{StaticResource SectionPanelStyle}">
         <TextBlock Style="{StaticResource SectionTitleTextStyle}" AutomationProperties.HeadingLevel="Level1" svc:Localized.Key="Settings.Section.General" />
+        <InfoBar IsOpen="True" IsClosable="False" Severity="Warning" Margin="0,8,0,0" Title="Work in Progress">
+            <TextBlock Margin="0,0,0,12" TextWrapping="Wrap" svc:Localized.Key="Taskbar.WorkInProgress.Message" />
+        </InfoBar>
         <StackPanel Margin="0,8,0,0" Spacing="4">
             <toolkit:SettingsCard x:Name="TaskbarAddonCard" svc:Localized.HeaderKey="Taskbar.Addon.Title">
                 <toolkit:SettingsCard.HeaderIcon>

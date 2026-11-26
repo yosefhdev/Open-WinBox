@@ -17,6 +17,9 @@
     <Grid>
         <StackPanel Style="{StaticResource SectionPanelStyle}">
             <TextBlock Style="{StaticResource SectionTitleTextStyle}" AutomationProperties.HeadingLevel="Level1" svc:Localized.Key="Settings.Section.TaskbarFolders" />
+            <InfoBar IsOpen="True" IsClosable="False" Severity="Warning" Margin="0,8,0,0" Title="Work in Progress">
+                <TextBlock Margin="0,0,0,12" TextWrapping="Wrap" svc:Localized.Key="Taskbar.WorkInProgress.Message" />
+            </InfoBar>
             <StackPanel Margin="0,8,0,0" Spacing="4">
                 <toolkit:SettingsCard
                     svc:Localized.HeaderKey="TaskbarFolders.Intro.Title"

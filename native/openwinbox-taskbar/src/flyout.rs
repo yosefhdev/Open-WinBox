@@ -227,9 +227,7 @@ unsafe extern "system" fn flyout_proc(hwnd: HWND, msg: u32, wparam: WPARAM, lpar
                             }
                             if *active {
                                 // El cursor es el propio icono mientras se arrastra.
-                                if let Some(icon) = tray::icon_of(*id) {
-                                    SetCursor(Some(HCURSOR(icon.0)));
-                                }
+                                tray::set_drag_cursor(*id);
                                 return;
                             }
                         }
@@ -277,6 +275,7 @@ unsafe extern "system" fn flyout_proc(hwnd: HWND, msg: u32, wparam: WPARAM, lpar
                         f.drag = None;
                     }
                 });
+                tray::end_drag_cursor();
                 LRESULT(0)
             }
             _ => DefWindowProcW(hwnd, msg, wparam, lparam),

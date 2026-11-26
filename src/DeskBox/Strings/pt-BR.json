@@ -3081,6 +3081,7 @@
   "TaskbarFolders.Delete.Confirm.PinnedBody": "A pasta, seu atalho e sua lista de apps serão removidos. Ela também será desafixada, então a barra de tarefas e as janelas do Explorador reiniciam por alguns segundos.",
   "TaskbarFolders.Error": "Não foi possível salvar a pasta: {0}",
   "TaskbarFolders.Popup.Empty": "Pasta vazia. Adicione apps nas Configurações.",
+  "Taskbar.WorkInProgress.Message": "Esta seção ainda está em desenvolvimento: alguns recursos podem não funcionar ou mudar em versões futuras.",
   "Taskbar.Addon.Title": "Barra de tarefas própria (experimental)",
   "Taskbar.Addon.State.NotInstalled": "Substitui a barra de tarefas do Windows pela do OpenWinBox. Desligada até você instalá-la.",
   "Taskbar.Addon.State.Running": "Em execução. A barra do Windows fica oculta enquanto ela funciona.",

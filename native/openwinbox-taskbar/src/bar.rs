@@ -394,6 +394,7 @@ unsafe extern "system" fn wnd_proc(hwnd: HWND, msg: u32, wparam: WPARAM, lparam:
                         a.draw();
                     }
                 });
+                crate::tray::end_drag_cursor();
                 true
             }
             WM_MBUTTONUP => with_app(hwnd, |a| {
@@ -802,9 +803,9 @@ impl App {
                 self.pressed = None;
             }
             if d.active {
-                if let Some(icon) = d.tray.and_then(crate::tray::icon_of) {
+                if let Some(id) = d.tray {
                     // El cursor es el propio icono mientras se arrastra.
-                    unsafe { SetCursor(Some(HCURSOR(icon.0))) };
+                    crate::tray::set_drag_cursor(id);
                     return;
                 }
                 self.draw();

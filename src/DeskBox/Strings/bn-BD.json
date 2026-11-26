@@ -3081,6 +3081,7 @@
   "TaskbarFolders.Delete.Confirm.PinnedBody": "ফোল্ডার, এর শর্টকাট ও অ্যাপ তালিকা মুছে যাবে। এটি আনপিনও হবে, তাই টাস্কবার ও এক্সপ্লোরার উইন্ডো কয়েক সেকেন্ডের জন্য আবার চালু হবে।",
   "TaskbarFolders.Error": "ফোল্ডার সংরক্ষণ করা যায়নি: {0}",
   "TaskbarFolders.Popup.Empty": "ফাঁকা ফোল্ডার। সেটিংসে অ্যাপ যোগ করুন।",
+  "Taskbar.WorkInProgress.Message": "এই অংশটি এখনও তৈরি হচ্ছে: কিছু বৈশিষ্ট্য এখনও কাজ নাও করতে পারে বা পরবর্তী সংস্করণে বদলাতে পারে।",
   "Taskbar.Addon.Title": "নিজস্ব টাস্কবার (পরীক্ষামূলক)",
   "Taskbar.Addon.State.NotInstalled": "Windows টাস্কবারের জায়গায় OpenWinBox-এর টাস্কবার দেয়। ইনস্টল না করা পর্যন্ত বন্ধ থাকে।",
   "Taskbar.Addon.State.Running": "চলছে। এটি চলার সময় Windows টাস্কবার লুকানো থাকে।",

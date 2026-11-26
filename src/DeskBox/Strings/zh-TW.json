@@ -3081,6 +3081,7 @@
   "TaskbarFolders.Delete.Confirm.PinnedBody": "將刪除此資料夾、其捷徑和應用程式清單。它也會被取消釘選，因此工作列和檔案總管視窗會重新啟動幾秒鐘。",
   "TaskbarFolders.Error": "無法儲存資料夾：{0}",
   "TaskbarFolders.Popup.Empty": "資料夾是空的。請在設定中加入應用程式。",
+  "Taskbar.WorkInProgress.Message": "此部分仍在開發中：部分功能可能尚無法使用，或在後續版本中變更。",
   "Taskbar.Addon.Title": "自有工作列（實驗性）",
   "Taskbar.Addon.State.NotInstalled": "以 OpenWinBox 的工作列取代 Windows 工作列。安裝前保持關閉。",
   "Taskbar.Addon.State.Running": "執行中。執行期間 Windows 工作列會隱藏。",

@@ -3081,6 +3081,7 @@
   "TaskbarFolders.Delete.Confirm.PinnedBody": "Le dossier, son raccourci et sa liste d'apps seront supprimés. Il sera aussi désépinglé : la barre des tâches et les fenêtres de l'Explorateur redémarreront quelques secondes.",
   "TaskbarFolders.Error": "Impossible d’enregistrer le dossier : {0}",
   "TaskbarFolders.Popup.Empty": "Dossier vide. Ajoutez des applications dans les Paramètres.",
+  "Taskbar.WorkInProgress.Message": "Cette section est encore en développement : certaines fonctions peuvent ne pas encore marcher ou changer dans les prochaines versions.",
   "Taskbar.Addon.Title": "Barre des tâches propre (expérimental)",
   "Taskbar.Addon.State.NotInstalled": "Remplace la barre des tâches de Windows par celle d’OpenWinBox. Désactivée tant que vous ne l’installez pas.",
   "Taskbar.Addon.State.Running": "En cours d’exécution. La barre de Windows est masquée pendant ce temps.",

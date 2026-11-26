@@ -3081,6 +3081,7 @@
   "TaskbarFolders.Delete.Confirm.PinnedBody": "Der Ordner, seine Verknüpfung und seine App-Liste werden entfernt. Er wird auch gelöst, daher starten die Taskleiste und Explorer-Fenster einige Sekunden neu.",
   "TaskbarFolders.Error": "Ordner konnte nicht gespeichert werden: {0}",
   "TaskbarFolders.Popup.Empty": "Leerer Ordner. Füge Apps in den Einstellungen hinzu.",
+  "Taskbar.WorkInProgress.Message": "Dieser Bereich befindet sich noch in Entwicklung: Einige Funktionen funktionieren eventuell noch nicht oder ändern sich in künftigen Versionen.",
   "Taskbar.Addon.Title": "Eigene Taskleiste (experimentell)",
   "Taskbar.Addon.State.NotInstalled": "Ersetzt die Windows-Taskleiste durch die von OpenWinBox. Aus, bis du sie installierst.",
   "Taskbar.Addon.State.Running": "Läuft. Die Windows-Taskleiste ist währenddessen ausgeblendet.",

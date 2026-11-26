@@ -3081,6 +3081,7 @@
   "TaskbarFolders.Delete.Confirm.PinnedBody": "The folder, its shortcut and its apps list will be removed. It is also unpinned, so the taskbar and File Explorer windows restart for a few seconds.",
   "TaskbarFolders.Error": "Could not save the folder: {0}",
   "TaskbarFolders.Popup.Empty": "Empty folder. Add apps in Settings.",
+  "Taskbar.WorkInProgress.Message": "This section is still under development: some features may not work yet or may change in future versions.",
   "Taskbar.Addon.Title": "Own taskbar (experimental)",
   "Taskbar.Addon.State.NotInstalled": "Replaces the Windows taskbar with the OpenWinBox one. Off until you install it.",
   "Taskbar.Addon.State.Running": "Running. The Windows taskbar is hidden while it runs.",

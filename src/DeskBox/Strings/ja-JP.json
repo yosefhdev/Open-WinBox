@@ -3081,6 +3081,7 @@
   "TaskbarFolders.Delete.Confirm.PinnedBody": "フォルダー、そのショートカット、アプリ一覧が削除されます。ピン留めも外れるため、タスクバーとエクスプローラーのウィンドウが数秒間再起動します。",
   "TaskbarFolders.Error": "フォルダーを保存できませんでした: {0}",
   "TaskbarFolders.Popup.Empty": "空のフォルダーです。設定からアプリを追加してください。",
+  "Taskbar.WorkInProgress.Message": "このセクションは開発中です。一部の機能は動作しないか、今後のバージョンで変更される可能性があります。",
   "Taskbar.Addon.Title": "独自タスクバー (試験版)",
   "Taskbar.Addon.State.NotInstalled": "Windows のタスクバーを OpenWinBox のものに置き換えます。インストールするまではオフです。",
   "Taskbar.Addon.State.Running": "実行中。実行中は Windows のタスクバーが非表示になります。",

@@ -3081,6 +3081,7 @@
   "TaskbarFolders.Delete.Confirm.PinnedBody": "ستُحذف المجلد واختصاره وقائمة تطبيقاته. سيُلغى تثبيته أيضًا، لذا يُعاد تشغيل شريط المهام ونوافذ المستكشف لبضع ثوانٍ.",
   "TaskbarFolders.Error": "تعذر حفظ المجلد: {0}",
   "TaskbarFolders.Popup.Empty": "مجلد فارغ. أضف تطبيقات من الإعدادات.",
+  "Taskbar.WorkInProgress.Message": "هذا القسم لا يزال قيد التطوير: قد لا تعمل بعض الميزات بعد أو قد تتغير في الإصدارات القادمة.",
   "Taskbar.Addon.Title": "شريط مهام خاص (تجريبي)",
   "Taskbar.Addon.State.NotInstalled": "يستبدل شريط مهام Windows بشريط OpenWinBox. متوقف حتى تثبّته.",
   "Taskbar.Addon.State.Running": "قيد التشغيل. شريط مهام Windows مخفي أثناء عمله.",
