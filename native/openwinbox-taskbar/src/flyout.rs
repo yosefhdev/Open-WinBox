@@ -10,6 +10,7 @@ use windows::Win32::Graphics::Direct2D::*;
 use windows::Win32::Graphics::Gdi::*;
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::HiDpi::GetDpiForWindow;
+use windows::Win32::UI::Input::KeyboardAndMouse::{ReleaseCapture, SetCapture};
 use windows::Win32::UI::WindowsAndMessaging::*;
 use windows::core::*;
 
@@ -27,6 +28,8 @@ struct Flyout {
     hover: Option<usize>,
     /// Borde superior de la barra y centro del "^" (pantalla) para recolocar si cambia el número de iconos.
     anchor: (i32, i32),
+    /// Icono presionado (id, x, y de inicio, arrastre activo): soltarlo sobre la barra lo hace visible.
+    drag: Option<(u32, i32, i32, bool)>,
 }
 
 thread_local! {
@@ -35,6 +38,16 @@ thread_local! {
 
 pub fn is_open() -> bool {
     FLYOUT.with_borrow(|f| f.is_some())
+}
+
+/// El punto (pantalla) cae dentro del desbordamiento abierto.
+pub fn contains(pt: POINT) -> bool {
+    FLYOUT.with_borrow(|f| {
+        f.as_ref().is_some_and(|f| {
+            let mut r = RECT::default();
+            unsafe { GetWindowRect(f.hwnd, &mut r).is_ok() && PtInRect(&r, pt).as_bool() }
+        })
+    })
 }
 
 /// Abre el desbordamiento encima de `bar_top`, centrado en `center_x`, o lo cierra si ya está abierto.
@@ -81,7 +94,7 @@ pub fn toggle(center_x: i32, bar_top: i32) {
             }
         };
         FLYOUT.with_borrow_mut(|f| {
-            *f = Some(Flyout { hwnd, renderer, icons: Vec::new(), bitmaps: HashMap::new(), hover: None, anchor: (center_x, bar_top) });
+            *f = Some(Flyout { hwnd, renderer, icons: Vec::new(), bitmaps: HashMap::new(), hover: None, anchor: (center_x, bar_top), drag: None });
         });
         refresh();
         let _ = ShowWindow(hwnd, SW_SHOW);
@@ -193,9 +206,33 @@ unsafe extern "system" fn flyout_proc(hwnd: HWND, msg: u32, wparam: WPARAM, lpar
                 close();
                 LRESULT(0)
             }
+            WM_LBUTTONDOWN => {
+                FLYOUT.with_borrow_mut(|f| {
+                    if let Some(f) = f.as_mut() {
+                        if let Some(i) = f.hit(lparam) {
+                            f.drag = Some((f.icons[i].0, (lparam.0 & 0xFFFF) as i16 as i32, ((lparam.0 >> 16) & 0xFFFF) as i16 as i32, false));
+                            SetCapture(hwnd);
+                        }
+                    }
+                });
+                LRESULT(0)
+            }
             WM_MOUSEMOVE => {
                 FLYOUT.with_borrow_mut(|f| {
                     if let Some(f) = f.as_mut() {
+                        if let Some((id, sx, sy, active)) = f.drag.as_mut() {
+                            let (x, y) = ((lparam.0 & 0xFFFF) as i16 as i32, ((lparam.0 >> 16) & 0xFFFF) as i16 as i32);
+                            if !*active && ((x - *sx).abs() > GetSystemMetrics(SM_CXDRAG) || (y - *sy).abs() > GetSystemMetrics(SM_CYDRAG)) {
+                                *active = true;
+                            }
+                            if *active {
+                                // El cursor es el propio icono mientras se arrastra.
+                                if let Some(icon) = tray::icon_of(*id) {
+                                    SetCursor(Some(HCURSOR(icon.0)));
+                                }
+                                return;
+                            }
+                        }
                         let hit = f.hit(lparam);
                         if hit != f.hover {
                             f.hover = hit;
@@ -207,11 +244,39 @@ unsafe extern "system" fn flyout_proc(hwnd: HWND, msg: u32, wparam: WPARAM, lpar
                 });
                 LRESULT(0)
             }
-            WM_LBUTTONUP | WM_RBUTTONUP => {
+            WM_LBUTTONUP => {
+                let drag = FLYOUT.with_borrow_mut(|f| f.as_mut().and_then(|f| f.drag.take()));
+                if drag.is_some() {
+                    let _ = ReleaseCapture();
+                }
+                match drag {
+                    Some((id, _, _, true)) => {
+                        // Soltado sobre la barra principal: pasa a estar visible en ella.
+                        let mut pt = POINT::default();
+                        let mut bar = RECT::default();
+                        let _ = GetCursorPos(&mut pt);
+                        if GetWindowRect(crate::main_window(), &mut bar).is_ok() && PtInRect(&bar, pt).as_bool() {
+                            tray::set_promoted(id, true);
+                        }
+                    }
+                    Some((id, _, _, false)) => tray::click(id, false),
+                    None => {}
+                }
+                LRESULT(0)
+            }
+            WM_RBUTTONUP => {
                 let id = FLYOUT.with_borrow(|f| f.as_ref().and_then(|f| f.hit(lparam).map(|i| f.icons[i].0)));
                 if let Some(id) = id {
-                    tray::click(id, msg == WM_RBUTTONUP);
+                    tray::click(id, true);
                 }
+                LRESULT(0)
+            }
+            WM_CAPTURECHANGED => {
+                FLYOUT.with_borrow_mut(|f| {
+                    if let Some(f) = f.as_mut() {
+                        f.drag = None;
+                    }
+                });
                 LRESULT(0)
             }
             _ => DefWindowProcW(hwnd, msg, wparam, lparam),

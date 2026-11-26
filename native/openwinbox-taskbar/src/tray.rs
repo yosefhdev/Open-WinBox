@@ -80,6 +80,8 @@ pub struct Icon {
     exe: String,
     /// Visible en la barra (como "Otros iconos de la bandeja" de Windows); si no, va al desbordamiento.
     pub promoted: bool,
+    /// Subclave de `NotifyIconSettings` que Windows le asignó; ahí se guarda si es visible.
+    setting: Option<String>,
 }
 
 #[derive(Default)]
@@ -325,7 +327,8 @@ fn apply(data: ShellTrayData) -> bool {
                     Some(i) => i,
                     None => {
                         t.next_id += 1;
-                        let promoted = is_promoted(&entries, &exe, nid.uid, guid);
+                        let entry = match_entry(&entries, &exe, nid.uid, guid);
+                        let (promoted, setting) = (entry.is_some_and(|e| e.promoted), entry.map(|e| e.key.clone()));
                         t.icons.push(Icon {
                             id: t.next_id,
                             owner,
@@ -339,6 +342,7 @@ fn apply(data: ShellTrayData) -> bool {
                             pid,
                             exe,
                             promoted,
+                            setting,
                         });
                         t.icons.len() - 1
                     }
@@ -503,17 +507,21 @@ fn refresh_promoted() -> bool {
     TRAY.with_borrow_mut(|t| {
         let mut changed = false;
         for i in &mut t.icons {
-            let p = is_promoted(&entries, &i.exe, i.uid, i.guid);
+            let entry = match_entry(&entries, &i.exe, i.uid, i.guid);
+            let p = entry.is_some_and(|e| e.promoted);
             changed |= p != i.promoted;
             i.promoted = p;
+            if let Some(e) = entry {
+                i.setting = Some(e.key.clone());
+            }
         }
         changed
     })
 }
 
-fn is_promoted(entries: &[Entry], exe: &str, uid: u32, guid: Option<GUID>) -> bool {
+fn match_entry<'a>(entries: &'a [Entry], exe: &str, uid: u32, guid: Option<GUID>) -> Option<&'a Entry> {
     if exe.is_empty() {
-        return false;
+        return None;
     }
     // Entre las entradas del mismo exe, la de su UID (o GUID); si no, cualquiera de ese exe.
     let mut fallback = None;
@@ -526,14 +534,46 @@ fn is_promoted(entries: &[Entry], exe: &str, uid: u32, guid: Option<GUID>) -> bo
             None => entry.uid == Some(uid),
         };
         if same {
-            return entry.promoted;
+            return Some(entry);
         }
-        fallback.get_or_insert(entry.promoted);
+        fallback.get_or_insert(entry);
     }
-    fallback.unwrap_or(false)
+    fallback
+}
+
+/// Arrastre entre la barra y el desbordamiento: lo guarda donde Windows (`IsPromoted`), así la
+/// barra nativa y Configuración > Barra de tareas ven lo mismo.
+pub fn set_promoted(id: u32, promoted: bool) {
+    let Some(setting) = TRAY.with_borrow_mut(|t| {
+        let icon = t.icons.iter_mut().find(|i| i.id == id)?;
+        icon.promoted = promoted;
+        Some(icon.setting.clone())
+    }) else {
+        return;
+    };
+    match setting {
+        Some(key) => {
+            let path: Vec<u16> = format!(r"Control Panel\NotifyIconSettings\{key}").encode_utf16().chain([0]).collect();
+            let value = promoted as u32;
+            let err = unsafe {
+                RegSetKeyValueW(HKEY_CURRENT_USER, PCWSTR(path.as_ptr()), w!("IsPromoted"), REG_DWORD.0, Some(&value as *const u32 as *const c_void), 4)
+            };
+            if err.is_err() {
+                log(&format!("bandeja: no se pudo guardar IsPromoted en {key}: {err:?}"));
+            }
+        }
+        // shortcut: sin entrada de Windows solo dura la sesión; Explorer crea la entrada al registrar el icono, así que es raro.
+        None => log("bandeja: icono sin entrada en NotifyIconSettings; el cambio no se guarda"),
+    }
+    crate::bar::tray_changed();
+}
+
+pub fn icon_of(id: u32) -> Option<HICON> {
+    TRAY.with_borrow(|t| t.icons.iter().find(|i| i.id == id).map(|i| i.icon))
 }
 
 struct Entry {
+    key: String,
     exe: String,
     uid: Option<u32>,
     guid: Option<GUID>,
@@ -556,7 +596,8 @@ fn settings_entries() -> Vec<Entry> {
             // "{FOLDERID}\resto": la carpeta conocida va como GUID.
             let exe = folders.iter().find_map(|(g, path)| raw.get(..38).filter(|p| p.eq_ignore_ascii_case(g)).map(|_| format!("{path}{}", &raw[38..]))).unwrap_or(raw);
             let guid = reg_bytes::<GUID>(key, sub, w!("IconGuid"));
-            out.push(Entry { exe, uid: reg_dword(key, sub, w!("UID")), guid, promoted: reg_dword(key, sub, w!("IsPromoted")) == Some(1) });
+            let subkey = String::from_utf16_lossy(&name[..len as usize]);
+            out.push(Entry { key: subkey, exe, uid: reg_dword(key, sub, w!("UID")), guid, promoted: reg_dword(key, sub, w!("IsPromoted")) == Some(1) });
         }
     }
     out

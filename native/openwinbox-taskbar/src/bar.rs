@@ -104,6 +104,8 @@ struct Drag {
     start: f32,
     x: f32,
     active: bool,
+    /// Arrastre de un icono de la bandeja (id) en vez de un botón: soltarlo en el "^" lo oculta.
+    tray: Option<u32>,
 }
 
 /// Un botón de app: anclado, abierto o ambos. Anclados primero, en su orden; luego el resto.
@@ -694,9 +696,14 @@ impl App {
 
     fn mouse_down(&mut self, lparam: LPARAM) {
         self.pressed = self.hit(lparam);
-        if let Some(Item::Button(i)) = self.pressed {
-            let x = (lparam.0 & 0xFFFF) as i16 as f32;
-            self.drag = Some(Drag { from: i, start: x, x, active: false });
+        let x = (lparam.0 & 0xFFFF) as i16 as f32;
+        let drag = match self.pressed {
+            Some(Item::Button(i)) => Some(Drag { from: i, start: x, x, active: false, tray: None }),
+            Some(Item::Tray(id)) => Some(Drag { from: usize::MAX, start: x, x, active: false, tray: Some(id) }),
+            _ => None,
+        };
+        if drag.is_some() {
+            self.drag = drag;
             unsafe { SetCapture(self.hwnd) };
         }
         self.draw();
@@ -712,7 +719,10 @@ impl App {
         match drag {
             Some(d) if d.active => {
                 self.pressed = None;
-                self.drop_button(d);
+                match d.tray {
+                    Some(id) => self.drop_tray(id),
+                    None => self.drop_button(d),
+                }
                 self.draw();
             }
             _ => self.left_click(lparam),
@@ -735,6 +745,26 @@ impl App {
         let n = self.buttons.len();
         let (lo, hi) = if self.buttons[d.from].pin.is_some() { (0, pinned.saturating_sub(1)) } else { (pinned, n.saturating_sub(1)) };
         before.clamp(lo, hi.max(lo))
+    }
+
+    /// Icono de bandeja soltado en el "^" o en el desbordamiento abierto: pasa a estar oculto. Sin "^"
+    /// (todos visibles), basta con soltarlo por encima de la barra.
+    fn drop_tray(&mut self, id: u32) {
+        let mut pt = POINT::default();
+        unsafe {
+            let _ = GetCursorPos(&mut pt);
+        }
+        let overflow = self.layout().into_iter().find(|(i, _)| *i == Item::Overflow).map(|(_, r)| RECT {
+            left: self.bounds.left + r.left as i32,
+            top: self.bounds.top + r.top as i32,
+            right: self.bounds.left + r.right as i32,
+            bottom: self.bounds.top + r.bottom as i32,
+        });
+        let on_overflow = overflow.is_some_and(|r| unsafe { PtInRect(&r, pt) }.as_bool());
+        let above = overflow.is_none() && pt.y < self.bounds.top;
+        if on_overflow || above || crate::flyout::contains(pt) {
+            crate::tray::set_promoted(id, false);
+        }
     }
 
     fn drop_button(&mut self, d: Drag) {
@@ -772,6 +802,11 @@ impl App {
                 self.pressed = None;
             }
             if d.active {
+                if let Some(icon) = d.tray.and_then(crate::tray::icon_of) {
+                    // El cursor es el propio icono mientras se arrastra.
+                    unsafe { SetCursor(Some(HCURSOR(icon.0))) };
+                    return;
+                }
                 self.draw();
                 return;
             }
