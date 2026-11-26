@@ -8,9 +8,13 @@
 
 [![Download](https://img.shields.io/badge/Download-Windows%20installer-E9705A?style=for-the-badge)](https://github.com/yosefhdev/Open-WinBox/releases)
 
-![Version](https://img.shields.io/badge/version-1.0.0--beta.4-orange)
+![Version](https://img.shields.io/badge/version-1.0.0--beta.7-orange)
 ![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 [![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
+
+<br />
+
+<img src="docs/images/screenshots/openwinbox/widget-glance.png" width="675" alt="Glance widget with a photo, the time and the date" />
 
 </div>
 
@@ -31,6 +35,30 @@ OpenWinBox keeps that code, changes the name and identity so both apps can be in
 | 🕒 **Second time zone in Glance** | Show the time in another city next to the date. Pick the zone in *Settings → Glance → Font → Second time zone*. |
 
 Everything else comes from DeskBox. Its [README](https://github.com/Tianyu199509/DeskBox#readme) describes all the widgets in detail.
+
+## Screenshots
+
+### Widgets
+
+<p>
+  <img src="docs/images/screenshots/openwinbox/widget-battery.png" height="208" alt="Battery widget showing the PC, a headset and a mouse" />
+  <img src="docs/images/screenshots/openwinbox/widget-weather.png" height="208" alt="Weather widget with temperature, humidity, wind and precipitation" />
+  <img src="docs/images/screenshots/openwinbox/widget-files.png" height="208" alt="File widget with app shortcuts" />
+</p>
+
+### Settings
+
+<img src="docs/images/screenshots/openwinbox/settings-feature-widgets.png" width="680" alt="Feature widgets settings page" />
+
+### Taskbar (work in progress)
+
+The taskbar folders and the own taskbar are still under development.
+
+<p>
+  <img src="docs/images/screenshots/openwinbox/settings-taskbar-general.png" width="410" alt="Own taskbar settings with the Work in Progress notice" />
+  <img src="docs/images/screenshots/openwinbox/settings-taskbar-appearance.png" width="410" alt="Own taskbar appearance settings with the dock style" />
+  <img src="docs/images/screenshots/openwinbox/settings-taskbar-folders.png" width="410" alt="Taskbar folders settings" />
+</p>
 
 ## Can I run it next to DeskBox?
 

@@ -8,6 +8,7 @@ This folder keeps public README and release images. Use lowercase ASCII names so
 brand/                       Brand and product-level images
 screenshots/zh-cn/           Chinese UI screenshots
 screenshots/en-us/           English UI screenshots
+screenshots/openwinbox/      OpenWinBox README screenshots (English UI, one capture per window)
 ```
 
 ## Naming Rules
