@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="DeskBox.Views.SettingsSections.TaskbarAppearanceSettingsSection"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:svc="using:DeskBox.Services"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Styles/SettingsOverviewResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <!-- Own taskbar add-on look (taskbar/config.json). Disabled until it is installed. -->
+    <StackPanel Style="{StaticResource SectionPanelStyle}">
+        <TextBlock Style="{StaticResource SectionTitleTextStyle}" AutomationProperties.HeadingLevel="Level1" svc:Localized.Key="Settings.Section.Appearance" />
+        <StackPanel Margin="0,8,0,0" Spacing="4">
+            <InfoBar x:Name="NeedsInstallInfoBar" IsOpen="False" Severity="Informational" IsClosable="False" />
+
+            <StackPanel Spacing="4">
+                <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.Alignment.Title">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8E3;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ComboBox x:Name="TaskbarAlignmentComboBox" MinWidth="140" svc:Localized.AutomationNameKey="Taskbar.Addon.Alignment.Title" SelectionChanged="Option_Changed">
+                        <ComboBoxItem x:Name="TaskbarAlignmentCenterItem" Tag="center" />
+                        <ComboBoxItem x:Name="TaskbarAlignmentLeftItem" Tag="left" />
+                    </ComboBox>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.ShowSearch.Title">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE721;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.ShowSearch.Title" x:Name="TaskbarShowSearchToggle" MinWidth="0" OnContent="" OffContent="" Toggled="Option_Changed" />
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.ShowTaskView.Title">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE7C4;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.ShowTaskView.Title" x:Name="TaskbarShowTaskViewToggle" MinWidth="0" OnContent="" OffContent="" Toggled="Option_Changed" />
+                </toolkit:SettingsCard>
+            </StackPanel>
+
+            <InfoBar x:Name="ErrorInfoBar" IsOpen="False" Severity="Error" IsClosable="True" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

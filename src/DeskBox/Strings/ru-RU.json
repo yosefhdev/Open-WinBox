@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "Кнопка представления задач",
   "Taskbar.Addon.AllMonitors.Title": "Показывать на всех мониторах",
   "Taskbar.Addon.AllMonitors.Description": "Если выключено, на дополнительных мониторах нет панели, как в Windows.",
-  "Taskbar.Addon.SaveError": "Не удалось сохранить настройки панели: {0}"
+  "Taskbar.Addon.SaveError": "Не удалось сохранить настройки панели: {0}",
+  "Taskbar.Addon.NeedsInstall": "Установите панель задач в разделе «Общие», чтобы изменить эти параметры."
 }

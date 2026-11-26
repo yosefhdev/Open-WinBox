@@ -408,12 +408,31 @@ begin
     Exit;
   end;
 
+  // The own taskbar add-on (openwinbox-taskbar.exe) hides the Explorer taskbar.
+  // Ask it to quit through its pipe first, so it shows the native one again;
+  // if it had to be killed, show Explorer's taskbar windows here and drop the
+  // native-hidden mark (same as NativeTaskbarRecovery in the app).
   CommandLine :=
     '$target = [System.IO.Path]::GetFullPath(''' + EscapePowerShellString(InstallPath) + ''').TrimEnd(''\''); ' +
-    'Get-CimInstance Win32_Process | ' +
-    'Where-Object { (@(''OpenWinBox.exe'', ''DeskBox.ThumbnailProxy.exe'') -icontains $_.Name) -and $_.ExecutablePath -and ' +
-    '([System.IO.Path]::GetDirectoryName($_.ExecutablePath)).TrimEnd(''\'') -ieq $target } | ' +
-    'ForEach-Object { Stop-Process -Id $_.ProcessId -Force }';
+    '$names = @(''OpenWinBox.exe'', ''DeskBox.ThumbnailProxy.exe'', ''openwinbox-taskbar.exe''); ' +
+    'function Get-Owned { @(Get-CimInstance Win32_Process | ' +
+    'Where-Object { ($names -icontains $_.Name) -and $_.ExecutablePath -and ' +
+    '([System.IO.Path]::GetDirectoryName($_.ExecutablePath)).TrimEnd(''\'') -ieq $target }) } ' +
+    '$bar = @(Get-Owned | Where-Object { $_.Name -ieq ''openwinbox-taskbar.exe'' }); ' +
+    'if ($bar.Count -gt 0) { ' +
+    'try { $pipe = New-Object System.IO.Pipes.NamedPipeClientStream(''.'', (''OpenWinBox.Taskbar.'' + [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value), [System.IO.Pipes.PipeDirection]::InOut); ' +
+    '$pipe.Connect(500); $bytes = [System.Text.Encoding]::UTF8.GetBytes(''shutdown'' + [char]10); $pipe.Write($bytes, 0, $bytes.Length); $pipe.Flush(); ' +
+    '[void](New-Object System.IO.StreamReader($pipe)).ReadLine(); $pipe.Dispose() } catch { } ' +
+    'foreach ($p in $bar) { Wait-Process -Id $p.ProcessId -Timeout 3 -ErrorAction SilentlyContinue } } ' +
+    'Get-Owned | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue; Wait-Process -Id $_.ProcessId -Timeout 3 -ErrorAction SilentlyContinue }; ' +
+    '$mark = Join-Path $env:LOCALAPPDATA ''OpenWinBox\Taskbar\native-hidden''; ' +
+    'if (Test-Path -LiteralPath $mark) { $q = [char]34; ' +
+    'Add-Type -Namespace OpenWinBoxSetup -Name User32 -MemberDefinition (''[DllImport('' + $q + ''user32.dll'' + $q + '', CharSet = CharSet.Unicode)] public static extern IntPtr FindWindowEx(IntPtr parent, IntPtr after, string cls, string title); '' + ' +
+    '''[DllImport('' + $q + ''user32.dll'' + $q + '')] public static extern bool ShowWindow(IntPtr hwnd, int cmd);''); ' +
+    'foreach ($cls in @(''Shell_TrayWnd'', ''Shell_SecondaryTrayWnd'')) { $h = [IntPtr]::Zero; ' +
+    'while (($h = [OpenWinBoxSetup.User32]::FindWindowEx([IntPtr]::Zero, $h, $cls, [NullString]::Value)) -ne [IntPtr]::Zero) { [void][OpenWinBoxSetup.User32]::ShowWindow($h, 4) } } ' +
+    'Remove-Item -LiteralPath $mark -Force -ErrorAction SilentlyContinue } ' +
+    'if (@(Get-Owned).Count -gt 0) { exit 1 }';
   Parameters := '-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "' + CommandLine + '"';
 
   Log('DeskBox stopping processes under: ' + InstallPath);

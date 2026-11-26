@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "Bouton Vue des tâches",
   "Taskbar.Addon.AllMonitors.Title": "Afficher sur tous les écrans",
   "Taskbar.Addon.AllMonitors.Description": "Désactivé, les écrans secondaires n’ont pas de barre, comme dans Windows.",
-  "Taskbar.Addon.SaveError": "Impossible d’enregistrer les réglages de la barre : {0}"
+  "Taskbar.Addon.SaveError": "Impossible d’enregistrer les réglages de la barre : {0}",
+  "Taskbar.Addon.NeedsInstall": "Installez la barre des tâches dans Général pour modifier ces options."
 }

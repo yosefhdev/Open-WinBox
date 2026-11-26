@@ -97,6 +97,12 @@ public sealed partial class SettingsWindow
             case GlanceWidgetSettingsSection glanceSettings:
                 glanceSettings.Configure(_widgetActions, _hWnd);
                 break;
+            case TaskbarGeneralSettingsSection taskbarGeneral:
+                taskbarGeneral.Configure(_localizationService);
+                break;
+            case TaskbarAppearanceSettingsSection taskbarAppearance:
+                taskbarAppearance.Configure(_localizationService);
+                break;
             case TaskbarFoldersSettingsSection taskbarFolders:
                 taskbarFolders.Configure(_localizationService, _hWnd);
                 break;

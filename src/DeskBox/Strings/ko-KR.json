@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "작업 보기 버튼",
   "Taskbar.Addon.AllMonitors.Title": "모든 모니터에 표시",
   "Taskbar.Addon.AllMonitors.Description": "끄면 Windows처럼 보조 모니터에 작업 표시줄이 없습니다.",
-  "Taskbar.Addon.SaveError": "작업 표시줄 설정을 저장하지 못했습니다: {0}"
+  "Taskbar.Addon.SaveError": "작업 표시줄 설정을 저장하지 못했습니다: {0}",
+  "Taskbar.Addon.NeedsInstall": "이 옵션을 변경하려면 일반에서 작업 표시줄을 설치하세요."
 }

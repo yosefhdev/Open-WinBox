@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "Schaltfläche Aufgabenansicht",
   "Taskbar.Addon.AllMonitors.Title": "Auf allen Monitoren anzeigen",
   "Taskbar.Addon.AllMonitors.Description": "Aus: Zweitmonitore haben keine Taskleiste, wie in Windows.",
-  "Taskbar.Addon.SaveError": "Die Taskleisteneinstellungen konnten nicht gespeichert werden: {0}"
+  "Taskbar.Addon.SaveError": "Die Taskleisteneinstellungen konnten nicht gespeichert werden: {0}",
+  "Taskbar.Addon.NeedsInstall": "Installieren Sie die Taskleiste unter Allgemein, um diese Optionen zu ändern."
 }

@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "Task view button",
   "Taskbar.Addon.AllMonitors.Title": "Show on all monitors",
   "Taskbar.Addon.AllMonitors.Description": "When off, secondary monitors have no taskbar, as in Windows.",
-  "Taskbar.Addon.SaveError": "Could not save the taskbar settings: {0}"
+  "Taskbar.Addon.SaveError": "Could not save the taskbar settings: {0}",
+  "Taskbar.Addon.NeedsInstall": "Install the taskbar in General to change these options."
 }

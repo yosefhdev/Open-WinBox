@@ -18,61 +18,6 @@
         <StackPanel Style="{StaticResource SectionPanelStyle}">
             <TextBlock Style="{StaticResource SectionTitleTextStyle}" AutomationProperties.HeadingLevel="Level1" svc:Localized.Key="Settings.Section.TaskbarFolders" />
             <StackPanel Margin="0,8,0,0" Spacing="4">
-                <!-- Own taskbar add-on: hidden when the build does not ship openwinbox-taskbar.exe. -->
-                <toolkit:SettingsCard
-                    x:Name="TaskbarAddonCard"
-                    Visibility="Collapsed"
-                    svc:Localized.HeaderKey="Taskbar.Addon.Title">
-                    <toolkit:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE90C;" />
-                    </toolkit:SettingsCard.HeaderIcon>
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <ProgressRing x:Name="TaskbarAddonBusy" Width="16" Height="16" IsActive="False" Visibility="Collapsed" />
-                        <Button x:Name="TaskbarAddonUninstallButton" Click="TaskbarAddonUninstallButton_Click">
-                            <TextBlock svc:Localized.Key="Taskbar.Addon.Uninstall" />
-                        </Button>
-                        <Button x:Name="TaskbarAddonPauseButton" Click="TaskbarAddonPauseButton_Click">
-                            <TextBlock svc:Localized.Key="Taskbar.Addon.Pause" />
-                        </Button>
-                        <Button x:Name="TaskbarAddonStartButton" Style="{StaticResource AccentButtonStyle}" Click="TaskbarAddonStartButton_Click">
-                            <TextBlock x:Name="TaskbarAddonStartText" />
-                        </Button>
-                    </StackPanel>
-                </toolkit:SettingsCard>
-
-                <!-- Add-on options (taskbar/config.json); only while it is installed. -->
-                <StackPanel x:Name="TaskbarAddonOptions" Spacing="4" Visibility="Collapsed">
-                    <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.Alignment.Title">
-                        <toolkit:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE8E3;" />
-                        </toolkit:SettingsCard.HeaderIcon>
-                        <ComboBox x:Name="TaskbarAlignmentComboBox" MinWidth="140" svc:Localized.AutomationNameKey="Taskbar.Addon.Alignment.Title" SelectionChanged="TaskbarAddonOption_Changed">
-                            <ComboBoxItem x:Name="TaskbarAlignmentCenterItem" Tag="center" />
-                            <ComboBoxItem x:Name="TaskbarAlignmentLeftItem" Tag="left" />
-                        </ComboBox>
-                    </toolkit:SettingsCard>
-                    <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.ShowSearch.Title">
-                        <toolkit:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE721;" />
-                        </toolkit:SettingsCard.HeaderIcon>
-                        <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.ShowSearch.Title" x:Name="TaskbarShowSearchToggle" MinWidth="0" OnContent="" OffContent="" Toggled="TaskbarAddonOption_Changed" />
-                    </toolkit:SettingsCard>
-                    <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.ShowTaskView.Title">
-                        <toolkit:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE7C4;" />
-                        </toolkit:SettingsCard.HeaderIcon>
-                        <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.ShowTaskView.Title" x:Name="TaskbarShowTaskViewToggle" MinWidth="0" OnContent="" OffContent="" Toggled="TaskbarAddonOption_Changed" />
-                    </toolkit:SettingsCard>
-                    <toolkit:SettingsCard
-                        svc:Localized.HeaderKey="Taskbar.Addon.AllMonitors.Title"
-                        svc:Localized.DescriptionKey="Taskbar.Addon.AllMonitors.Description">
-                        <toolkit:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE7F4;" />
-                        </toolkit:SettingsCard.HeaderIcon>
-                        <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.AllMonitors.Title" x:Name="TaskbarAllMonitorsToggle" MinWidth="0" OnContent="" OffContent="" Toggled="TaskbarAddonOption_Changed" />
-                    </toolkit:SettingsCard>
-                </StackPanel>
-
                 <toolkit:SettingsCard
                     svc:Localized.HeaderKey="TaskbarFolders.Intro.Title"
                     svc:Localized.DescriptionKey="TaskbarFolders.Intro">

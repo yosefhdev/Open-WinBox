@@ -69,7 +69,7 @@ UsePreviousPrivileges=yes
 CloseApplications=force
 ; The short-lived thumbnail proxy batches can outlive a killed host when a
 ; shell handler hangs, so Restart Manager must cover it as well.
-CloseApplicationsFilter={#MyAppExeName},DeskBox.ThumbnailProxy.exe
+CloseApplicationsFilter={#MyAppExeName},DeskBox.ThumbnailProxy.exe,openwinbox-taskbar.exe
 RestartApplications=no
 OutputDir=..\Output
 #if DeskBoxBundledRuntime

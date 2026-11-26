@@ -1,3 +1,4 @@
+using DeskBox.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -14,7 +15,10 @@ public sealed partial class SettingsWindow
     private const int TaskbarArea = 1;
     private bool _isSyncingSettingsArea;
 
-    private static bool IsTaskbarAreaNavTag(string navTag) => navTag == "TaskbarFolders";
+    private static bool IsTaskbarAreaNavTag(string navTag) => navTag.StartsWith("Taskbar", StringComparison.Ordinal);
+
+    /// <summary>General and Appearance belong to the own taskbar add-on; builds without it only have folders.</summary>
+    private static bool IsTaskbarAddonNavTag(string navTag) => navTag is "TaskbarGeneral" or "TaskbarAppearance";
 
     private void SettingsAreaSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -31,7 +35,8 @@ public sealed partial class SettingsWindow
             return;
         }
         ApplySettingsAreaVisibility(area);
-        NavigateToSettingsSection(area == TaskbarArea ? "TaskbarFolders" : "General");
+        NavigateToSettingsSection(area != TaskbarArea ? "General"
+            : File.Exists(TaskbarHostService.ExePath) ? "TaskbarGeneral" : "TaskbarFolders");
     }
 
     /// <summary>Keeps the selector on the right area when a section is opened by search or deep link.</summary>
@@ -61,12 +66,13 @@ public sealed partial class SettingsWindow
 
     private void ApplySettingsAreaVisibility(int area)
     {
+        bool addonAvailable = File.Exists(TaskbarHostService.ExePath);
         foreach (object item in SettingsNavigationView.MenuItems)
         {
             if (item is NavigationViewItem { Tag: string tag } navItem)
             {
                 bool inTaskbarArea = IsTaskbarAreaNavTag(tag);
-                navItem.Visibility = inTaskbarArea == (area == TaskbarArea)
+                navItem.Visibility = inTaskbarArea == (area == TaskbarArea) && (addonAvailable || !IsTaskbarAddonNavTag(tag))
                     ? Visibility.Visible
                     : Visibility.Collapsed;
             }

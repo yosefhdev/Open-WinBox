@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "টাস্ক ভিউ বোতাম",
   "Taskbar.Addon.AllMonitors.Title": "সব মনিটরে দেখান",
   "Taskbar.Addon.AllMonitors.Description": "বন্ধ থাকলে, Windows-এর মতো সেকেন্ডারি মনিটরে কোনো টাস্কবার থাকে না।",
-  "Taskbar.Addon.SaveError": "টাস্কবারের সেটিংস সংরক্ষণ করা যায়নি: {0}"
+  "Taskbar.Addon.SaveError": "টাস্কবারের সেটিংস সংরক্ষণ করা যায়নি: {0}",
+  "Taskbar.Addon.NeedsInstall": "এই বিকল্পগুলো বদলাতে সাধারণ থেকে টাস্কবার ইনস্টল করুন।"
 }

@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "任务视图按钮",
   "Taskbar.Addon.AllMonitors.Title": "在所有显示器上显示",
   "Taskbar.Addon.AllMonitors.Description": "关闭后，副显示器上没有任务栏，与 Windows 相同。",
-  "Taskbar.Addon.SaveError": "无法保存任务栏设置：{0}"
+  "Taskbar.Addon.SaveError": "无法保存任务栏设置：{0}",
+  "Taskbar.Addon.NeedsInstall": "请在“常规”中安装任务栏以更改这些选项。"
 }

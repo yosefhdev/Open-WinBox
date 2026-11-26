@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "زر عرض المهام",
   "Taskbar.Addon.AllMonitors.Title": "العرض على كل الشاشات",
   "Taskbar.Addon.AllMonitors.Description": "عند إيقافه، تبقى الشاشات الثانوية بلا شريط، كما في Windows.",
-  "Taskbar.Addon.SaveError": "تعذّر حفظ إعدادات الشريط: {0}"
+  "Taskbar.Addon.SaveError": "تعذّر حفظ إعدادات الشريط: {0}",
+  "Taskbar.Addon.NeedsInstall": "ثبّت شريط المهام من «عام» لتغيير هذه الخيارات."
 }

@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "タスク ビュー ボタン",
   "Taskbar.Addon.AllMonitors.Title": "すべてのモニターに表示",
   "Taskbar.Addon.AllMonitors.Description": "オフにすると、Windows と同様にサブモニターにはタスクバーが表示されません。",
-  "Taskbar.Addon.SaveError": "タスクバーの設定を保存できませんでした: {0}"
+  "Taskbar.Addon.SaveError": "タスクバーの設定を保存できませんでした: {0}",
+  "Taskbar.Addon.NeedsInstall": "これらのオプションを変更するには、[全般] でタスクバーをインストールしてください。"
 }

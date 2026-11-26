@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "工作檢視按鈕",
   "Taskbar.Addon.AllMonitors.Title": "在所有顯示器上顯示",
   "Taskbar.Addon.AllMonitors.Description": "關閉後，副顯示器上沒有工作列，與 Windows 相同。",
-  "Taskbar.Addon.SaveError": "無法儲存工作列設定：{0}"
+  "Taskbar.Addon.SaveError": "無法儲存工作列設定：{0}",
+  "Taskbar.Addon.NeedsInstall": "請在「一般」中安裝工作列以變更這些選項。"
 }

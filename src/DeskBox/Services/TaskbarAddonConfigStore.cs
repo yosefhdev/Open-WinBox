@@ -68,6 +68,14 @@ public static class TaskbarAddonConfigStore
         File.Move(temp, ConfigPath, overwrite: true);
     }
 
+    /// <summary>Re-reads the file (so a newer version is honoured by Save), applies the change and saves.</summary>
+    public static void Update(Action<TaskbarAddonConfig> change)
+    {
+        TaskbarAddonConfig config = Load();
+        change(config);
+        Save(config);
+    }
+
     /// <summary>Writes the defaults on install so the file is there to inspect and edit.</summary>
     public static void EnsureExists()
     {

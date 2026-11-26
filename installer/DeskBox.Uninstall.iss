@@ -975,6 +975,8 @@ begin
       RemoveStartupRegistryEntry;
       RemoveTaskbarPinnedShortcut;
       RemoveAppCompatFlag;
+      // Own taskbar add-on flags (Installed/Paused/DataRoot); its exe left with {app}.
+      RegDeleteKeyIncludingSubkeys(HKCU, 'Software\OpenWinBox\Taskbar');
       RemoveNotificationRegistration;
       RemoveDeskBoxDataDirectories;
       if PurgeDeskBoxAppData then

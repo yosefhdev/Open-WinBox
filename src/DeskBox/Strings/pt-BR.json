@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "Botão de visão de tarefas",
   "Taskbar.Addon.AllMonitors.Title": "Mostrar em todos os monitores",
   "Taskbar.Addon.AllMonitors.Description": "Desligado, os monitores secundários ficam sem barra, como no Windows.",
-  "Taskbar.Addon.SaveError": "Não foi possível salvar as configurações da barra: {0}"
+  "Taskbar.Addon.SaveError": "Não foi possível salvar as configurações da barra: {0}",
+  "Taskbar.Addon.NeedsInstall": "Instale a barra de tarefas em Geral para alterar estas opções."
 }

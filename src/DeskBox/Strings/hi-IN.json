@@ -3099,5 +3099,6 @@
   "Taskbar.Addon.ShowTaskView.Title": "टास्क व्यू बटन",
   "Taskbar.Addon.AllMonitors.Title": "सभी मॉनिटर पर दिखाएँ",
   "Taskbar.Addon.AllMonitors.Description": "बंद होने पर, Windows की तरह द्वितीयक मॉनिटर पर टास्कबार नहीं होता।",
-  "Taskbar.Addon.SaveError": "टास्कबार सेटिंग्स सहेजी नहीं जा सकीं: {0}"
+  "Taskbar.Addon.SaveError": "टास्कबार सेटिंग्स सहेजी नहीं जा सकीं: {0}",
+  "Taskbar.Addon.NeedsInstall": "इन विकल्पों को बदलने के लिए सामान्य में टास्कबार इंस्टॉल करें।"
 }

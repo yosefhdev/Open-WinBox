@@ -314,6 +314,30 @@ Text="OpenWinBox" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem
+                    Tag="TaskbarGeneral"
+                    Visibility="Collapsed"
+                    svc:Localized.Key="Settings.Nav.General">
+                    <NavigationViewItem.Icon>
+                        <ImageIcon Style="{StaticResource SettingsNavImageIconStyle}">
+                            <ImageIcon.Source>
+                                <media:SvgImageSource UriSource="ms-appx:///Assets/SettingsNavIcons/general.svg" />
+                            </ImageIcon.Source>
+                        </ImageIcon>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem
+                    Tag="TaskbarAppearance"
+                    Visibility="Collapsed"
+                    svc:Localized.Key="Settings.Nav.Appearance">
+                    <NavigationViewItem.Icon>
+                        <ImageIcon Style="{StaticResource SettingsNavImageIconStyle}">
+                            <ImageIcon.Source>
+                                <media:SvgImageSource UriSource="ms-appx:///Assets/SettingsNavIcons/appearance.svg" />
+                            </ImageIcon.Source>
+                        </ImageIcon>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem
                     x:Name="TaskbarFoldersNavItem"
                     Tag="TaskbarFolders"
                     Visibility="Collapsed"
@@ -1145,6 +1169,12 @@ Text="OpenWinBox" />
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
+                    </DataTemplate>
+                    <DataTemplate x:Key="TaskbarGeneralSectionTemplate" x:DataType="viewModels:SettingsViewModel">
+                        <sections:TaskbarGeneralSettingsSection x:Name="TaskbarGeneralSection" Visibility="Collapsed" />
+                    </DataTemplate>
+                    <DataTemplate x:Key="TaskbarAppearanceSectionTemplate" x:DataType="viewModels:SettingsViewModel">
+                        <sections:TaskbarAppearanceSettingsSection x:Name="TaskbarAppearanceSection" Visibility="Collapsed" />
                     </DataTemplate>
                     <DataTemplate x:Key="TaskbarFoldersSectionTemplate" x:DataType="viewModels:SettingsViewModel">
                         <sections:TaskbarFoldersSettingsSection x:Name="TaskbarFoldersSection" Visibility="Collapsed" />
