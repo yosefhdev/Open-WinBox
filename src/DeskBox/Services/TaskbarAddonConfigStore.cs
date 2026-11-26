@@ -21,6 +21,40 @@ public sealed class TaskbarAddonConfig
 
     /// <summary>False = no bar on secondary monitors, like Windows' "show on all displays".</summary>
     public bool ShowOnAllMonitors { get; set; } = true;
+
+    /// <summary>"acrylic", "blur", "solid" (opaque) or "transparent" (tint without blur).</summary>
+    public string Background { get; set; } = "acrylic";
+
+    /// <summary>"#RRGGBB".</summary>
+    public string TintColor { get; set; } = "#202020";
+
+    /// <summary>0–100; ignored by "solid".</summary>
+    public int TintOpacity { get; set; } = 80;
+
+    /// <summary>Icon side at 96 DPI, 16–40 (the bar clamps it).</summary>
+    public int IconSize { get; set; } = 24;
+
+    /// <summary>Extra space between buttons at 96 DPI, 0–24.</summary>
+    public int Spacing { get; set; } = 0;
+
+    /// <summary>Button highlight radius at 96 DPI, 0–12.</summary>
+    public int CornerRadius { get; set; } = 4;
+
+    /// <summary>Bar height at 96 DPI, 32–96; 0 = Windows' taskbar height.</summary>
+    public int Height { get; set; }
+
+    /// <summary>Gap to the left, right and bottom screen edges at 96 DPI, 0–48.</summary>
+    public int Margin { get; set; }
+
+    /// <summary>Bar corner radius at 96 DPI, 0–32.</summary>
+    public int BarRadius { get; set; }
+
+    /// <summary>"full" (edge to edge) or "auto" (fits its icons, dock style).</summary>
+    public string Width { get; set; } = "full";
+
+    public bool ShowBorder { get; set; }
+
+    public bool ShowClock { get; set; } = true;
 }
 
 [JsonSourceGenerationOptions(WriteIndented = true, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]

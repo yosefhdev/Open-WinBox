@@ -11,6 +11,18 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ms-appx:///Styles/SettingsOverviewResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <!-- Same slider look as SettingsWindow.xaml / CapsuleModeSettingsSection.xaml. -->
+            <Style x:Key="InlineMetricSliderStyle" TargetType="Slider" BasedOn="{StaticResource DefaultSliderStyle}">
+                <Setter Property="Width" Value="300" />
+                <Setter Property="MinWidth" Value="220" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="IsThumbToolTipEnabled" Value="False" />
+            </Style>
+            <Style x:Key="SliderSettingValueTextStyle" TargetType="TextBlock" BasedOn="{StaticResource SettingValueTextStyle}">
+                <Setter Property="MinWidth" Value="42" />
+                <Setter Property="TextAlignment" Value="Right" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -20,15 +32,119 @@
         <StackPanel Margin="0,8,0,0" Spacing="4">
             <InfoBar x:Name="NeedsInstallInfoBar" IsOpen="False" Severity="Informational" IsClosable="False" />
 
-            <StackPanel Spacing="4">
+            <StackPanel x:Name="OptionsPanel" Spacing="4">
+                <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.Presets.Title">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE771;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Click="ResetPreset_Click">
+                            <TextBlock svc:Localized.Key="Taskbar.Addon.Presets.Reset" />
+                        </Button>
+                        <Button Style="{StaticResource AccentButtonStyle}" Click="DockPreset_Click">
+                            <TextBlock svc:Localized.Key="Taskbar.Addon.Presets.Dock" />
+                        </Button>
+                    </StackPanel>
+                </toolkit:SettingsCard>
+
+                <toolkit:SettingsExpander svc:Localized.HeaderKey="Taskbar.Addon.Shape.Title">
+                    <toolkit:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xE737;" />
+                    </toolkit:SettingsExpander.HeaderIcon>
+                    <ComboBox x:Name="WidthComboBox" MinWidth="{StaticResource SettingsControlMinWidth}" svc:Localized.AutomationNameKey="Taskbar.Addon.Shape.Title" SelectionChanged="Option_Changed">
+                        <ComboBoxItem x:Name="WidthFullItem" Tag="full" />
+                        <ComboBoxItem x:Name="WidthAutoItem" Tag="auto" />
+                    </ComboBox>
+                    <toolkit:SettingsExpander.Items>
+                        <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.NativeHeight.Title">
+                            <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.NativeHeight.Title" x:Name="NativeHeightToggle" MinWidth="0" OnContent="" OffContent="" Toggled="Option_Changed" />
+                        </toolkit:SettingsCard>
+                        <toolkit:SettingsCard
+                            x:Name="HeightCard"
+                            HorizontalContentAlignment="Right"
+                            svc:Localized.HeaderKey="Taskbar.Addon.Height.Title"
+                            svc:Localized.DescriptionKey="Taskbar.Addon.Height.Description">
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                                <TextBlock Style="{StaticResource SliderSettingValueTextStyle}" Text="{x:Bind HeightSlider.Value, Mode=OneWay}" />
+                                <Slider x:Name="HeightSlider" svc:Localized.AutomationNameKey="Taskbar.Addon.Height.Title" Minimum="32" Maximum="96" StepFrequency="1" Style="{StaticResource InlineMetricSliderStyle}" ValueChanged="Option_Changed" />
+                            </StackPanel>
+                        </toolkit:SettingsCard>
+                        <toolkit:SettingsCard HorizontalContentAlignment="Right" svc:Localized.HeaderKey="Taskbar.Addon.Margin.Title">
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                                <TextBlock Style="{StaticResource SliderSettingValueTextStyle}" Text="{x:Bind MarginSlider.Value, Mode=OneWay}" />
+                                <Slider x:Name="MarginSlider" svc:Localized.AutomationNameKey="Taskbar.Addon.Margin.Title" Minimum="0" Maximum="48" StepFrequency="1" Style="{StaticResource InlineMetricSliderStyle}" ValueChanged="Option_Changed" />
+                            </StackPanel>
+                        </toolkit:SettingsCard>
+                        <toolkit:SettingsCard HorizontalContentAlignment="Right" svc:Localized.HeaderKey="Taskbar.Addon.BarRadius.Title">
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                                <TextBlock Style="{StaticResource SliderSettingValueTextStyle}" Text="{x:Bind BarRadiusSlider.Value, Mode=OneWay}" />
+                                <Slider x:Name="BarRadiusSlider" svc:Localized.AutomationNameKey="Taskbar.Addon.BarRadius.Title" Minimum="0" Maximum="32" StepFrequency="1" Style="{StaticResource InlineMetricSliderStyle}" ValueChanged="Option_Changed" />
+                            </StackPanel>
+                        </toolkit:SettingsCard>
+                        <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.ShowBorder.Title">
+                            <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.ShowBorder.Title" x:Name="ShowBorderToggle" MinWidth="0" OnContent="" OffContent="" Toggled="Option_Changed" />
+                        </toolkit:SettingsCard>
+                    </toolkit:SettingsExpander.Items>
+                </toolkit:SettingsExpander>
+
+                <toolkit:SettingsExpander svc:Localized.HeaderKey="Taskbar.Addon.Background.Title">
+                    <toolkit:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xE790;" />
+                    </toolkit:SettingsExpander.HeaderIcon>
+                    <ComboBox x:Name="BackgroundComboBox" MinWidth="{StaticResource SettingsControlMinWidth}" svc:Localized.AutomationNameKey="Taskbar.Addon.Background.Title" SelectionChanged="Option_Changed">
+                        <ComboBoxItem x:Name="BackgroundAcrylicItem" Tag="acrylic" />
+                        <ComboBoxItem x:Name="BackgroundBlurItem" Tag="blur" />
+                        <ComboBoxItem x:Name="BackgroundSolidItem" Tag="solid" />
+                        <ComboBoxItem x:Name="BackgroundTransparentItem" Tag="transparent" />
+                    </ComboBox>
+                    <toolkit:SettingsExpander.Items>
+                        <toolkit:SettingsCard HorizontalContentAlignment="Right" svc:Localized.HeaderKey="Taskbar.Addon.TintColor.Title">
+                            <toolkit:ColorPickerButton x:Name="TintColorPicker" Width="72" Height="34" MinWidth="72" HorizontalAlignment="Right" />
+                        </toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Name="TintOpacityCard" HorizontalContentAlignment="Right" svc:Localized.HeaderKey="Taskbar.Addon.TintOpacity.Title">
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                                <TextBlock Style="{StaticResource SliderSettingValueTextStyle}" Text="{x:Bind TintOpacitySlider.Value, Mode=OneWay}" />
+                                <Slider x:Name="TintOpacitySlider" svc:Localized.AutomationNameKey="Taskbar.Addon.TintOpacity.Title" Minimum="0" Maximum="100" StepFrequency="1" Style="{StaticResource InlineMetricSliderStyle}" ValueChanged="Option_Changed" />
+                            </StackPanel>
+                        </toolkit:SettingsCard>
+                    </toolkit:SettingsExpander.Items>
+                </toolkit:SettingsExpander>
+
                 <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.Alignment.Title">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8E3;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ComboBox x:Name="TaskbarAlignmentComboBox" MinWidth="140" svc:Localized.AutomationNameKey="Taskbar.Addon.Alignment.Title" SelectionChanged="Option_Changed">
+                    <ComboBox x:Name="TaskbarAlignmentComboBox" MinWidth="{StaticResource SettingsControlMinWidth}" svc:Localized.AutomationNameKey="Taskbar.Addon.Alignment.Title" SelectionChanged="Option_Changed">
                         <ComboBoxItem x:Name="TaskbarAlignmentCenterItem" Tag="center" />
                         <ComboBoxItem x:Name="TaskbarAlignmentLeftItem" Tag="left" />
                     </ComboBox>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard HorizontalContentAlignment="Right" svc:Localized.HeaderKey="Taskbar.Addon.IconSize.Title">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE740;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                        <TextBlock Style="{StaticResource SliderSettingValueTextStyle}" Text="{x:Bind IconSizeSlider.Value, Mode=OneWay}" />
+                        <Slider x:Name="IconSizeSlider" svc:Localized.AutomationNameKey="Taskbar.Addon.IconSize.Title" Minimum="16" Maximum="40" StepFrequency="1" Style="{StaticResource InlineMetricSliderStyle}" ValueChanged="Option_Changed" />
+                    </StackPanel>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard HorizontalContentAlignment="Right" svc:Localized.HeaderKey="Taskbar.Addon.Spacing.Title">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8A9;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                        <TextBlock Style="{StaticResource SliderSettingValueTextStyle}" Text="{x:Bind SpacingSlider.Value, Mode=OneWay}" />
+                        <Slider x:Name="SpacingSlider" svc:Localized.AutomationNameKey="Taskbar.Addon.Spacing.Title" Minimum="0" Maximum="24" StepFrequency="1" Style="{StaticResource InlineMetricSliderStyle}" ValueChanged="Option_Changed" />
+                    </StackPanel>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard HorizontalContentAlignment="Right" svc:Localized.HeaderKey="Taskbar.Addon.CornerRadius.Title">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE71A;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                        <TextBlock Style="{StaticResource SliderSettingValueTextStyle}" Text="{x:Bind CornerRadiusSlider.Value, Mode=OneWay}" />
+                        <Slider x:Name="CornerRadiusSlider" svc:Localized.AutomationNameKey="Taskbar.Addon.CornerRadius.Title" Minimum="0" Maximum="12" StepFrequency="1" Style="{StaticResource InlineMetricSliderStyle}" ValueChanged="Option_Changed" />
+                    </StackPanel>
                 </toolkit:SettingsCard>
                 <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.ShowSearch.Title">
                     <toolkit:SettingsCard.HeaderIcon>
@@ -41,6 +157,12 @@
                         <FontIcon Glyph="&#xE7C4;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.ShowTaskView.Title" x:Name="TaskbarShowTaskViewToggle" MinWidth="0" OnContent="" OffContent="" Toggled="Option_Changed" />
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard svc:Localized.HeaderKey="Taskbar.Addon.ShowClock.Title">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE823;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch svc:Localized.AutomationNameKey="Taskbar.Addon.ShowClock.Title" x:Name="ShowClockToggle" MinWidth="0" OnContent="" OffContent="" Toggled="Option_Changed" />
                 </toolkit:SettingsCard>
             </StackPanel>
 

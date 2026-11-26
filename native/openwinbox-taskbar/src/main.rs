@@ -7,13 +7,17 @@
 //!   --exit-after <s>          barra que se cierra sola (pruebas)
 //!   --watchdog <pid>          vigilante: restaura la barra nativa si <pid> muere sin hacerlo
 
+mod appbar;
 mod bar;
 mod config;
+mod flyout;
 mod ipc;
 mod pins;
 mod render;
 mod shell;
+mod status;
 mod tasks;
+mod tray;
 
 use std::io::Write;
 use std::sync::atomic::{AtomicIsize, Ordering};

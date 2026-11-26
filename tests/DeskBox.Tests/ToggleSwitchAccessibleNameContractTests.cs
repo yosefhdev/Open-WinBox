@@ -21,7 +21,7 @@ public sealed class ToggleSwitchAccessibleNameContractTests
         { "src/DeskBox/Views/SettingsSections/DesktopOrganizationSettingsSection.xaml", 2 },
         { "src/DeskBox/Views/SettingsSections/CapsuleModeSettingsSection.xaml", 1 },
         { "src/DeskBox/Views/SettingsSections/TaskbarGeneralSettingsSection.xaml", 1 },
-        { "src/DeskBox/Views/SettingsSections/TaskbarAppearanceSettingsSection.xaml", 2 },
+        { "src/DeskBox/Views/SettingsSections/TaskbarAppearanceSettingsSection.xaml", 5 },
         { "src/DeskBox/Views/OnboardingWindow.xaml", 6 },
     };
 

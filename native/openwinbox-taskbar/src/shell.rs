@@ -21,7 +21,7 @@ pub const SECONDARY_CLASS: PCWSTR = w!("Shell_SecondaryTrayWnd");
 pub fn native_bars() -> Vec<HWND> {
     let mut bars = Vec::new();
     unsafe {
-        if let Ok(h) = FindWindowW(PRIMARY_CLASS, None) {
+        if let Some(h) = explorer_tray() {
             bars.push(h);
         }
         let mut after = None;
@@ -38,8 +38,26 @@ pub fn secondary_bars() -> Vec<HWND> {
     native_bars().into_iter().filter(|&h| crate::class_name(h) == "Shell_SecondaryTrayWnd").collect()
 }
 
+/// La `Shell_TrayWnd` de Explorer. No vale `FindWindow`: la bandeja propia (`tray.rs`) tiene la misma
+/// clase y está encima en Z a propósito; se salta toda ventana de este proceso.
+pub fn explorer_tray() -> Option<HWND> {
+    let me = std::process::id();
+    let mut after = None;
+    unsafe {
+        while let Ok(h) = FindWindowExW(None, after, PRIMARY_CLASS, None) {
+            let mut pid = 0;
+            GetWindowThreadProcessId(h, Some(&mut pid));
+            if pid != me {
+                return Some(h);
+            }
+            after = Some(h);
+        }
+    }
+    None
+}
+
 pub fn primary_rect() -> Option<RECT> {
-    window_rect(unsafe { FindWindowW(PRIMARY_CLASS, None) }.ok()?)
+    window_rect(explorer_tray()?)
 }
 
 /// Rectángulo en pantalla; sirve también con la ventana oculta.
@@ -51,7 +69,9 @@ pub fn window_rect(h: HWND) -> Option<RECT> {
 
 pub fn is_native_bar(hwnd: HWND) -> bool {
     let class = crate::class_name(hwnd);
-    class == "Shell_TrayWnd" || class == "Shell_SecondaryTrayWnd"
+    let mut pid = 0;
+    unsafe { GetWindowThreadProcessId(hwnd, Some(&mut pid)) };
+    (class == "Shell_TrayWnd" || class == "Shell_SecondaryTrayWnd") && pid != std::process::id()
 }
 
 pub fn hide_all() {
@@ -87,6 +107,27 @@ pub fn mark_hidden() {
 
 pub fn clear_mark() {
     let _ = std::fs::remove_file(mark_path());
+}
+
+/// "Mostrar las apps de la barra en" de Windows (`MMTaskbarMode`): 0 = todas las barras (por defecto,
+/// también si falta el valor), 1 = la principal y la del monitor de la ventana, 2 = solo la de su monitor.
+pub fn multi_monitor_mode() -> u32 {
+    use windows::Win32::System::Registry::*;
+    let mut value = 0u32;
+    let mut size = size_of::<u32>() as u32;
+    let ok = unsafe {
+        RegGetValueW(
+            HKEY_CURRENT_USER,
+            w!(r"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"),
+            w!("MMTaskbarMode"),
+            RRF_RT_REG_DWORD,
+            None,
+            Some(&mut value as *mut u32 as *mut core::ffi::c_void),
+            Some(&mut size),
+        )
+    }
+    .is_ok();
+    if ok { value } else { 0 }
 }
 
 pub fn left_hidden() -> bool {

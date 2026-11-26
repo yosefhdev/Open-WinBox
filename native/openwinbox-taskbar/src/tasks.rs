@@ -39,13 +39,13 @@ pub struct Tasks {
 }
 
 impl Tasks {
-    /// Ventanas elegibles cuyo monitor es `monitor` (cada barra muestra las de su pantalla).
-    pub fn refresh(&mut self, own: HWND, monitor: HMONITOR) {
+    /// Ventanas elegibles; con `monitor`, solo las de esa pantalla (según el modo multimonitor de Windows).
+    pub fn refresh(&mut self, own: HWND, monitor: Option<HMONITOR>) {
         let mut found: Vec<HWND> = Vec::new();
         unsafe {
             let _ = EnumWindows(Some(collect), LPARAM(&mut found as *mut _ as isize));
         }
-        found.retain(|&h| h != own && eligible(h) && window_monitor(h) == monitor);
+        found.retain(|&h| h != own && eligible(h) && monitor.is_none_or(|m| window_monitor(h) == m));
 
         let mut by_key: Vec<(String, Vec<HWND>)> = Vec::new();
         for &h in &found {
@@ -166,7 +166,7 @@ fn package_aumid(h: HWND) -> Option<String> {
     }
 }
 
-fn process_path(h: HWND) -> Option<String> {
+pub fn process_path(h: HWND) -> Option<String> {
     unsafe {
         let mut pid = 0;
         GetWindowThreadProcessId(h, Some(&mut pid));
